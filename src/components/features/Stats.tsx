@@ -114,11 +114,11 @@ function LanguageBar({ languages }: { languages: Language[] }) {
             className="col-span-1 md:col-span-2 lg:col-span-4 mt-8"
         >
             <div className="neo-brutal-border bg-black p-8 border-l-8 border-l-primary">
-                <div className="flex justify-between items-end mb-6">
-                    <div>
-                        <h4 className="font-black text-3xl uppercase tracking-tighter text-white">Language<span className="text-primary">.DNA</span></h4>
-                        <p className="text-muted-foreground font-mono text-sm mt-1"> CODEBASE</p>
-                    </div>
+                {/* Header */}
+                <div className="mb-8 pb-4 border-b border-white/10">
+                    <h4 className="font-black text-3xl uppercase tracking-tighter text-white">
+                        Language<span className="text-primary">.DNA</span>
+                    </h4>
                 </div>
 
                 {/* Cyberpunk Segmented Bar */}
