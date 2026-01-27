@@ -113,67 +113,44 @@ function LanguageBar({ languages }: { languages: Language[] }) {
             viewport={{ once: true }}
             className="col-span-1 md:col-span-2 lg:col-span-4 mt-8"
         >
-            <div className="neo-brutal-border bg-black p-8 border-l-8 border-l-primary">
-                {/* Header */}
-                <div className="mb-8 pb-4 border-b border-white/10">
-                    <h4 className="font-black text-3xl uppercase tracking-tighter text-white">
-                        Language<span className="text-primary">.DNA</span>
-                    </h4>
+            <div className="neo-brutal-border bg-black p-8 border-l-8 border-l-primary relative overflow-hidden">
+                {/* Background Pattern */}
+                <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[length:14px_24px] pointer-events-none" />
+
+                <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-8 relative z-10 gap-4">
+                    <div>
+                        <h4 className="font-black text-4xl uppercase tracking-tighter text-white">Language<span className="text-primary">.DNA</span></h4>
+                    </div>
+                    <div className="px-3 py-1 bg-white/10 dark:bg-white/5 rounded-full border border-white/10 text-xs font-mono text-muted-foreground">
+                        DETECTED_LANGUAGES: {languages.length}
+                    </div>
                 </div>
 
-                {/* Cyberpunk Segmented Bar */}
-                <div className="flex h-12 w-full gap-1">
-                    {languages.map((lang, i) => (
-                        <motion.div
-                            key={lang.name}
-                            initial={{ scaleY: 0 }}
-                            whileInView={{ scaleY: 1 }}
-                            transition={{ delay: 0.5 + (i * 0.1), type: "spring" }}
-                            viewport={{ once: true }}
-                            style={{ width: `${lang.percentage}%`, backgroundColor: lang.color }}
-                            className="h-full relative group hover:brightness-125 transition-all"
-                        >
-                             {/* Scanline Effect */}
-                             <div className="absolute inset-0 bg-white/20 -translate-y-full group-hover:translate-y-full transition-transform duration-700" />
-                             
-                             {/* Tooltip */}
-                             <div className="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity bg-black text-white text-xs font-mono px-2 py-1 border border-primary z-20 whitespace-nowrap pointer-events-none">
-                                {lang.name} {lang.percentage}%
-                             </div>
-                        </motion.div>
-                    ))}
-                </div>
 
-                {/* Legend - Grid Layout with Card Style */}
-                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3 mt-6 pt-6 border-t border-white/10">
+
+                {/* New Grid Data Layout */}
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 relative z-10">
                     {languages.map((lang, i) => (
                         <motion.div 
                             key={lang.name}
                             initial={{ opacity: 0, y: 10 }}
                             whileInView={{ opacity: 1, y: 0 }}
-                            transition={{ delay: 0.6 + (i * 0.05) }}
+                            transition={{ delay: 0.2 + (i * 0.05) }}
                             viewport={{ once: true }}
-                            className="group flex items-center gap-3 bg-white/5 hover:bg-white/10 
-                                       px-4 py-3 rounded-lg border border-white/10 hover:border-primary/50 
-                                       transition-all duration-300 cursor-default"
+                            className="bg-white/5 border border-white/10 p-4 hover:bg-white/10 hover:border-primary/50 transition-all group cursor-pointer flex flex-col justify-between h-32"
                         >
-                            {/* Color Indicator - Larger with glow effect */}
-                            <span 
-                                className="w-4 h-4 rounded-sm shrink-0 group-hover:scale-110 transition-transform" 
-                                style={{ 
-                                    backgroundColor: lang.color,
-                                    boxShadow: `0 0 10px ${lang.color}40`
-                                }} 
-                            />
+                            <div className="flex justify-between items-start">
+                                <div className="w-3 h-3 rounded-full shadow-[0_0_10px_currentColor]" style={{ color: lang.color, backgroundColor: lang.color }} />
+                                <ArrowUpRight className="w-4 h-4 text-muted-foreground group-hover:text-primary group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
+                            </div>
                             
-                            {/* Text Content - Stacked Hierarchy */}
-                            <div className="flex flex-col min-w-0">
-                                <span className="font-mono text-xs uppercase tracking-wide text-white/60 truncate">
+                            <div>
+                                <div className="text-3xl font-black text-white group-hover:text-primary transition-colors tracking-tighter">
+                                    {lang.percentage}<span className="text-sm text-muted-foreground font-normal ml-1">%</span>
+                                </div>
+                                <div className="font-mono text-xs uppercase tracking-wider text-muted-foreground group-hover:text-white transition-colors mt-1">
                                     {lang.name}
-                                </span>
-                                <span className="font-mono text-sm font-black text-white tabular-nums">
-                                    {lang.percentage}%
-                                </span>
+                                </div>
                             </div>
                         </motion.div>
                     ))}
