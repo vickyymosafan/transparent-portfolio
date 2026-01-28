@@ -115,7 +115,7 @@ function LanguageBar({ languages }: { languages: Language[] }) {
         >
             <div className="neo-brutal-border bg-black p-8 border-l-8 border-l-primary relative overflow-hidden">
                 {/* Background Pattern */}
-                <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[length:14px_24px] pointer-events-none" />
+                <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-size-[14px_24px] pointer-events-none" />
 
                 <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-8 relative z-10 gap-4">
                     <div>
