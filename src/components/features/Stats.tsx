@@ -119,7 +119,7 @@ function LanguageBar({ languages }: { languages: Language[] }) {
 
                 <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-8 relative z-10 gap-4">
                     <div>
-                        <h4 className="font-black text-4xl uppercase tracking-tighter text-white">Language<span className="text-primary">.DNA</span></h4>
+                        <h4 className="font-black text-4xl uppercase tracking-tighter text-white">Language</h4>
                     </div>
                     <div className="px-3 py-1 bg-white/10 dark:bg-white/5 rounded-full border border-white/10 text-xs font-mono text-muted-foreground">
                         DETECTED_LANGUAGES: {languages.length}
