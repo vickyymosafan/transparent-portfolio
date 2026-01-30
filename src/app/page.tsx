@@ -4,6 +4,7 @@ import { Hero } from "@/components/features/Hero";
 import { ProjectList } from "@/components/features/ProjectList";
 import { About } from "@/components/features/About";
 import { StatsGrid } from "@/components/features/Stats";
+import { Contact } from "@/components/features/Contact";
 import { Container, Section } from "@/components/layout/Wrappers";
 import { Reveal } from "@/components/ui/Animations";
 import { H2, P } from "@/components/ui/Typography";
@@ -68,34 +69,7 @@ export default function Home() {
       </Section>
 
       {/* Footer / Contact */}
-      <Section className="py-32 relative z-10 text-center bg-primary text-black selection:bg-black selection:text-white">
-        <Container>
-          <Reveal>
-            <div className="flex flex-col items-center gap-8">
-                <h2 className="text-[12vw] leading-[0.8] font-black tracking-tighter uppercase mix-blend-multiply">
-                    Let&apos;s Build<br />Something
-                </h2>
-                
-                <a
-                    href="mailto:hello@example.com"
-                    className="mt-8 px-12 py-6 bg-black text-white text-2xl md:text-4xl font-bold font-mono hover:scale-110 hover:-rotate-2 transition-transform neo-brutal-border border-white shadow-[8px_8px_0px_#ffffff]"
-                >
-                    hello@example.com
-                </a>
-                
-                <div className="mt-16 flex gap-8 font-mono font-bold uppercase tracking-widest text-sm md:text-base opacity-80">
-                    <a href="#" className="hover:underline decoration-4 underline-offset-4">GitHub</a>
-                    <a href="#" className="hover:underline decoration-4 underline-offset-4">LinkedIn</a>
-                    <a href="#" className="hover:underline decoration-4 underline-offset-4">Twitter</a>
-                </div>
-            </div>
-          </Reveal>
-
-          <footer className="mt-24 text-sm font-bold opacity-50 uppercase tracking-widest">
-            &copy; {new Date().getFullYear()} Code Wizard. Built with Next.js 16 & Tailwind 4.
-          </footer>
-        </Container>
-      </Section>
+      <Contact />
     </main>
   );
 }
