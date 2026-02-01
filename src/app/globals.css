@@ -1,0 +1,49 @@
+@import "tailwindcss";
+
+:root {
+  /* Gen Z / "Code Signal" Palette */
+  --background: #050505; /* Deep Black */
+  --surface: #121212;   /* Off Black */
+  --foreground: #F4F4F5; /* Readable White */
+  
+  --primary: #CCFF00;   /* Acid Green */
+  --primary-foreground: #000000;
+  
+  --secondary: #333333; /* Dark Gray */
+  --secondary-foreground: #FFFFFF;
+  
+  --muted: #A1A1AA;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-surface: var(--surface);
+  --color-foreground: var(--foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  
+  /* Space Grotesk for Headings, Inter for Body */
+  --font-heading: var(--font-space-grotesk);
+  --font-body: var(--font-inter);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-body), sans-serif;
+  overflow-x: hidden;
+}
+
+/* Utilities */
+.glass-panel {
+  background: rgba(18, 18, 18, 0.6);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.text-glow {
+  text-shadow: 0 0 20px rgba(204, 255, 0, 0.3);
+}
