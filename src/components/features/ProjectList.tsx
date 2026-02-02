@@ -1,5 +1,5 @@
-import { H3, P } from "@/components/ui/Typography";
-import { PROJECTS, type Project } from "@/services/mockData";
+import { P } from "@/components/ui/Typography";
+import { PROJECTS } from "@/services/mockData";
 import { ArrowUpRight } from "lucide-react";
 
 export function ProjectList() {

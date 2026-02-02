@@ -56,7 +56,7 @@ export function Hero() {
                 </div>
 
                 {/* Right Column: Image */}
-                <div className="relative w-full aspect-square md:aspect-[4/5] lg:aspect-square flex items-center justify-center">
+                <div className="relative w-full aspect-square md:aspect-4/5 lg:aspect-square flex items-center justify-center">
                     {/* Image Container with Neo-Brutal styling */}
                     <div className="relative w-[300px] h-[400px] md:w-[400px] md:h-[500px]">
                         {/* Back Card (Decoration) */}
@@ -86,7 +86,7 @@ export function Hero() {
             </div>
 
             {/* Marquee Scroller at Bottom */}
-            <div className="absolute bottom-0 left-0 w-screen overflow-hidden py-4 border-y border-white/5 bg-black/50 backdrop-blur-sm -mx-[50vw] left-[50%] relative">
+            <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-screen overflow-hidden py-4 border-y border-white/5 bg-black/50 backdrop-blur-sm">
                  <div className="whitespace-nowrap animate-marquee flex gap-8 items-center">
                     {[1, 2, 3, 4].map((i) => (
                         <div key={i} className="flex items-center gap-8">

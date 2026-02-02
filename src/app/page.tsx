@@ -14,7 +14,7 @@ export default function Home() {
       <div className="fixed inset-0 pointer-events-none z-50 bg-noise opacity-30 mix-blend-overlay" />
       
       {/* Background Grid Pattern (Subtle) */}
-      <div className="fixed inset-0 bg-[linear-gradient(to_right,#8080800a_1px,transparent_1px),linear-gradient(to_bottom,#8080800a_1px,transparent_1px)] bg-[size:14px_24px] pointer-events-none z-0" />
+      <div className="fixed inset-0 bg-[linear-gradient(to_right,#8080800a_1px,transparent_1px),linear-gradient(to_bottom,#8080800a_1px,transparent_1px)] bg-size-[14px_24px] pointer-events-none z-0" />
 
       {/* Hero Section */}
       <Section className="min-h-[90vh] flex items-center relative z-10 pb-0">
@@ -54,7 +54,7 @@ export default function Home() {
                     <span className="font-mono text-accent uppercase font-bold tracking-widest">Portfolio</span>
                 </div>
                 <H2 className="text-6xl md:text-7xl font-black uppercase tracking-tighter mb-4">Featured Work</H2>
-                <P className="text-xl max-w-2xl">Production-grade applications I've shipped. No tutorials here.</P>
+                <P className="text-xl max-w-2xl">Production-grade applications I&apos;ve shipped. No tutorials here.</P>
             </div>
           </Reveal>
           <Reveal delay={0.15}>
@@ -69,7 +69,7 @@ export default function Home() {
           <Reveal>
             <div className="flex flex-col items-center gap-8">
                 <h2 className="text-[12vw] leading-[0.8] font-black tracking-tighter uppercase mix-blend-multiply">
-                    Let's Build<br />Something
+                    Let&apos;s Build<br />Something
                 </h2>
                 
                 <a

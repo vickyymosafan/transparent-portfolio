@@ -1,6 +1,6 @@
 "use client";
 
-import { H3, P } from "@/components/ui/Typography";
+import { H3 } from "@/components/ui/Typography";
 import { MOCK_GITHUB, MOCK_WAKATIME } from "@/services/mockData";
 import { Github, Clock, Code2, Flame } from "lucide-react";
 
