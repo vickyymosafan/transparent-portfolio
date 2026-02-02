@@ -16,6 +16,9 @@ export function ProjectList() {
                              <div className="flex items-center gap-4 mb-4">
                                 <span className="text-6xl font-black text-muted/20">0{idx + 1}</span>
                                 <div className="h-1 flex-1 bg-white/10" />
+                                <span className="text-xs font-mono px-3 py-1 border border-white/20 rounded-full text-muted-foreground">
+                                    {project.category ?? "PROJECT"}
+                                </span>
                              </div>
                             
                             <h3 className="text-4xl md:text-5xl font-black uppercase mb-4 group-hover:text-primary transition-colors">

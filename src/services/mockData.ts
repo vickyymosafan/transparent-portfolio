@@ -1,4 +1,3 @@
-// Types
 export interface Language {
     name: string;
     percentage: number;
@@ -9,50 +8,91 @@ export interface Project {
     title: string;
     desc: string;
     tech: string[];
-    link: string;
+    category?: "Full Stack" | "Backend" | "Frontend";
+    link?: string;
 }
 
 export const MOCK_GITHUB = {
-    username: "code_wizard_99",
-    repos: 42,
-    contributions: 1337,
-    commits_this_year: 850,
+    username: "vickyymosafan",
+    contributions: 1146,
     top_languages: [
-        { name: "TypeScript", percentage: 65, color: "#3178c6" },
-        { name: "Rust", percentage: 20, color: "#dea584" },
-        { name: "Python", percentage: 10, color: "#3572A5" },
-        { name: "Go", percentage: 5, color: "#00ADD8" },
-    ] as Language[],
+        { name: "TypeScript", percentage: 45, color: "#3178C6" },
+        { name: "PHP", percentage: 20, color: "#4F5D95" },
+        { name: "JavaScript", percentage: 15, color: "#F7DF1E" },
+        { name: "C#", percentage: 10, color: "#178600" },
+        { name: "Python", percentage: 10, color: "#3776AB" },
+    ] as Language[]
 };
 
 export const MOCK_WAKATIME = {
-    total_hours: "4,500+",
-    daily_average: "6 hrs 12 mins",
-    languages: [
-        { name: "TypeScript", time: "2,000 hrs" },
-        { name: "React", time: "1,200 hrs" },
-        { name: "NestJS", time: "800 hrs" },
-    ],
-    editor: "VS Code (99%)",
+    total_hours: "3,013",
+    daily_average: "4 hrs 20 mins"
+};
+
+export const TECH_STACK = {
+    Frontend: ["React", "Next.js", "Vue.js"],
+    Backend: ["Node.js", "NestJS", "Express", "Laravel"],
+    Database: ["PostgreSQL", "MySQL", "MongoDB"],
+    "AI IDEs": ["Cursor", "Windsurf", "Antigravity", "Kiro"],
+    Tools: ["VSCode", "Git", "GitHub"]
 };
 
 export const PROJECTS: Project[] = [
+    // Full Stack
     {
-        title: "E-Commerce Microservices",
-        desc: "A high-scale system handling 10k req/s using NestJS and Kafka.",
-        tech: ["NestJS", "Kafka", "Redis"],
-        link: "#",
+        title: "AI SMARTCHAT",
+        desc: "Advanced AI chat platform with context retention.",
+        tech: ["Next.js", "Python", "AI integration"],
+        category: "Full Stack"
     },
     {
-        title: "AI Agent Platform",
-        desc: "Autonomous coding agents built with Python and LangChain.",
-        tech: ["Python", "LangChain", "OpenAI"],
-        link: "#",
+        title: "ANTOSA ARCHITECT",
+        desc: "Architectural portfolio and project management system.",
+        tech: ["Vue.js", "Laravel", "MySQL"],
+        category: "Full Stack"
     },
     {
-        title: "Crypto Dashboard",
-        desc: "Real-time WebSockets processing for crypto arbitrage.",
-        tech: ["Next.js", "WebSockets", "D3.js"],
-        link: "#",
+        title: "SYSTEM PEMERINTAHAN",
+        desc: "Government administration and tracking system.",
+        tech: ["PHP", "CodeIgniter", "Bootstrap"],
+        category: "Full Stack"
     },
+    {
+        title: "UNFOLLOWSCAN",
+        desc: "Social media analytics tool for tracking engagement.",
+        tech: ["Node.js", "React", "API"],
+        category: "Full Stack"
+    },
+    // Backend
+    {
+        title: "BE POSYANDU DIGITAL",
+        desc: "Backend API for health service digitization.",
+        tech: ["NestJS", "PostgreSQL", "Docker"],
+        category: "Backend"
+    },
+    {
+        title: "BE PLAYLIST DOWNLOADER",
+        desc: "High-performance media processing service.",
+        tech: ["Python", "FastAPI", "FFmpeg"],
+        category: "Backend"
+    },
+    {
+        title: "BE POS INDOAUGUST",
+        desc: "Point of Sale backend for retail management.",
+        tech: ["Express", "MongoDB", "Redis"],
+        category: "Backend"
+    },
+    // Frontend
+    {
+        title: "FE PENCATATAN POSYANDU",
+        desc: "Frontend interface for Posyandu digital records.",
+        tech: ["Next.js", "Tailwind", "React Query"],
+        category: "Frontend"
+    },
+    {
+        title: "FE POSYANDU DIGITAL",
+        desc: "User-facing dashboard for public health data.",
+        tech: ["React", "Vite", "ChakraUI"],
+        category: "Frontend"
+    }
 ];
