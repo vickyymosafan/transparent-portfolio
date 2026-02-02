@@ -1,73 +1,81 @@
 "use client";
 
-import { Card } from "@/components/ui/Card";
 import { H3, P } from "@/components/ui/Typography";
-import { MOCK_GITHUB, MOCK_WAKATIME, type Language } from "@/services/mockData";
+import { MOCK_GITHUB, MOCK_WAKATIME } from "@/services/mockData";
 import { Github, Clock, Code2, Flame } from "lucide-react";
 
 export function StatsGrid() {
     return (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            <Card className="flex flex-col gap-2">
-                <div className="flex items-center gap-2 text-primary mb-2">
-                    <Github className="w-6 h-6" />
-                    <span className="font-mono text-sm uppercase">Contributions</span>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {/* Stat Item 1 */}
+            <div className="neo-brutal-border bg-surface p-6 relative group hover:bg-white/5 transition-colors">
+                <div className="flex justify-between items-start mb-4">
+                    <span className="font-mono text-sm uppercase text-primary font-bold">Contributions</span>
+                    <Github className="w-8 h-8 text-muted group-hover:text-primary transition-colors" />
                 </div>
-                <H3 className="text-4xl">{MOCK_GITHUB.contributions}</H3>
-                <P className="text-sm">In the last year</P>
-            </Card>
+                <H3 className="text-5xl font-black group-hover:text-glow transition-all">{MOCK_GITHUB.contributions}</H3>
+                <div className="mt-2 text-xs font-mono bg-primary text-black px-2 py-1 w-fit">LAST YEAR</div>
+            </div>
 
-            <Card className="flex flex-col gap-2">
-                <div className="flex items-center gap-2 text-primary mb-2">
-                    <Clock className="w-6 h-6" />
-                    <span className="font-mono text-sm uppercase">Coding Time</span>
+            {/* Stat Item 2 */}
+            <div className="neo-brutal-border bg-surface p-6 relative group hover:bg-white/5 transition-colors">
+                 <div className="flex justify-between items-start mb-4">
+                    <span className="font-mono text-sm uppercase text-primary font-bold">Coding Time</span>
+                    <Clock className="w-8 h-8 text-muted group-hover:text-primary transition-colors" />
                 </div>
-                <H3 className="text-4xl">{MOCK_WAKATIME.total_hours}</H3>
-                <P className="text-sm">Total tracked hours</P>
-            </Card>
+                <H3 className="text-5xl font-black group-hover:text-glow transition-all">{MOCK_WAKATIME.total_hours}</H3>
+                <div className="mt-2 text-xs font-mono bg-primary text-black px-2 py-1 w-fit">TRACKED HOURS</div>
+            </div>
 
-            <Card className="flex flex-col gap-2">
-                <div className="flex items-center gap-2 text-primary mb-2">
-                    <Flame className="w-6 h-6" />
-                    <span className="font-mono text-sm uppercase">Daily Avg</span>
+            {/* Stat Item 3 */}
+            <div className="neo-brutal-border bg-surface p-6 relative group hover:bg-white/5 transition-colors">
+                 <div className="flex justify-between items-start mb-4">
+                    <span className="font-mono text-sm uppercase text-primary font-bold">Daily Avg</span>
+                    <Flame className="w-8 h-8 text-muted group-hover:text-primary transition-colors" />
                 </div>
-                <H3 className="text-4xl">{MOCK_WAKATIME.daily_average}</H3>
-                <P className="text-sm">Consistency is key</P>
-            </Card>
+                <H3 className="text-5xl font-black group-hover:text-glow transition-all">{MOCK_WAKATIME.daily_average}</H3>
+                <div className="mt-2 text-xs font-mono bg-primary text-black px-2 py-1 w-fit">CONSISTENCY</div>
+            </div>
 
-            <Card className="flex flex-col gap-2">
-                <div className="flex items-center gap-2 text-primary mb-2">
-                    <Code2 className="w-6 h-6" />
-                    <span className="font-mono text-sm uppercase">Top Lang</span>
+            {/* Stat Item 4 */}
+            <div className="neo-brutal-border bg-surface p-6 relative group hover:bg-white/5 transition-colors">
+                 <div className="flex justify-between items-start mb-4">
+                    <span className="font-mono text-sm uppercase text-primary font-bold">Top Lang</span>
+                    <Code2 className="w-8 h-8 text-muted group-hover:text-primary transition-colors" />
                 </div>
-                <H3 className="text-4xl">{MOCK_GITHUB.top_languages[0].name}</H3>
-                <P className="text-sm">{MOCK_GITHUB.top_languages[0].percentage}% usage</P>
-            </Card>
+                <H3 className="text-5xl font-black group-hover:text-glow transition-all">{MOCK_GITHUB.top_languages[0].name}</H3>
+                <div className="mt-2 text-xs font-mono bg-primary text-black px-2 py-1 w-fit">{MOCK_GITHUB.top_languages[0].percentage}% USAGE</div>
+            </div>
 
             {/* Detailed Lang Bar (Span 2 or 4 cols) */}
-            <Card className="col-span-1 md:col-span-2 lg:col-span-4 mt-2">
-                <div className="flex justify-between items-center mb-4">
-                    <span className="font-mono text-sm uppercase text-muted">Language Distribution</span>
+            <div className="col-span-1 md:col-span-2 lg:col-span-4 mt-2 neo-brutal-border bg-surface p-6">
+                <div className="flex justify-between items-center mb-6">
+                    <span className="font-mono text-lg uppercase text-foreground font-bold border-b-2 border-primary">Language Distribution</span>
                 </div>
-                <div className="flex h-4 w-full overflow-hidden rounded-full bg-secondary">
+                <div className="flex h-8 w-full border-2 border-white/20">
                     {MOCK_GITHUB.top_languages.map((lang) => (
                         <div
                             key={lang.name}
                             style={{ width: `${lang.percentage}%`, backgroundColor: lang.color }}
-                            className="h-full transition-all duration-1000 ease-out hover:brightness-110"
+                            className="h-full hover:brightness-125 hover:scale-y-110 transition-transform origin-bottom cursor-crosshair border-r border-black/50 last:border-0 relative group"
                             title={`${lang.name}: ${lang.percentage}%`}
-                        />
-                    ))}
-                </div>
-                <div className="flex gap-4 mt-2 flex-wrap">
-                    {MOCK_GITHUB.top_languages.map((lang) => (
-                        <div key={lang.name} className="flex items-center gap-2">
-                            <div className="w-3 h-3 rounded-full" style={{ backgroundColor: lang.color }} />
-                            <span className="text-xs font-mono text-muted">{lang.name} {lang.percentage}%</span>
+                        >
+                             {/* Tooltip on hover */}
+                             <div className="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 bg-black border border-primary text-primary text-xs font-mono px-2 py-1 opacity-0 group-hover:opacity-100 pointer-events-none whitespace-nowrap z-20">
+                                {lang.name}
+                             </div>
                         </div>
                     ))}
                 </div>
-            </Card>
+                <div className="flex gap-6 mt-6 flex-wrap">
+                    {MOCK_GITHUB.top_languages.map((lang) => (
+                        <div key={lang.name} className="flex items-center gap-3 border border-white/10 px-3 py-1 bg-white/5">
+                            <div className="w-3 h-3" style={{ backgroundColor: lang.color }} />
+                            <span className="text-sm font-mono text-foreground font-bold uppercase">{lang.name} <span className="text-muted">{lang.percentage}%</span></span>
+                        </div>
+                    ))}
+                </div>
+            </div>
         </div>
     );
 }

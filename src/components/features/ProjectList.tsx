@@ -1,30 +1,47 @@
-import { Card } from "@/components/ui/Card";
 import { H3, P } from "@/components/ui/Typography";
 import { PROJECTS, type Project } from "@/services/mockData";
 import { ArrowUpRight } from "lucide-react";
 
 export function ProjectList() {
     return (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="space-y-12">
             {PROJECTS.map((project, idx) => (
-                <Card key={idx} className="group relative flex flex-col justify-between h-full hover:bg-white/5">
-                    <div className="absolute top-6 right-6 opacity-0 group-hover:opacity-100 transition-opacity">
-                        <ArrowUpRight className="text-primary w-6 h-6" />
+                <div key={idx} className="group relative neo-brutal-border bg-surface p-8 transition-transform hover:-translate-y-2">
+                    <div className="absolute -top-4 -right-4 bg-primary text-black px-4 py-2 font-mono font-bold text-xl neo-brutal-border opacity-0 group-hover:opacity-100 transition-all duration-300 transform rotate-12 group-hover:rotate-0">
+                        OPEN PROJECT
                     </div>
 
-                    <div className="flex flex-col gap-4">
-                        <H3 className="text-2xl">{project.title}</H3>
-                        <P className="text-sm text-balance">{project.desc}</P>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                        <div>
+                             <div className="flex items-center gap-4 mb-4">
+                                <span className="text-6xl font-black text-muted/20">0{idx + 1}</span>
+                                <div className="h-1 flex-1 bg-white/10" />
+                             </div>
+                            
+                            <h3 className="text-4xl md:text-5xl font-black uppercase mb-4 group-hover:text-primary transition-colors">
+                                {project.title}
+                            </h3>
+                            
+                            <P className="text-lg text-muted-foreground mb-6 border-l-4 border-primary pl-4">
+                                {project.desc}
+                            </P>
 
-                        <div className="flex flex-wrap gap-2 mt-4">
-                            {project.tech.map(t => (
-                                <span key={t} className="text-xs font-mono px-2 py-1 bg-white/5 border border-white/10 rounded text-muted">
-                                    {t}
-                                </span>
-                            ))}
+                            <div className="flex flex-wrap gap-3">
+                                {project.tech.map(t => (
+                                    <span key={t} className="text-xs font-bold font-mono px-3 py-1 bg-white text-black uppercase transform hover:scale-110 transition-transform cursor-default">
+                                        {t}
+                                    </span>
+                                ))}
+                            </div>
+                        </div>
+
+                        {/* Right side - Abstract Visual or Image Placeholder */}
+                        <div className="h-full min-h-[200px] border-2 border-dashed border-white/20 flex items-center justify-center relative overflow-hidden bg-black/50">
+                             <div className="absolute inset-0 bg-noise opacity-20" />
+                             <ArrowUpRight className="w-24 h-24 text-primary opacity-20 group-hover:opacity-100 group-hover:scale-110 transition-all duration-500" />
                         </div>
                     </div>
-                </Card>
+                </div>
             ))}
         </div>
     );
