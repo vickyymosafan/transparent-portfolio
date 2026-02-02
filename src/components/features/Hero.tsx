@@ -79,7 +79,7 @@ export function Hero() {
                         {/* Floating Badge */}
                          <div className="absolute -bottom-6 -left-6 bg-black border border-white/20 p-4 neo-brutal-border animate-float" style={{ animationDelay: "1s" }}>
                             <div className="text-xs font-mono text-muted mb-1">CURRENT STACK</div>
-                            <div className="text-xl font-bold text-primary">NEXT.JS 16</div>
+                            <div className="text-xl font-bold text-primary">NEXT.JS</div>
                          </div>
                     </div>
                 </div>
