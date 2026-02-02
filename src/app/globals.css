@@ -13,7 +13,7 @@
   --secondary-foreground: #ffffff;
 
   --muted: #525252;
-  --accent: #ff00ff; /* Hot Pink for accents */
+  --accent: #0ea5e9; /* Electric Blue for accents */
 }
 
 @theme inline {
