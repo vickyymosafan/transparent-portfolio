@@ -90,7 +90,7 @@ export function Hero() {
                  <div className="whitespace-nowrap animate-marquee flex gap-8 items-center">
                     {[1, 2, 3, 4].map((i) => (
                         <div key={i} className="flex items-center gap-8">
-                            <span className="text-4xl font-bold text-transparent stroke-text uppercase opacity-30">Open For Work</span>
+                            <span className="text-4xl font-bold text-transparent stroke-text uppercase opacity-30">Principal Engineer</span>
                             <span className="text-2xl text-primary">★</span>
                             <span className="text-4xl font-bold text-foreground uppercase">Frontend Architecture</span>
                             <span className="text-2xl text-primary">★</span>
