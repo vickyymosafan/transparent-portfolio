@@ -5,8 +5,20 @@ export function Hero() {
     return (
         <section className="relative w-full min-h-[90vh] flex flex-col justify-center pt-20 overflow-hidden">
             {/* Background Elements */}
-            <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-primary/20 blur-[120px] rounded-full pointer-events-none -z-10" />
-            <div className="absolute bottom-0 left-0 w-[300px] h-[300px] bg-accent/10 blur-[100px] rounded-full pointer-events-none -z-10" />
+            <div 
+                className="absolute -top-[20%] -right-[10%] w-[1000px] h-[1000px] rounded-full pointer-events-none -z-10 opacity-20 mix-blend-screen"
+                style={{
+                    background: 'radial-gradient(circle at center, var(--primary) 0%, transparent 70%)',
+                    filter: 'blur(80px)'
+                }}
+            />
+            <div 
+                className="absolute -bottom-[20%] -left-[10%] w-[800px] h-[800px] rounded-full pointer-events-none -z-10 opacity-10 mix-blend-screen"
+                style={{
+                    background: 'radial-gradient(circle at center, var(--accent) 0%, transparent 70%)',
+                    filter: 'blur(60px)'
+                }}
+            />
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
                 {/* Left Column: Text */}
@@ -54,7 +66,7 @@ export function Hero() {
                     {/* Image Container with Neo-Brutal styling */}
                     <div className="relative w-[300px] h-[400px] md:w-[400px] md:h-[500px]">
                         {/* Back Card (Decoration) */}
-                        <div className="absolute inset-0 bg-primary translate-x-4 translate-y-4 border-2 border-white/20" />
+                        <div className="absolute inset-0 bg-primary/10 translate-x-4 translate-y-4 border-2 border-primary/30 backdrop-blur-sm" />
                         
                         {/* Image Frame */}
                         <div className="absolute inset-0 bg-surface border-2 border-white/10 overflow-hidden grayscale hover:grayscale-0 transition-all duration-500 ease-out hover:translate-x-1 hover:translate-y-1">
