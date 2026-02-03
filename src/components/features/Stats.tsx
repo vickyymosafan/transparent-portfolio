@@ -1,81 +1,161 @@
 "use client";
 
-import { H3 } from "@/components/ui/Typography";
-import { MOCK_GITHUB, MOCK_WAKATIME } from "@/services/mockData";
-import { Github, Clock, Code2, Flame } from "lucide-react";
+import { MOCK_GITHUB, MOCK_WAKATIME, Language } from "@/services/mockData";
+import { Github, Clock, Code2, Flame, ArrowUpRight } from "lucide-react";
+import { motion } from "framer-motion";
+import { ElementType } from "react";
 
 export function StatsGrid() {
     return (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {/* Stat Item 1 */}
-            <div className="neo-brutal-border bg-surface p-6 relative group hover:bg-white/5 transition-colors">
-                <div className="flex justify-between items-start mb-4">
-                    <span className="font-mono text-sm uppercase text-primary font-bold">Contributions</span>
-                    <Github className="w-8 h-8 text-muted group-hover:text-primary transition-colors" />
-                </div>
-                <H3 className="text-5xl font-black group-hover:text-glow transition-all">{MOCK_GITHUB.contributions}</H3>
-                <div className="mt-2 text-xs font-mono bg-primary text-black px-2 py-1 w-fit">LAST YEAR</div>
-            </div>
+            {/* Stat Item 1: Contributions */}
+            <StatCard 
+                label="Contributions" 
+                value={MOCK_GITHUB.contributions.toString()} 
+                sub="Last Year"
+                icon={Github}
+                delay={0}
+            />
 
-            {/* Stat Item 2 */}
-            <div className="neo-brutal-border bg-surface p-6 relative group hover:bg-white/5 transition-colors">
-                 <div className="flex justify-between items-start mb-4">
-                    <span className="font-mono text-sm uppercase text-primary font-bold">Coding Time</span>
-                    <Clock className="w-8 h-8 text-muted group-hover:text-primary transition-colors" />
-                </div>
-                <H3 className="text-5xl font-black group-hover:text-glow transition-all">{MOCK_WAKATIME.total_hours}</H3>
-                <div className="mt-2 text-xs font-mono bg-primary text-black px-2 py-1 w-fit">TRACKED HOURS</div>
-            </div>
+            {/* Stat Item 2: Coding Time */}
+            <StatCard 
+                label="Coding Time" 
+                value={MOCK_WAKATIME.total_hours} 
+                sub="Tracked Hours"
+                icon={Clock}
+                delay={0.1}
+            />
 
-            {/* Stat Item 3 */}
-            <div className="neo-brutal-border bg-surface p-6 relative group hover:bg-white/5 transition-colors">
-                 <div className="flex justify-between items-start mb-4">
-                    <span className="font-mono text-sm uppercase text-primary font-bold">Daily Avg</span>
-                    <Flame className="w-8 h-8 text-muted group-hover:text-primary transition-colors" />
-                </div>
-                <H3 className="text-5xl font-black group-hover:text-glow transition-all">{MOCK_WAKATIME.daily_average}</H3>
-                <div className="mt-2 text-xs font-mono bg-primary text-black px-2 py-1 w-fit">CONSISTENCY</div>
-            </div>
+            {/* Stat Item 3: Daily Avg */}
+            <StatCard 
+                label="Daily Avg" 
+                value={MOCK_WAKATIME.daily_average} 
+                sub="Consistency"
+                icon={Flame}
+                delay={0.2}
+            />
 
-            {/* Stat Item 4 */}
-            <div className="neo-brutal-border bg-surface p-6 relative group hover:bg-white/5 transition-colors">
-                 <div className="flex justify-between items-start mb-4">
-                    <span className="font-mono text-sm uppercase text-primary font-bold">Top Lang</span>
-                    <Code2 className="w-8 h-8 text-muted group-hover:text-primary transition-colors" />
-                </div>
-                <H3 className="text-5xl font-black group-hover:text-glow transition-all">{MOCK_GITHUB.top_languages[0].name}</H3>
-                <div className="mt-2 text-xs font-mono bg-primary text-black px-2 py-1 w-fit">{MOCK_GITHUB.top_languages[0].percentage}% USAGE</div>
-            </div>
+            {/* Stat Item 4: Top Lang */}
+            <StatCard 
+                label="Top Lang" 
+                value={MOCK_GITHUB.top_languages[0].name} 
+                sub={`${MOCK_GITHUB.top_languages[0].percentage}% Usage`}
+                icon={Code2}
+                delay={0.3}
+            />
 
-            {/* Detailed Lang Bar (Span 2 or 4 cols) */}
-            <div className="col-span-1 md:col-span-2 lg:col-span-4 mt-2 neo-brutal-border bg-surface p-6">
-                <div className="flex justify-between items-center mb-6">
-                    <span className="font-mono text-lg uppercase text-foreground font-bold border-b-2 border-primary">Language Distribution</span>
-                </div>
-                <div className="flex h-8 w-full border-2 border-white/20">
-                    {MOCK_GITHUB.top_languages.map((lang) => (
-                        <div
-                            key={lang.name}
-                            style={{ width: `${lang.percentage}%`, backgroundColor: lang.color }}
-                            className="h-full hover:brightness-125 hover:scale-y-110 transition-transform origin-bottom cursor-crosshair border-r border-black/50 last:border-0 relative group"
-                            title={`${lang.name}: ${lang.percentage}%`}
-                        >
-                             {/* Tooltip on hover */}
-                             <div className="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 bg-black border border-primary text-primary text-xs font-mono px-2 py-1 opacity-0 group-hover:opacity-100 pointer-events-none whitespace-nowrap z-20">
-                                {lang.name}
-                             </div>
-                        </div>
-                    ))}
-                </div>
-                <div className="flex gap-6 mt-6 flex-wrap">
-                    {MOCK_GITHUB.top_languages.map((lang) => (
-                        <div key={lang.name} className="flex items-center gap-3 border border-white/10 px-3 py-1 bg-white/5">
-                            <div className="w-3 h-3" style={{ backgroundColor: lang.color }} />
-                            <span className="text-sm font-mono text-foreground font-bold uppercase">{lang.name} <span className="text-muted">{lang.percentage}%</span></span>
-                        </div>
-                    ))}
-                </div>
-            </div>
+            {/* Detailed Lang Bar */}
+            <LanguageBar languages={MOCK_GITHUB.top_languages} />
         </div>
+    );
+}
+
+interface StatCardProps {
+    label: string;
+    value: string;
+    sub: string;
+    icon: ElementType;
+    delay: number;
+}
+
+function StatCard({ label, value, sub, icon: Icon, delay }: StatCardProps) {
+    return (
+        <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ delay, duration: 0.5 }}
+            viewport={{ once: true }}
+            className="neo-brutal-border bg-black text-white p-8 relative group overflow-hidden hover:bg-primary hover:text-black transition-colors duration-300"
+        >
+            {/* Background Noise/Grid on Hover */}
+            <div className="absolute inset-0 bg-[linear-gradient(45deg,transparent_25%,rgba(0,0,0,0.1)_25%,rgba(0,0,0,0.1)_50%,transparent_50%,transparent_75%,rgba(0,0,0,0.1)_75%,rgba(0,0,0,0.1)_100%)] bg-size-[10px_10px] opacity-0 group-hover:opacity-20 pointer-events-none" />
+
+            {/* Header */}
+            <div className="flex justify-between items-start mb-12 relative z-10">
+                <span className="font-mono text-sm uppercase tracking-[0.2em] font-bold border-b-2 border-primary group-hover:border-black transition-colors">
+                    {label}
+                </span>
+                <Icon className="w-6 h-6 opacity-50 group-hover:opacity-100 transition-opacity" />
+            </div>
+
+            {/* Value (Giant) */}
+            <div className="relative z-10">
+                <h3 className="text-6xl md:text-7xl font-black tracking-tighter leading-[0.8]">
+                    {value}
+                </h3>
+            </div>
+
+            {/* Footer */}
+            <div className="mt-8 flex items-center justify-between border-t border-white/20 group-hover:border-black/20 pt-4 relative z-10">
+                <span className="text-xs font-mono uppercase bg-white/10 px-2 py-1 group-hover:bg-black/10 transition-colors">
+                    {sub}
+                </span>
+                <ArrowUpRight className="w-4 h-4 opacity-50 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
+            </div>
+
+            {/* Decorative Corner */}
+            <div className="absolute top-0 right-0 p-2 opacity-50">
+                <div className="w-2 h-2 bg-primary group-hover:bg-black transition-colors" />
+            </div>
+            <div className="absolute bottom-0 left-0 p-2 opacity-50">
+                <div className="w-2 h-2 bg-primary group-hover:bg-black transition-colors" />
+            </div>
+        </motion.div>
+    );
+}
+
+function LanguageBar({ languages }: { languages: Language[] }) {
+    return (
+        <motion.div 
+            initial={{ opacity: 0, scale: 0.98 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 0.4 }}
+            viewport={{ once: true }}
+            className="col-span-1 md:col-span-2 lg:col-span-4 mt-8"
+        >
+            <div className="neo-brutal-border bg-black p-8 border-l-8 border-l-primary">
+                <div className="flex justify-between items-end mb-6">
+                    <div>
+                        <h4 className="font-black text-3xl uppercase tracking-tighter text-white">Language<span className="text-primary">.DNA</span></h4>
+                        <p className="text-muted-foreground font-mono text-sm mt-1"> CODEBASE</p>
+                    </div>
+                </div>
+
+                {/* Cyberpunk Segmented Bar */}
+                <div className="flex h-12 w-full gap-1">
+                    {languages.map((lang, i) => (
+                        <motion.div
+                            key={lang.name}
+                            initial={{ scaleY: 0 }}
+                            whileInView={{ scaleY: 1 }}
+                            transition={{ delay: 0.5 + (i * 0.1), type: "spring" }}
+                            viewport={{ once: true }}
+                            style={{ width: `${lang.percentage}%`, backgroundColor: lang.color }}
+                            className="h-full relative group hover:brightness-125 transition-all"
+                        >
+                             {/* Scanline Effect */}
+                             <div className="absolute inset-0 bg-white/20 -translate-y-full group-hover:translate-y-full transition-transform duration-700" />
+                             
+                             {/* Tooltip */}
+                             <div className="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity bg-black text-white text-xs font-mono px-2 py-1 border border-primary z-20 whitespace-nowrap pointer-events-none">
+                                {lang.name} {lang.percentage}%
+                             </div>
+                        </motion.div>
+                    ))}
+                </div>
+
+                {/* Legend */}
+                <div className="flex flex-wrap gap-6 mt-6 pt-6 border-t border-white/10">
+                    {languages.map((lang) => (
+                        <div key={lang.name} className="flex items-center gap-3">
+                            <span className="w-3 h-3 block" style={{ backgroundColor: lang.color }} />
+                            <span className="font-mono text-sm font-bold uppercase text-white/70">
+                                {lang.name} <span className="text-white">{lang.percentage}%</span>
+                            </span>
+                        </div>
+                    ))}
+                </div>
+            </div>
+        </motion.div>
     );
 }
