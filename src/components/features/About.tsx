@@ -1,5 +1,6 @@
 import { Container, Section } from "@/components/layout/Wrappers";
 import { Reveal } from "@/components/ui/Animations";
+import { TextReveal } from "@/components/ui/TextReveal";
 import { TECH_STACK } from "@/services/mockData";
 
 export function About() {
@@ -18,10 +19,10 @@ export function About() {
                         <Reveal>
                             <div className="relative mb-8">
                                 <h2 className="text-6xl md:text-8xl font-black uppercase tracking-tighter leading-[0.85] text-transparent stroke-text-bold hover:text-white transition-colors duration-500">
-                                    Engineering
+                                    <TextReveal>Engineering</TextReveal>
                                 </h2>
                                 <h2 className="text-6xl md:text-8xl font-black uppercase tracking-tighter leading-[0.85] text-primary ml-12 md:ml-24">
-                                    Intelligence
+                                    <TextReveal variant="blur">Intelligence</TextReveal>
                                 </h2>
                                 {/* Decoration Tag */}
                                 <div className="absolute -top-6 right-0 md:left-[60%] bg-accent text-black font-mono text-sm font-bold px-3 py-1 -rotate-6 shadow-[4px_4px_0px_white]">

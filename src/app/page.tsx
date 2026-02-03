@@ -7,6 +7,7 @@ import { StatsGrid } from "@/components/features/Stats";
 import { Container, Section } from "@/components/layout/Wrappers";
 import { Reveal } from "@/components/ui/Animations";
 import { H2, P } from "@/components/ui/Typography";
+import { TextReveal } from "@/components/ui/TextReveal";
 
 export default function Home() {
   return (
@@ -38,7 +39,7 @@ export default function Home() {
                     <span className="w-4 h-4 bg-primary animate-pulse" />
                     <span className="font-mono text-primary uppercase font-bold tracking-widest">Live Data</span>
                 </div>
-              <H2 className="text-6xl md:text-7xl font-black uppercase tracking-tighter mb-4">Live Statistics</H2>
+              <H2 className="text-6xl md:text-7xl font-black uppercase tracking-tighter mb-4"><TextReveal>Live Statistics</TextReveal></H2>
             </div>
           </Reveal>
           <Reveal delay={0.2}>
@@ -56,7 +57,7 @@ export default function Home() {
                     <span className="w-4 h-4 bg-accent animate-pulse" />
                     <span className="font-mono text-accent uppercase font-bold tracking-widest">Portfolio</span>
                 </div>
-                <H2 className="text-6xl md:text-7xl font-black uppercase tracking-tighter mb-4">Featured Work</H2>
+                <H2 className="text-6xl md:text-7xl font-black uppercase tracking-tighter mb-4"><TextReveal>Featured Work</TextReveal></H2>
                 <P className="text-xl max-w-2xl">Production-grade applications I&apos;ve shipped.</P>
             </div>
           </Reveal>
