@@ -39,21 +39,24 @@ export function About() {
                                 </div>
                                 
                                 <p className="text-lg md:text-xl font-medium text-muted-foreground leading-relaxed mt-4">
-                                    <span className="text-primary font-bold">I don&apos;t just write code.</span> I architect digital ecosystems. 
-                                    Specializing in <span className="text-foreground border-b-2 border-accent">Fullstack Development</span> and <span className="text-foreground border-b-2 border-accent">AI Integration</span>, 
-                                    I bridge the gap between creative chaos and engineering precision.
+                                    I am a <span className="text-primary font-bold">Fullstack Developer</span> and <span className="text-primary font-bold">Prompting Engineer</span> who leverages AI coding agents to accelerate development.
                                 </p>
                                 <p className="mt-6 text-lg md:text-xl font-medium text-muted-foreground leading-relaxed">
-                                    My workflow is simple: <span className="text-white bg-black px-2 font-mono">Analysis</span> → <span className="text-white bg-black px-2 font-mono">Execution</span> → <span className="text-white bg-black px-2 font-mono">Perfection</span>.
-                                    No fluff, no excuses. Just shipped products.
+                                    I apply an engineering approach to every project—creating PRDs, structured prompts, and clear documentation to define architecture and workflows with clarity.
                                 </p>
 
-                                <div className="mt-8 flex flex-wrap gap-4">
-                                    <div className="flex items-center gap-2 text-sm font-mono uppercase font-bold text-accent">
-                                        <span>SOLID Principles</span>
+                                <div className="mt-8 space-y-4 font-mono text-sm">
+                                    <div className="flex items-center gap-4 group/item">
+                                        <span className="bg-primary text-black px-2 py-0.5 font-bold group-hover/item:bg-white transition-colors">01.</span>
+                                        <span className="text-muted-foreground group-hover/item:text-foreground transition-colors">Backend Focus: Efficient architecture & Security</span>
                                     </div>
-                                    <div className="flex items-center gap-2 text-sm font-mono uppercase font-bold text-accent">
-                                        <span>Clean Architecture</span>
+                                    <div className="flex items-center gap-4 group/item">
+                                        <span className="bg-primary text-black px-2 py-0.5 font-bold group-hover/item:bg-white transition-colors">02.</span>
+                                        <span className="text-muted-foreground group-hover/item:text-foreground transition-colors">Frontend Focus: Reusable components & Consistency</span>
+                                    </div>
+                                    <div className="flex items-center gap-4 group/item">
+                                        <span className="bg-primary text-black px-2 py-0.5 font-bold group-hover/item:bg-white transition-colors">03.</span>
+                                        <span className="text-muted-foreground group-hover/item:text-foreground transition-colors">Principles: SOLID, DRY, KISS</span>
                                     </div>
                                 </div>
                                 
