@@ -2,11 +2,11 @@
 
 import { Hero } from "@/components/features/Hero";
 import { ProjectList } from "@/components/features/ProjectList";
+import { About } from "@/components/features/About";
 import { StatsGrid } from "@/components/features/Stats";
 import { Container, Section } from "@/components/layout/Wrappers";
 import { Reveal } from "@/components/ui/Animations";
 import { H2, P } from "@/components/ui/Typography";
-import { TECH_STACK } from "@/services/mockData";
 
 export default function Home() {
   return (
@@ -27,55 +27,7 @@ export default function Home() {
       </Section>
 
       {/* About Me Section (New) */}
-      <Section className="relative z-10 py-24 bg-surface/50 border-y border-white/5">
-        <Container>
-            <Reveal>
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-                    <div>
-                        <div className="flex items-center gap-4 mb-4">
-                             <span className="w-4 h-4 bg-accent animate-spin-slow rounded-none" />
-                             <span className="font-mono text-accent uppercase font-bold tracking-widest">About Me</span>
-                        </div>
-                        <H2 className="text-5xl md:text-6xl font-black uppercase tracking-tighter mb-8 max-w-xl">
-                            Engineering <span className="text-primary">Intelligence</span>
-                        </H2>
-                        <div className="space-y-6 text-lg text-muted-foreground font-medium">
-                            <P>
-                                I am a <strong className="text-foreground">Fullstack Developer</strong> and <strong className="text-foreground">Prompting Engineer</strong> who leverages AI coding agents to accelerate development.
-                            </P>
-                            <P>
-                                I apply an engineering approach to every project—creating PRDs, structured prompts, and clear documentation to define architecture and workflows with clarity.
-                            </P>
-                            <ul className="space-y-2 list-none mt-4 font-mono text-sm border-l-2 border-primary pl-4">
-                                <li className="flex gap-2"><span className="text-primary">01.</span> Backend Focus: Efficient architecture & Security</li>
-                                <li className="flex gap-2"><span className="text-primary">02.</span> Frontend Focus: Reusable components & Consistency</li>
-                                <li className="flex gap-2"><span className="text-primary">03.</span> Principles: SOLID, DRY, KISS</li>
-                            </ul>
-                        </div>
-                    </div>
-                    
-                    {/* Tech Stack Grid */}
-                    <div className="neo-brutal-border bg-black p-8">
-                        <H2 className="text-3xl font-black uppercase mb-6 border-b border-white/10 pb-4">Tech Arsenal</H2>
-                        <div className="space-y-6">
-                            {Object.entries(TECH_STACK).map(([category, techs]) => (
-                                <div key={category}>
-                                    <h3 className="text-xs font-mono uppercase text-muted mb-2 tracking-widest">{category}</h3>
-                                    <div className="flex flex-wrap gap-2">
-                                        {techs.map((tech) => (
-                                            <span key={tech} className="px-2 py-1 bg-white/10 text-sm font-bold hover:bg-primary hover:text-black transition-colors cursor-default">
-                                                {tech}
-                                            </span>
-                                        ))}
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-                </div>
-            </Reveal>
-        </Container>
-      </Section>
+      <About />
 
       {/* Stats Section */}
       <Section className="relative z-10 py-24">
