@@ -13,7 +13,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Dev Portfolio | Transparent & Data-Driven",
+  title: "Dev Portfolio | Vicky Mosafan",
   description: "A transparent, data-driven portfolio for a Fullstack Developer.",
 };
 
