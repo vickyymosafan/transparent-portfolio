@@ -144,15 +144,38 @@ function LanguageBar({ languages }: { languages: Language[] }) {
                     ))}
                 </div>
 
-                {/* Legend */}
-                <div className="flex flex-wrap gap-6 mt-6 pt-6 border-t border-white/10">
-                    {languages.map((lang) => (
-                        <div key={lang.name} className="flex items-center gap-3">
-                            <span className="w-3 h-3 block" style={{ backgroundColor: lang.color }} />
-                            <span className="font-mono text-sm font-bold uppercase text-white/70">
-                                {lang.name} <span className="text-white">{lang.percentage}%</span>
-                            </span>
-                        </div>
+                {/* Legend - Grid Layout with Card Style */}
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3 mt-6 pt-6 border-t border-white/10">
+                    {languages.map((lang, i) => (
+                        <motion.div 
+                            key={lang.name}
+                            initial={{ opacity: 0, y: 10 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.6 + (i * 0.05) }}
+                            viewport={{ once: true }}
+                            className="group flex items-center gap-3 bg-white/5 hover:bg-white/10 
+                                       px-4 py-3 rounded-lg border border-white/10 hover:border-primary/50 
+                                       transition-all duration-300 cursor-default"
+                        >
+                            {/* Color Indicator - Larger with glow effect */}
+                            <span 
+                                className="w-4 h-4 rounded-sm shrink-0 group-hover:scale-110 transition-transform" 
+                                style={{ 
+                                    backgroundColor: lang.color,
+                                    boxShadow: `0 0 10px ${lang.color}40`
+                                }} 
+                            />
+                            
+                            {/* Text Content - Stacked Hierarchy */}
+                            <div className="flex flex-col min-w-0">
+                                <span className="font-mono text-xs uppercase tracking-wide text-white/60 truncate">
+                                    {lang.name}
+                                </span>
+                                <span className="font-mono text-sm font-black text-white tabular-nums">
+                                    {lang.percentage}%
+                                </span>
+                            </div>
+                        </motion.div>
                     ))}
                 </div>
             </div>
