@@ -59,28 +59,40 @@ interface StatCardProps {
 }
 
 function StatCard({ label, value, sub, icon: Icon, delay }: StatCardProps) {
+    // Determine font size based on value length to prevent overflow
+    const length = value.length;
+    let fontSizeClass = "text-5xl md:text-6xl lg:text-7xl"; // Default (< 6 chars)
+
+    if (length > 15) {
+        fontSizeClass = "text-2xl md:text-3xl lg:text-4xl";
+    } else if (length > 8) { // "TypeScript" (10) and "4 hrs 20 mins" (13) hit here
+        fontSizeClass = "text-3xl md:text-4xl lg:text-5xl";
+    } else if (length > 5) {
+        fontSizeClass = "text-4xl md:text-5xl lg:text-6xl";
+    }
+
     return (
         <motion.div 
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ delay, duration: 0.5 }}
             viewport={{ once: true }}
-            className="neo-brutal-border bg-black text-white p-8 relative group overflow-hidden hover:bg-primary hover:text-black transition-colors duration-300"
+            className="neo-brutal-border bg-black text-white p-6 md:p-8 relative group overflow-hidden hover:bg-primary hover:text-black transition-colors duration-300"
         >
             {/* Background Noise/Grid on Hover */}
             <div className="absolute inset-0 bg-[linear-gradient(45deg,transparent_25%,rgba(0,0,0,0.1)_25%,rgba(0,0,0,0.1)_50%,transparent_50%,transparent_75%,rgba(0,0,0,0.1)_75%,rgba(0,0,0,0.1)_100%)] bg-size-[10px_10px] opacity-0 group-hover:opacity-20 pointer-events-none" />
 
             {/* Header */}
-            <div className="flex justify-between items-start mb-12 relative z-10">
-                <span className="font-mono text-sm uppercase tracking-[0.2em] font-bold border-b-2 border-primary group-hover:border-black transition-colors">
+            <div className="flex justify-between items-start mb-8 md:mb-12 relative z-10">
+                <span className="font-mono text-xs md:text-sm uppercase tracking-[0.2em] font-bold border-b-2 border-primary group-hover:border-black transition-colors">
                     {label}
                 </span>
-                <Icon className="w-6 h-6 opacity-50 group-hover:opacity-100 transition-opacity" />
+                <Icon className="w-5 h-5 md:w-6 md:h-6 opacity-50 group-hover:opacity-100 transition-opacity" />
             </div>
 
             {/* Value (Giant) */}
-            <div className="relative z-10">
-                <h3 className="text-6xl md:text-7xl font-black tracking-tighter leading-[0.8]">
+            <div className="relative z-10 min-h-20 flex items-end">
+                <h3 className={`${fontSizeClass} font-black tracking-tighter leading-[0.9] wrap-break-word hyphens-auto`}>
                     {value}
                 </h3>
             </div>
