@@ -67,7 +67,7 @@ function Char({ children, progress, range, variant }: CharProps) {
   const opacity = useTransform(progress, range, [0, 1]);
   const blur = useTransform(progress, range, [10, 0]);
   const y = useTransform(progress, range, [10, 0]);
-  const filter = useTransform(blur, (v) => `blur(${v}px)`);
+  const filter = useTransform(blur, (v: number) => `blur(${v}px)`);
 
   // Variant Switch
   const style = variant === "blur" 

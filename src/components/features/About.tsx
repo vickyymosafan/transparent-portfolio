@@ -96,12 +96,6 @@ export function About() {
                          </Reveal>
                     </div>
                 </div>
-                
-                <style jsx>{`
-                    .stroke-text-bold {
-                        -webkit-text-stroke: 2px rgba(255, 255, 255, 0.8);
-                    }
-                `}</style>
             </Container>
         </Section>
     );

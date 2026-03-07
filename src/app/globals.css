@@ -99,3 +99,11 @@ body {
   transform: translate(-2px, -2px);
   box-shadow: 6px 6px 0px var(--primary);
 }
+
+.stroke-text {
+  -webkit-text-stroke: 1px rgba(255, 255, 255, 0.5);
+}
+
+.stroke-text-bold {
+  -webkit-text-stroke: 2px rgba(255, 255, 255, 0.8);
+}

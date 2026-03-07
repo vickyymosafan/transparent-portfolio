@@ -179,12 +179,6 @@ export function Hero() {
                     ))}
                  </div>
             </motion.div>
-            
-            <style jsx>{`
-                .stroke-text {
-                    -webkit-text-stroke: 1px rgba(255, 255, 255, 0.5);
-                }
-            `}</style>
         </div>
     );
 }

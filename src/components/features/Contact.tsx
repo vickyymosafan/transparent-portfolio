@@ -16,7 +16,7 @@ export function Contact() {
     return (
         <section ref={containerRef} className="relative z-10 bg-primary text-black pt-32 pb-12 overflow-hidden selection:bg-black selection:text-primary">
             {/* Background Noise (Subtle) */}
-            <div className="absolute inset-0 opacity-10 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] bg-repeat mix-blend-multiply pointer-events-none" />
+            <div className="absolute inset-0 opacity-10 bg-noise mix-blend-multiply pointer-events-none" />
 
             {/* Scrolling Marquee */}
             <div className="absolute top-0 left-0 w-full overflow-hidden whitespace-nowrap border-b-2 border-black bg-black py-2">
