@@ -9,6 +9,9 @@ import { scrollProgress } from "@/lib/scroll-progress";
 import { useChapterStore } from "@/lib/chapter-store";
 import { CHAPTER_SCENES, SCENE_DAMP } from "@/lib/scene-state";
 import { getLiveViews } from "./live-registry";
+import { SkyDome } from "./SkyDome";
+import { FogBanks } from "./FogBanks";
+import { Ridges } from "./Ridges";
 import { EmberMoon } from "./EmberMoon";
 import { MistField } from "./MistField";
 import { Monoliths } from "./Monoliths";
@@ -99,6 +102,9 @@ export default function SceneInner({ onReady, onContextLost }: { onReady?: () =>
         <Bloom mipmapBlur luminanceThreshold={1} luminanceSmoothing={0.2} intensity={1.1} />
       </EffectComposer>
       <SceneRig />
+      <SkyDome />
+      <FogBanks />
+      <Ridges />
       <EmberMoon />
       <MistField />
       <Monoliths />
