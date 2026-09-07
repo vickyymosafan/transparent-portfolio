@@ -2,6 +2,7 @@ import { PROJECTS } from "@/services/mockData";
 import { ArrowUpRight } from "lucide-react";
 import { LiveWindow } from "@/components/canvas/LiveWindow";
 import { WordMask } from "@/components/ui/Animations";
+import { Interlude } from "@/components/ui/Interlude";
 
 function ProjectCard({ project, index }: { project: (typeof PROJECTS)[number]; index: number }) {
     return (
@@ -63,6 +64,7 @@ export function ProjectList() {
 export function ProjectsSection() {
     return (
         <section id="chapter-projects" data-chapter="projects" className="relative overflow-x-clip px-[clamp(20px,3.4vw,56px)] py-[clamp(88px,15vh,190px)]">
+            <Interlude numeral="03" title="The Work" tagline="Shipped systems with real users. Selected, not collected." />
             <div className="sec-scrim" />
             <div className="relative z-10 mx-auto max-w-7xl">
                 <div className="mb-10 flex items-baseline gap-4">

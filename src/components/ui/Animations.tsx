@@ -32,3 +32,17 @@ export function WordMask({
         </motion.span>
     );
 }
+
+export function RevealTitle({ text, className }: { text: string; className?: string }) {
+    return (
+        <motion.h2
+            className={className}
+            initial={{ opacity: 0, y: 34, filter: "blur(14px)", letterSpacing: "0.08em" }}
+            whileInView={{ opacity: 1, y: 0, filter: "blur(0px)", letterSpacing: "-0.02em" }}
+            viewport={{ once: true, margin: "-120px" }}
+            transition={{ duration: 1.15, ease: [0.16, 1, 0.3, 1] }}
+        >
+            {text}
+        </motion.h2>
+    );
+}

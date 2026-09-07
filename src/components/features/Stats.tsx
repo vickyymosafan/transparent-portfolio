@@ -4,6 +4,7 @@ import { MOCK_GITHUB, MOCK_WAKATIME, Language } from "@/services/mockData";
 import { Github, Clock, Code2, Flame, ArrowUpRight, type LucideIcon } from "lucide-react";
 import { motion } from "framer-motion";
 import { WordMask } from "@/components/ui/Animations";
+import { Interlude } from "@/components/ui/Interlude";
 
 export function StatsGrid() {
     return (
@@ -144,6 +145,7 @@ function LanguageBar({ languages }: { languages: Language[] }) {
 export function StatsSection() {
     return (
         <section id="chapter-stats" data-chapter="stats" className="relative overflow-x-clip px-[clamp(20px,3.4vw,56px)] py-[clamp(88px,15vh,190px)]">
+            <Interlude numeral="02" title="Live Pulse" tagline="Contributions, hours, and languages — measured while they happen, not remembered afterwards." />
             <div className="sec-scrim sec-scrim--center" />
             <div className="relative z-10 mx-auto max-w-7xl">
                 <div className="mb-10 flex items-baseline gap-4">

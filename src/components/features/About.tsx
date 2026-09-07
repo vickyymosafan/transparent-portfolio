@@ -1,5 +1,6 @@
 import { ArrowUpRight } from "lucide-react";
 import { WordMask } from "@/components/ui/Animations";
+import { Interlude } from "@/components/ui/Interlude";
 import { TECH_STACK } from "@/services/mockData";
 
 const FOCUS = [
@@ -11,6 +12,7 @@ const FOCUS = [
 export function About() {
     return (
         <section id="chapter-about" data-chapter="about" className="relative overflow-x-clip px-[clamp(20px,3.4vw,56px)] py-[clamp(88px,15vh,190px)]">
+            <Interlude numeral="01" title="The Builder" tagline="How I work: PRDs, structured prompts, and engineering discipline — applied with AI agents, not replaced by them." />
             <div className="sec-scrim" />
             <div className="relative z-10 mx-auto max-w-7xl">
                 <div className="mb-[clamp(30px,5vh,66px)] flex items-baseline gap-4">
