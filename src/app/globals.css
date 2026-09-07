@@ -293,3 +293,42 @@ body {
 }
 
 .fg-item svg { filter: saturate(0.85) brightness(0.8); }
+
+/* ===== Card glow (anchored on lit sources) ===== */
+.card-glow {
+  position: absolute;
+  z-index: 5;
+  pointer-events: none;
+  translate: -50% -50%;
+  width: calc(var(--gr) * 2);
+  aspect-ratio: 1;
+  mix-blend-mode: screen;
+  animation: glow-swell 9.7s cubic-bezier(0.65, 0, 0.35, 1) infinite alternate;
+}
+.card-glow::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 9999px;
+  background: radial-gradient(closest-side, rgba(255, 142, 108, 0.5), rgba(212, 56, 38, 0.24) 40%, transparent 72%);
+  animation: glow-pulse 6.1s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+}
+.card-glow--flame::before { animation: glow-flame 4.3s linear infinite; }
+@keyframes glow-swell {
+  from { transform: scale(0.93); }
+  to { transform: scale(1.07); }
+}
+@keyframes glow-pulse {
+  from { opacity: 0.78; }
+  50% { opacity: 1; }
+  to { opacity: 0.78; }
+}
+@keyframes glow-flame {
+  0% { opacity: 0.74; } 6% { opacity: 0.97; } 12% { opacity: 0.63; } 19% { opacity: 0.9; }
+  27% { opacity: 0.55; } 34% { opacity: 0.94; } 42% { opacity: 0.71; } 51% { opacity: 1; }
+  58% { opacity: 0.6; } 66% { opacity: 0.88; } 74% { opacity: 0.67; } 83% { opacity: 0.96; }
+  91% { opacity: 0.72; } 100% { opacity: 0.74; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .card-glow, .card-glow::before { animation: none; }
+}

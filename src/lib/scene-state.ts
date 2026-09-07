@@ -22,7 +22,16 @@ export const CHAPTER_SCENES: Record<ChapterId, ChapterScene> = {
 
 export const SCENE_DAMP = { camera: 1.5, uniforms: 1.2 } as const;
 
-export const LIVE_WINDOW_OFFSETS = [-1.6, 0.3, 1.6] as const;
+export interface CardView {
+  cam: [number, number, number];
+  look: [number, number, number];
+}
+
+export const CARD_VIEWS: CardView[] = [
+  { cam: [2.2, 1.6, -3.2], look: [2.6, 2.4, -8] },
+  { cam: [-4.6, 3.4, 2.2], look: [-3.2, 3.8, -12] },
+  { cam: [-1.0, 0.8, 1.2], look: [1.4, 0.9, -6] },
+];
 
 export function countStars(): number {
   if (typeof navigator === "undefined") return 420;

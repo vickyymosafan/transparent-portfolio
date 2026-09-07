@@ -54,7 +54,6 @@ function SceneRig() {
     const views = getLiveViews();
     if (views.length > 0) {
       const dpr = gl.getPixelRatio();
-      cardCam.copy(camera as THREE.PerspectiveCamera);
       gl.setScissorTest(false);
       gl.setViewport(0, 0, gl.domElement.width, gl.domElement.height);
       gl.setScissorTest(true);
@@ -66,13 +65,18 @@ function SceneRig() {
         const y = Math.floor((window.innerHeight - r.bottom) * dpr);
         const w = Math.floor(r.width * dpr);
         const h = Math.floor(r.height * dpr);
+        const push = v.hover ? 0.12 : 0;
+        cardCam.position.set(
+          v.view.cam[0] + (v.view.look[0] - v.view.cam[0]) * push,
+          v.view.cam[1] + (v.view.look[1] - v.view.cam[1]) * push,
+          v.view.cam[2] + (v.view.look[2] - v.view.cam[2]) * push
+        );
         cardCam.aspect = r.width / r.height;
         cardCam.updateProjectionMatrix();
-        cardCam.position.x += v.camOffsetX;
+        cardCam.lookAt(v.view.look[0], v.view.look[1], v.view.look[2]);
         gl.setViewport(x, y, w, h);
         gl.setScissor(x, y, w, h);
         gl.render(scene, cardCam);
-        cardCam.position.x -= v.camOffsetX;
       }
       gl.setScissorTest(false);
     }

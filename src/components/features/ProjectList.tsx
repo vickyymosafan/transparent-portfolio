@@ -1,8 +1,14 @@
 import { PROJECTS } from "@/services/mockData";
 import { ArrowUpRight } from "lucide-react";
-import { LiveWindow } from "@/components/canvas/LiveWindow";
+import { LiveWindow, type CardGlow } from "@/components/canvas/LiveWindow";
 import { WordMask } from "@/components/ui/Animations";
 import { Interlude } from "@/components/ui/Interlude";
+
+const CARD_GLOWS: CardGlow[] = [
+  { gx: 50, gy: 38, gr: 20, variant: "flame" },
+  { gx: 24, gy: 22, gr: 16, variant: "moon" },
+  { gx: 62, gy: 55, gr: 18, variant: "flame" },
+];
 
 function ProjectCard({ project, index }: { project: (typeof PROJECTS)[number]; index: number }) {
     return (
@@ -13,7 +19,7 @@ function ProjectCard({ project, index }: { project: (typeof PROJECTS)[number]; i
         >
             <a href={project.link ?? "#"} className="block" data-cursor>
                 <div className="relative aspect-[4/5] outline outline-1 -outline-offset-1 outline-bone/[0.09] transition-[outline-color] duration-500 group-hover:outline-bone/30">
-                    <LiveWindow index={index} className="absolute inset-0" />
+                    <LiveWindow index={index} className="absolute inset-0" glow={CARD_GLOWS[index]} />
                     <ArrowUpRight className="absolute right-3.5 top-3.5 z-20 size-6 -translate-x-1 -translate-y-1 opacity-0 transition-all duration-500 group-hover:translate-x-0 group-hover:translate-y-0 group-hover:opacity-90" />
                     <b className="absolute bottom-3.5 left-4 right-4 z-10 text-[clamp(13px,1.15vw,17px)] uppercase tracking-wide text-bone drop-shadow-[0_2px_12px_rgba(0,0,0,0.8)]">
                         {project.title}
