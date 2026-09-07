@@ -83,7 +83,7 @@ export function SiteNav() {
             </header>
             <div
                 id="mobile-menu"
-                className={`fixed top-0 right-0 bottom-0 z-50 flex w-[min(84vw,360px)] flex-col items-start border-l border-bone/[0.07] bg-[rgba(3,6,9,0.98)] px-[clamp(20px,3.4vw,56px)] pt-[calc(84px+28px)] transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] md:hidden ${
+                className={`fixed top-[84px] right-0 bottom-0 z-50 flex w-[min(84vw,360px)] flex-col items-start border-l border-bone/[0.07] bg-[rgba(3,6,9,0.98)] px-[clamp(20px,3.4vw,56px)] pt-[clamp(14px,3vh,42px)] transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] md:hidden ${
                     open ? "translate-x-0" : "translate-x-full invisible"
                 }`}
             >
