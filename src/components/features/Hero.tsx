@@ -1,184 +1,68 @@
 "use client";
 
-import Image from "next/image";
-import { Button } from "@/components/ui/Button";
-import { motion, Variants } from "framer-motion";
+import { motion } from "framer-motion";
+import { WordMask } from "@/components/ui/Animations";
+import { CHAPTER_LABELS } from "@/lib/chapter-store";
+
+const CHIP_IDS = ["about", "stats", "projects", "finale"] as const;
+type ChipId = (typeof CHIP_IDS)[number];
+const CHAPTER_DESC: Record<ChipId, string> = {
+    about: "Who I am and how I work",
+    stats: "GitHub & WakaTime, live",
+    projects: "Shipped, production-grade",
+    finale: "Let's build something",
+};
 
 export function Hero() {
-    const containerVariants: Variants = {
-        hidden: { opacity: 0 },
-        visible: {
-            opacity: 1,
-            transition: {
-                staggerChildren: 0.1,
-                delayChildren: 0.2,
-            }
-        }
-    };
-
-    const itemVariants: Variants = {
-        hidden: { y: 50, opacity: 0, rotateX: -20 },
-        visible: {
-            y: 0,
-            opacity: 1,
-            rotateX: 0,
-            transition: {
-                type: "spring",
-                stiffness: 100,
-                damping: 10,
-                mass: 0.5
-            }
-        }
-    };
-
-    const imageVariants: Variants = {
-        hidden: { scale: 0.8, opacity: 0, rotate: -15 },
-        visible: {
-            scale: 1,
-            opacity: 1,
-            rotate: 0,
-            transition: {
-                type: "spring",
-                stiffness: 120,
-                damping: 15,
-                delay: 0.4
-            }
-        }
-    };
-
     return (
-        <div className="relative w-full overflow-visible py-12 md:py-20 lg:py-0">
-            {/* Background Elements */}
-            <div 
-                className="absolute -top-[50%] -right-[20%] w-[1000px] h-[1000px] rounded-full pointer-events-none -z-10 opacity-20 mix-blend-screen"
-                style={{
-                    background: 'radial-gradient(circle at center, var(--primary) 0%, transparent 70%)',
-                    filter: 'blur(80px)'
-                }}
-            />
-            <div 
-                className="absolute -bottom-[50%] -left-[20%] w-[800px] h-[800px] rounded-full pointer-events-none -z-10 opacity-10 mix-blend-screen"
-                style={{
-                    background: 'radial-gradient(circle at center, var(--accent) 0%, transparent 70%)',
-                    filter: 'blur(60px)'
-                }}
-            />
+        <section id="chapter-hero" data-chapter="hero" className="relative flex min-h-svh flex-col px-[clamp(20px,3.4vw,56px)]">
+            <div className="pointer-events-none absolute inset-x-0 top-0 h-[46%] bg-gradient-to-b from-black/70 via-black/30 to-transparent" />
 
-            <motion.div 
-                className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center"
-                variants={containerVariants}
-                initial="hidden"
-                animate="visible"
-            >
-                {/* Left Column: Text */}
-                <div className="flex flex-col gap-6 relative z-10 text-center lg:text-left items-center lg:items-start">
-
-
-                    {/* Giant Typography */}
-                    <div className="relative">
-                        <motion.h1 
-                            className="text-6xl md:text-8xl lg:text-9xl font-black tracking-tighter leading-[0.9] text-foreground mix-blend-difference"
-                            variants={itemVariants}
-                        >
-                            FULLSTACK
-                            <br />
-                            <span className="text-transparent stroke-text">DEV</span>ELOPER
-                        </motion.h1>
-                        
-                        {/* Floating decorative elements */}
-                         <motion.div 
-                            className="absolute -top-4 -right-4 w-12 h-12 border-2 border-primary rounded-full hidden md:block" 
-                            initial={{ scale: 0 }}
-                            animate={{ scale: 1, rotate: 360 }}
-                            transition={{ delay: 1, type: "spring" }}
-                         />
-                    </div>
-
-                    <div className="space-y-2">
-                        <motion.h2 className="text-3xl md:text-5xl font-bold uppercase tracking-tight text-muted/50" variants={itemVariants}>
-                            Data Driven.
-                        </motion.h2>
-                        <motion.h2 className="text-3xl md:text-5xl font-bold uppercase tracking-tight text-foreground" variants={itemVariants}>
-                            Transparent.
-                        </motion.h2>
-                    </div>
-
-                    <motion.p 
-                        className="max-w-xl text-lg md:text-xl text-muted-foreground font-medium border-l-2 border-primary pl-4 my-6 text-left"
-                        variants={itemVariants}
-                    >
-                        I build scalable applications. No fluff, just code that works in production. 
-                        Backed by real data, not just promises.
-                    </motion.p>
-
-                    <motion.div className="flex flex-wrap gap-4 justify-center lg:justify-start" variants={itemVariants}>
-                        <Button size="lg" withArrow className="neo-brutal-border bg-primary text-black hover:bg-primary/90 rounded-none font-bold uppercase tracking-wider">
-                            View My Work
-                        </Button>
-                        <Button size="lg" variant="outline" className="rounded-none border-2 hover:border-primary font-bold uppercase tracking-wider">
-                            Contact Me
-                        </Button>
-                    </motion.div>
+            <div className="relative z-10 max-w-[560px] pt-[calc(84px+2rem)]">
+                <div className="eyebrow mb-5 flex items-center gap-2.5">
+                    <span className="h-[5px] w-[5px] rounded-full bg-[#e0231c] shadow-[0_0_10px_#e0231c]" />
+                    Transparent Portfolio — Live Data
                 </div>
+                <h1 className="mb-4 text-[clamp(26px,3.05vw,46px)] uppercase leading-[1.055] tracking-[-0.012em] text-bone">
+                    <WordMask text="Fullstack developer," />
+                    <br />
+                    <WordMask text="built in the open." delay={0.25} />
+                </h1>
+                <p className="max-w-[322px] text-[clamp(14px,1.02vw,17px)] font-light leading-[1.72] text-[#b4bfb7]">
+                    Scalable apps, no fluff — backed by live data from GitHub and WakaTime, not promises.
+                </p>
+            </div>
 
-                {/* Right Column: Image */}
-                <div className="relative w-full aspect-square md:aspect-4/5 lg:aspect-square flex items-center justify-center">
-                    {/* Image Container with Neo-Brutal styling */}
-                    <motion.div 
-                        className="relative w-[300px] h-[400px] md:w-[400px] md:h-[500px]"
-                        variants={imageVariants}
-                    >
-                        {/* Back Card (Decoration) */}
-                        <div className="absolute inset-0 bg-primary/10 translate-x-4 translate-y-4 border-2 border-primary/30 backdrop-blur-sm" />
-                        
-                        {/* Image Frame */}
-                        <div className="absolute inset-0 bg-surface border-2 border-white/10 overflow-hidden grayscale hover:grayscale-0 transition-all duration-500 ease-out hover:translate-x-1 hover:translate-y-1">
-                             <Image 
-                                src="/profile.png" 
-                                alt="Profile" 
-                                fill 
-                                className="object-cover object-center"
-                                priority
-                             />
-                             
-                             {/* Overlay Texture */}
-                             <div className="absolute inset-0 bg-noise opacity-20 mix-blend-overlay" />
-                        </div>
-                        
-                        {/* Floating Badge */}
-                         <motion.div 
-                            className="absolute -bottom-6 -left-6 bg-black border border-white/20 p-4 neo-brutal-border"
-                            initial={{ x: -50, opacity: 0 }}
-                            animate={{ x: 0, opacity: 1 }}
-                            transition={{ delay: 0.8, type: "spring" }}
-                         >
-                            <div className="text-xs font-mono text-muted mb-1">CURRENT STACK</div>
-                            <div className="text-xl font-bold text-primary">NEXT.JS</div>
-                         </motion.div>
-                    </motion.div>
-                </div>
-            </motion.div>
+            <div className="min-h-[clamp(140px,26vh,300px)] flex-1" aria-hidden />
 
-            {/* Marquee Scroller at Bottom */}
-            <motion.div 
-                className="absolute -bottom-24 lg:-bottom-32 left-1/2 -translate-x-1/2 w-screen overflow-hidden py-4 border-y border-white/5 bg-black/50 backdrop-blur-sm transform"
-                initial={{ opacity: 0, y: 100 }}
+            <motion.div
+                className="relative z-10 pb-[clamp(22px,4.2vh,42px)]"
+                initial={{ opacity: 0, y: 24 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 1, duration: 0.8 }}
+                transition={{ delay: 0.9, duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
             >
-                 <div className="whitespace-nowrap animate-marquee flex gap-8 items-center">
-                    {[1, 2, 3, 4].map((i) => (
-                        <div key={i} className="flex items-center gap-8">
-                            <span className="text-4xl font-bold text-transparent stroke-text uppercase opacity-30">Principal Engineer</span>
-                            <span className="text-2xl text-primary">★</span>
-                            <span className="text-4xl font-bold text-foreground uppercase">Frontend Architecture</span>
-                            <span className="text-2xl text-primary">★</span>
-                            <span className="text-4xl font-bold text-transparent stroke-text uppercase opacity-30">Backend Performance</span>
-                            <span className="text-2xl text-primary">★</span>
-                        </div>
+                <div className="mb-3.5 flex items-center justify-end gap-3 text-[9px] uppercase tracking-[0.3em] text-muted-k">
+                    Scroll
+                    <span className="relative block h-px w-[54px] overflow-hidden bg-bone/15">
+                        <i className="absolute inset-0 origin-left animate-cue bg-bone" />
+                    </span>
+                </div>
+                <div className="grid grid-cols-2 gap-4 border-t border-bone/[0.07] pt-[18px] md:grid-cols-4">
+                    {CHIP_IDS.map((id, i) => (
+                        <a key={id} href={`#chapter-${id}`} className="group flex gap-3.5">
+                            <span className="text-[clamp(26px,2.5vw,36px)] font-light leading-none tabular-nums text-bone-dim transition-colors duration-500 group-hover:text-[#ff5a3c]">
+                                {`0${i + 1}`}
+                            </span>
+                            <span className="min-w-0 pt-[3px]">
+                                <b className="block text-[10px] font-medium uppercase tracking-[0.2em] text-bone-dim transition-colors duration-500 group-hover:text-bone">
+                                    {CHAPTER_LABELS[id]}
+                                </b>
+                                <p className="mt-1.5 text-[11px] leading-normal text-muted-k">{CHAPTER_DESC[id]}</p>
+                            </span>
+                        </a>
                     ))}
-                 </div>
+                </div>
             </motion.div>
-        </div>
+        </section>
     );
 }
