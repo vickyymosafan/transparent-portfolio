@@ -7,10 +7,13 @@ import { Container, Section } from "@/components/layout/Wrappers";
 import { Reveal } from "@/components/ui/Animations";
 import { H2, P } from "@/components/ui/Typography";
 import { TextReveal } from "@/components/ui/TextReveal";
+import { SceneCanvas } from "@/components/canvas/SceneCanvas";
 
 export default function Home() {
   return (
     <main className="min-h-screen bg-background text-foreground relative selection:bg-primary selection:text-primary-foreground overflow-hidden">
+      <SceneCanvas />
+
       {/* Global Noise Overlay */}
       <div className="fixed inset-0 pointer-events-none z-50 bg-noise opacity-30 mix-blend-overlay" />
       

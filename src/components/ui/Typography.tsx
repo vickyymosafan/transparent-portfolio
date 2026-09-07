@@ -3,7 +3,7 @@ import React from "react";
 
 interface TypographyProps extends React.HTMLAttributes<HTMLElement> {
     children: React.ReactNode;
-    as?: React.ElementType;
+    as?: React.ElementType<React.HTMLAttributes<HTMLElement>>;
 }
 
 export function H1({ children, className, as: Component = "h1", ...props }: TypographyProps) {

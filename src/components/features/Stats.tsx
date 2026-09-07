@@ -1,9 +1,8 @@
 "use client";
 
 import { MOCK_GITHUB, MOCK_WAKATIME, Language } from "@/services/mockData";
-import { Github, Clock, Code2, Flame, ArrowUpRight } from "lucide-react";
+import { Github, Clock, Code2, Flame, ArrowUpRight, type LucideIcon } from "lucide-react";
 import { motion } from "framer-motion";
-import { ElementType } from "react";
 
 export function StatsGrid() {
     return (
@@ -54,7 +53,7 @@ interface StatCardProps {
     label: string;
     value: string;
     sub: string;
-    icon: ElementType;
+    icon: LucideIcon;
     delay: number;
 }
 
