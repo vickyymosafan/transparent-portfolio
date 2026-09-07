@@ -99,7 +99,6 @@ export function MonolithCity() {
     <group>
       <instancedMesh ref={instanced} args={[undefined, undefined, COUNT]} frustumCulled={false}>
         <boxGeometry args={[1, 1, 1]} />
-        {/* eslint-disable-next-line react-hooks/purity -- color set once; values >1 feed bloom via map multiply */}
         <meshBasicMaterial
           map={tex}
           color={new THREE.Color(2.4, 2.0, 1.7)}
@@ -112,7 +111,6 @@ export function MonolithCity() {
         <group key={i} position={[t.pos[0], t.pos[1], t.pos[2]]}>
           <mesh position={[0, t.h / 2 - 0.8, 0]}>
             <boxGeometry args={[t.w, t.h, 0.5]} />
-            {/* eslint-disable-next-line react-hooks/purity -- same bloom-multiply pattern */}
             <meshBasicMaterial
               map={tex}
               color={new THREE.Color(t.glow, t.glow * 0.85, t.glow * 0.7)}
