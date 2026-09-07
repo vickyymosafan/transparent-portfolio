@@ -1,0 +1,31 @@
+import type { ChapterId } from "./chapter-store";
+
+export interface ChapterScene {
+  camera: [number, number, number];
+  lookAt: [number, number, number];
+  fogColor: string;
+  fogDensity: number;
+  moonX: number;
+  moonY: number;
+  moonScale: number;
+  stream: number;
+  drift: number;
+}
+
+export const CHAPTER_SCENES: Record<ChapterId, ChapterScene> = {
+  hero: { camera: [0, 1.0, 9], lookAt: [0, 1.2, 0], fogColor: "#0a0e12", fogDensity: 0.055, moonX: 3.4, moonY: 3.6, moonScale: 1, stream: 0, drift: 1 },
+  about: { camera: [0.6, 1.0, 6.5], lookAt: [0.3, 1.4, 0], fogColor: "#0c0f12", fogDensity: 0.06, moonX: 3.0, moonY: 3.2, moonScale: 1.05, stream: 0, drift: 1.2 },
+  stats: { camera: [0, 1.1, 6.0], lookAt: [0, 1.6, 0], fogColor: "#0a1116", fogDensity: 0.075, moonX: -2.6, moonY: 4.0, moonScale: 0.8, stream: 1, drift: 0.5 },
+  projects: { camera: [1.4, 1.0, 7], lookAt: [0.6, 1.3, 0], fogColor: "#100c0a", fogDensity: 0.06, moonX: 0.8, moonY: 2.8, moonScale: 0.95, stream: 0, drift: 0.9 },
+  finale: { camera: [0, 1.2, 10], lookAt: [0, 2.2, 0], fogColor: "#080a0e", fogDensity: 0.05, moonX: 0, moonY: 3.4, moonScale: 1.7, stream: 0, drift: 0.4 },
+};
+
+export const SCENE_DAMP = { camera: 2.2, uniforms: 1.8 } as const;
+
+export function countParticles(): number {
+  if (typeof navigator === "undefined") return 2500;
+  const nav = navigator as Navigator & { deviceMemory?: number };
+  const cores = nav.hardwareConcurrency ?? 8;
+  const memory = nav.deviceMemory ?? 8;
+  return cores <= 4 || memory <= 4 ? 800 : 2500;
+}
