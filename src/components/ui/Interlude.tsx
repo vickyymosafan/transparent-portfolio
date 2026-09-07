@@ -10,7 +10,7 @@ export function Interlude({ numeral, title, tagline }: { numeral: string; title:
     const y = useTransform(scrollYProgress, [0, 1], ["12%", "-12%"]);
 
     return (
-        <div ref={ref} className="relative flex min-h-svh flex-col items-start justify-center px-[clamp(20px,3.4vw,56px)]">
+        <div ref={ref} className="relative flex min-h-svh flex-col items-start justify-center">
             <div className="sec-scrim sec-scrim--open" />
             <motion.span
                 aria-hidden

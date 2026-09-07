@@ -59,6 +59,7 @@ export function EmberMoon() {
   const mesh = useRef<THREE.Mesh>(null);
   const shell = useRef<THREE.Mesh>(null);
   const mat = useRef<THREE.ShaderMaterial>(null);
+  const shellMat = useRef<THREE.ShaderMaterial>(null);
 
   useFrame((state, delta) => {
     if (shell.current) {
@@ -74,6 +75,7 @@ export function EmberMoon() {
       mat.current.uniforms.uTime.value = moonTime;
       mat.current.uniforms.uIntensity.value = moonState.intensity;
     }
+    if (shellMat.current) shellMat.current.uniforms.uIntensity.value = moonState.intensity;
   });
 
   return (
@@ -93,6 +95,7 @@ export function EmberMoon() {
       <mesh scale={2.6}>
         <sphereGeometry args={[1, 24, 16]} />
         <shaderMaterial
+          ref={shellMat}
           uniforms={{ uIntensity: { value: 1 } }}
           vertexShader={shellVert}
           fragmentShader={shellFrag}

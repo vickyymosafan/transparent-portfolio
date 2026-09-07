@@ -18,6 +18,8 @@ import { Embers } from "./Embers";
 import { MonolithCity } from "./MonolithCity";
 import { cardCam, emberState, moonState, tmpColor } from "./shared-refs";
 
+const fullSize = new THREE.Vector2();
+
 function SceneRig() {
   const { camera, gl, scene } = useThree();
   const lookAt = useRef(new THREE.Vector3(0, 1.2, 0));
@@ -53,18 +55,18 @@ function SceneRig() {
 
     const views = getLiveViews();
     if (views.length > 0) {
-      const dpr = gl.getPixelRatio();
       gl.setScissorTest(false);
-      gl.setViewport(0, 0, gl.domElement.width, gl.domElement.height);
+      gl.getSize(fullSize);
+      gl.setViewport(0, 0, fullSize.x, fullSize.y);
       gl.setScissorTest(true);
       // NOTE: window.innerHeight is valid here only because #scene-canvas is fixed inset-0.
       for (const v of views) {
         const r = v.el.getBoundingClientRect();
         if (r.bottom < 0 || r.top > window.innerHeight || r.width === 0) continue;
-        const x = Math.floor(r.left * dpr);
-        const y = Math.floor((window.innerHeight - r.bottom) * dpr);
-        const w = Math.floor(r.width * dpr);
-        const h = Math.floor(r.height * dpr);
+        const x = Math.floor(r.left);
+        const y = Math.floor(window.innerHeight - r.bottom);
+        const w = Math.floor(r.width);
+        const h = Math.floor(r.height);
         const push = v.hover ? 0.12 : 0;
         cardCam.position.set(
           v.view.cam[0] + (v.view.look[0] - v.view.cam[0]) * push,
@@ -79,6 +81,8 @@ function SceneRig() {
         gl.render(scene, cardCam);
       }
       gl.setScissorTest(false);
+      gl.getSize(fullSize);
+      gl.setViewport(0, 0, fullSize.x, fullSize.y);
     }
   }, 2);
   /* eslint-enable react-hooks/immutability */

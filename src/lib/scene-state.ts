@@ -29,7 +29,7 @@ export interface CardView {
 
 export const CARD_VIEWS: CardView[] = [
   { cam: [2.2, 1.6, -3.2], look: [2.6, 2.4, -8] },
-  { cam: [-4.6, 3.4, 2.2], look: [-3.2, 3.8, -12] },
+  { cam: [-4.6, 3.4, 2.2], look: [-3.4, 3.6, -10] },
   { cam: [-1.0, 0.8, 1.2], look: [1.4, 0.9, -6] },
 ];
 
