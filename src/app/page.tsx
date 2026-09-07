@@ -1,63 +1,32 @@
 import { Hero } from "@/components/features/Hero";
-import { ProjectsSection } from "@/components/features/ProjectList";
 import { About } from "@/components/features/About";
-import { StatsGrid } from "@/components/features/Stats";
+import { StatsSection } from "@/components/features/Stats";
+import { ProjectsSection } from "@/components/features/ProjectList";
 import { Contact } from "@/components/features/Contact";
-import { Container, Section } from "@/components/layout/Wrappers";
-import { Reveal } from "@/components/ui/Animations";
-import { H2 } from "@/components/ui/Typography";
-import { TextReveal } from "@/components/ui/TextReveal";
 import { SceneCanvas } from "@/components/canvas/SceneCanvas";
-// TEMP furniture mounts — stay until Task 9 replaces page.tsx entirely
 import { Preloader } from "@/components/ui/Preloader";
-import { CustomCursor } from "@/components/ui/CustomCursor";
-import { ProgressRail } from "@/components/ui/ProgressRail";
 import { SiteNav } from "@/components/layout/SiteNav";
+import { ProgressRail } from "@/components/ui/ProgressRail";
+import { CustomCursor } from "@/components/ui/CustomCursor";
 
 export default function Home() {
-  return (
-    <main className="min-h-screen bg-background text-foreground relative selection:bg-primary selection:text-primary-foreground overflow-hidden">
-      <SiteNav />
-      <Preloader />
-      <CustomCursor />
-      <ProgressRail />
-      <SceneCanvas />
+    return (
+        <main className="relative min-h-screen overflow-x-clip bg-ink text-bone selection:bg-[#e0231c] selection:text-white">
+            <SceneCanvas />
+            <div className="vignette" aria-hidden />
+            <div className="pointer-events-none fixed inset-0 z-[60] bg-noise opacity-[0.06] mix-blend-overlay" aria-hidden />
+            <Preloader />
+            <SiteNav />
+            <ProgressRail />
+            <CustomCursor />
 
-      {/* Global Noise Overlay */}
-      <div className="fixed inset-0 pointer-events-none z-50 bg-noise opacity-30 mix-blend-overlay" />
-      
-      {/* Background Grid Pattern (Subtle) */}
-      <div className="fixed inset-0 bg-[linear-gradient(to_right,#8080800a_1px,transparent_1px),linear-gradient(to_bottom,#8080800a_1px,transparent_1px)] bg-size-[14px_24px] pointer-events-none z-0" />
-
-      {/* Hero Section */}
-      <Hero />
-
-      {/* About Me Section (New) */}
-      <About />
-
-      {/* Stats Section */}
-      <Section className="relative z-10 py-24">
-        <Container>
-          <Reveal>
-            <div className="mb-16 border-b-2 border-white/10 pb-8">
-                <div className="flex items-center gap-4 mb-2">
-                    <span className="w-4 h-4 bg-primary animate-pulse" />
-                    <span className="font-mono text-primary uppercase font-bold tracking-widest">Live Data</span>
-                </div>
-              <H2 className="text-6xl md:text-7xl font-black uppercase tracking-tighter mb-4"><TextReveal>Live Statistics</TextReveal></H2>
+            <div className="relative z-10">
+                <Hero />
+                <About />
+                <StatsSection />
+                <ProjectsSection />
+                <Contact />
             </div>
-          </Reveal>
-          <Reveal delay={0.2}>
-            <StatsGrid />
-          </Reveal>
-        </Container>
-      </Section>
-
-      {/* Projects Section — TEMP mount until Task 9 replaces page.tsx */}
-      <ProjectsSection />
-
-      {/* Footer / Contact */}
-      <Contact />
-    </main>
-  );
+        </main>
+    );
 }
