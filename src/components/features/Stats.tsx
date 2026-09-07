@@ -3,41 +3,42 @@
 import { MOCK_GITHUB, MOCK_WAKATIME, Language } from "@/services/mockData";
 import { Github, Clock, Code2, Flame, ArrowUpRight, type LucideIcon } from "lucide-react";
 import { motion } from "framer-motion";
+import { WordMask } from "@/components/ui/Animations";
 
 export function StatsGrid() {
     return (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
             {/* Stat Item 1: Contributions */}
-            <StatCard 
-                label="Contributions" 
-                value={MOCK_GITHUB.contributions.toString()} 
+            <StatCard
+                label="Contributions"
+                value={MOCK_GITHUB.contributions.toString()}
                 sub="Last Year"
                 icon={Github}
                 delay={0}
             />
 
             {/* Stat Item 2: Coding Time */}
-            <StatCard 
-                label="Coding Time" 
-                value={MOCK_WAKATIME.total_hours} 
+            <StatCard
+                label="Coding Time"
+                value={MOCK_WAKATIME.total_hours}
                 sub="Tracked Hours"
                 icon={Clock}
                 delay={0.1}
             />
 
             {/* Stat Item 3: Daily Avg */}
-            <StatCard 
-                label="Daily Avg" 
-                value={MOCK_WAKATIME.daily_average} 
+            <StatCard
+                label="Daily Avg"
+                value={MOCK_WAKATIME.daily_average}
                 sub="Consistency"
                 icon={Flame}
                 delay={0.2}
             />
 
             {/* Stat Item 4: Top Lang */}
-            <StatCard 
-                label="Top Lang" 
-                value={MOCK_GITHUB.top_languages[0].name} 
+            <StatCard
+                label="Top Lang"
+                value={MOCK_GITHUB.top_languages[0].name}
                 sub={`${MOCK_GITHUB.top_languages[0].percentage}% Usage`}
                 icon={Code2}
                 delay={0.3}
@@ -71,45 +72,23 @@ function StatCard({ label, value, sub, icon: Icon, delay }: StatCardProps) {
     }
 
     return (
-        <motion.div 
+        <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            transition={{ delay, duration: 0.5 }}
+            transition={{ delay, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
             viewport={{ once: true }}
-            className="neo-brutal-border bg-black text-white p-6 md:p-8 relative group overflow-hidden hover:bg-primary hover:text-black transition-colors duration-300"
+            className="group relative flex flex-col justify-between overflow-hidden bg-[#070a0d]/85 p-6 outline outline-1 -outline-offset-1 outline-bone/[0.07] transition-[outline-color] duration-500 hover:outline-bone/30 md:p-8"
         >
-            {/* Background Noise/Grid on Hover */}
-            <div className="absolute inset-0 bg-[linear-gradient(45deg,transparent_25%,rgba(0,0,0,0.1)_25%,rgba(0,0,0,0.1)_50%,transparent_50%,transparent_75%,rgba(0,0,0,0.1)_75%,rgba(0,0,0,0.1)_100%)] bg-size-[10px_10px] opacity-0 group-hover:opacity-20 pointer-events-none" />
-
-            {/* Header */}
-            <div className="flex justify-between items-start mb-8 md:mb-12 relative z-10">
-                <span className="font-mono text-xs md:text-sm uppercase tracking-[0.2em] font-bold border-b-2 border-primary group-hover:border-black transition-colors">
-                    {label}
-                </span>
-                <Icon className="w-5 h-5 md:w-6 md:h-6 opacity-50 group-hover:opacity-100 transition-opacity" />
+            <div className="mb-8 flex items-start justify-between md:mb-12">
+                <span className="text-[10px] font-medium uppercase tracking-[0.2em] text-bone-dim">{label}</span>
+                <Icon className="size-5 opacity-50" />
             </div>
-
-            {/* Value (Giant) */}
-            <div className="relative z-10 min-h-20 flex items-end">
-                <h3 className={`${fontSizeClass} font-black tracking-tighter leading-[0.9] wrap-break-word hyphens-auto`}>
-                    {value}
-                </h3>
+            <div className="flex min-h-20 items-end">
+                <h3 className={`${fontSizeClass} font-light tabular-nums tracking-[-0.02em] text-bone transition-colors group-hover:text-[#ff5a3c]`}>{value}</h3>
             </div>
-
-            {/* Footer */}
-            <div className="mt-8 flex items-center justify-between border-t border-white/20 group-hover:border-black/20 pt-4 relative z-10">
-                <span className="text-xs font-mono uppercase bg-white/10 px-2 py-1 group-hover:bg-black/10 transition-colors">
-                    {sub}
-                </span>
-                <ArrowUpRight className="w-4 h-4 opacity-50 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
-            </div>
-
-            {/* Decorative Corner */}
-            <div className="absolute top-0 right-0 p-2 opacity-50">
-                <div className="w-2 h-2 bg-primary group-hover:bg-black transition-colors" />
-            </div>
-            <div className="absolute bottom-0 left-0 p-2 opacity-50">
-                <div className="w-2 h-2 bg-primary group-hover:bg-black transition-colors" />
+            <div className="mt-8 flex items-center justify-between border-t border-bone/10 pt-3.5">
+                <span className="text-[10px] uppercase tracking-[0.2em] text-muted-k">{sub}</span>
+                <ArrowUpRight className="size-4 opacity-50 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
             </div>
         </motion.div>
     );
@@ -117,56 +96,70 @@ function StatCard({ label, value, sub, icon: Icon, delay }: StatCardProps) {
 
 function LanguageBar({ languages }: { languages: Language[] }) {
     return (
-        <motion.div 
+        <motion.div
             initial={{ opacity: 0, scale: 0.98 }}
             whileInView={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.4 }}
             viewport={{ once: true }}
-            className="col-span-1 md:col-span-2 lg:col-span-4 mt-8"
+            className="col-span-full mt-8"
         >
-            <div className="neo-brutal-border bg-black p-8 border-l-8 border-l-primary relative overflow-hidden">
-                {/* Background Pattern */}
-                <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-size-[14px_24px] pointer-events-none" />
-
-                <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-8 relative z-10 gap-4">
-                    <div>
-                        <h4 className="font-black text-4xl uppercase tracking-tighter text-white">Language</h4>
-                    </div>
-                    <div className="px-3 py-1 bg-white/10 dark:bg-white/5 rounded-full border border-white/10 text-xs font-mono text-muted-foreground">
-                        DETECTED_LANGUAGES: {languages.length}
-                    </div>
+            <div className="bg-[#070a0d]/85 p-8 outline outline-1 -outline-offset-1 outline-bone/[0.07]">
+                <div className="mb-6 flex flex-col items-start justify-between gap-4 md:flex-row md:items-end">
+                    <h4 className="text-[clamp(30px,4vw,60px)] font-normal uppercase leading-[1.05] tracking-[-0.012em] text-bone">
+                        <WordMask text="Languages" />
+                    </h4>
+                    <span className="rounded-full border border-bone/15 px-3 py-1 font-mono text-[10px] uppercase tracking-[0.16em] text-muted-k">
+                        Detected: {languages.length}
+                    </span>
                 </div>
-
-
-
-                {/* New Grid Data Layout */}
-                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 relative z-10">
+                <div className="grid grid-cols-2 gap-4 md:grid-cols-5">
                     {languages.map((lang, i) => (
-                        <motion.div 
+                        <motion.div
                             key={lang.name}
                             initial={{ opacity: 0, y: 10 }}
                             whileInView={{ opacity: 1, y: 0 }}
-                            transition={{ delay: 0.2 + (i * 0.05) }}
+                            transition={{ delay: 0.2 + i * 0.05 }}
                             viewport={{ once: true }}
-                            className="bg-white/5 border border-white/10 p-4 hover:bg-white/10 hover:border-primary/50 transition-all group cursor-pointer flex flex-col justify-between h-32"
+                            className="group flex h-32 flex-col justify-between bg-ink/85 p-5 outline outline-1 -outline-offset-1 outline-bone/[0.07] transition-[outline-color] duration-500 hover:outline-bone/30"
                         >
-                            <div className="flex justify-between items-start">
-                                <div className="w-3 h-3 rounded-full shadow-[0_0_10px_currentColor]" style={{ color: lang.color, backgroundColor: lang.color }} />
-                                <ArrowUpRight className="w-4 h-4 text-muted-foreground group-hover:text-primary group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
-                            </div>
-                            
+                            <span
+                                className="size-3 rounded-full shadow-[0_0_10px_currentColor]"
+                                style={{ color: lang.color, backgroundColor: lang.color }}
+                            />
                             <div>
-                                <div className="text-3xl font-black text-white group-hover:text-primary transition-colors tracking-tighter">
-                                    {lang.percentage}<span className="text-sm text-muted-foreground font-normal ml-1">%</span>
+                                <div className="text-3xl font-light tabular-nums text-bone transition-colors group-hover:text-[#ff5a3c]">
+                                    {lang.percentage}
+                                    <span className="ml-1 text-sm font-light text-muted-k">%</span>
                                 </div>
-                                <div className="font-mono text-xs uppercase tracking-wider text-muted-foreground group-hover:text-white transition-colors mt-1">
-                                    {lang.name}
-                                </div>
+                                <div className="mt-1 font-mono text-[10px] uppercase tracking-[0.16em] text-muted-k">{lang.name}</div>
                             </div>
                         </motion.div>
                     ))}
                 </div>
             </div>
         </motion.div>
+    );
+}
+
+export function StatsSection() {
+    return (
+        <section id="chapter-stats" data-chapter="stats" className="relative overflow-x-clip px-[clamp(20px,3.4vw,56px)] py-[clamp(88px,15vh,190px)]">
+            <div className="sec-scrim sec-scrim--center" />
+            <div className="relative z-10 mx-auto max-w-7xl">
+                <div className="mb-10 flex items-baseline gap-4">
+                    <span className="text-[10px] font-medium uppercase tracking-[0.24em] text-muted-k">
+                        <b className="font-medium text-[#e0231c]">02</b> / 04 — Live Data
+                    </span>
+                    <span className="h-px flex-1 bg-bone/[0.07]" />
+                </div>
+                <h2 className="mb-3 text-[clamp(30px,4vw,60px)] font-normal uppercase leading-[1.05] tracking-[-0.012em] text-bone">
+                    <WordMask text="Live statistics" />
+                </h2>
+                <p className="mb-12 max-w-xl text-[clamp(14px,1.02vw,17px)] font-light text-[#9aa5a0]">
+                    Numbers pulled straight from GitHub and WakaTime — nothing staged.
+                </p>
+                <StatsGrid />
+            </div>
+        </section>
     );
 }
