@@ -13,9 +13,10 @@ import { SkyDome } from "./SkyDome";
 import { FogBanks } from "./FogBanks";
 import { Ridges } from "./Ridges";
 import { EmberMoon } from "./EmberMoon";
-import { MistField } from "./MistField";
+import { Stars } from "./Stars";
+import { Embers } from "./Embers";
 import { MonolithCity } from "./MonolithCity";
-import { cardCam, mistState, moonState, tmpColor } from "./shared-refs";
+import { cardCam, emberState, moonState, tmpColor } from "./shared-refs";
 
 function SceneRig() {
   const { camera, gl, scene } = useThree();
@@ -29,9 +30,8 @@ function SceneRig() {
     moonState.pos.x = THREE.MathUtils.damp(moonState.pos.x, s.moonX, SCENE_DAMP.uniforms, dt);
     moonState.pos.y = THREE.MathUtils.damp(moonState.pos.y, s.moonY, SCENE_DAMP.uniforms, dt);
     moonState.scale = THREE.MathUtils.damp(moonState.scale, s.moonScale, SCENE_DAMP.uniforms, dt);
-    mistState.stream = THREE.MathUtils.damp(mistState.stream, s.stream, SCENE_DAMP.uniforms, dt);
-    mistState.drift = THREE.MathUtils.damp(mistState.drift, s.drift, SCENE_DAMP.uniforms, dt);
-    moonState.intensity = 1 - 0.45 * mistState.stream;
+    emberState.energy = THREE.MathUtils.damp(emberState.energy, s.stream, SCENE_DAMP.uniforms, dt);
+    moonState.intensity = 1 - 0.45 * emberState.energy;
 
     const fog = scene.fog;
     if (fog instanceof THREE.FogExp2) {
@@ -106,7 +106,8 @@ export default function SceneInner({ onReady, onContextLost }: { onReady?: () =>
       <FogBanks />
       <Ridges />
       <EmberMoon />
-      <MistField />
+      <Stars />
+      <Embers />
       <MonolithCity />
     </Canvas>
   );
