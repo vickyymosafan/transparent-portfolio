@@ -8,10 +8,19 @@ import { Reveal } from "@/components/ui/Animations";
 import { H2, P } from "@/components/ui/Typography";
 import { TextReveal } from "@/components/ui/TextReveal";
 import { SceneCanvas } from "@/components/canvas/SceneCanvas";
+// TEMP furniture mounts — stay until Task 9 replaces page.tsx entirely
+import { Preloader } from "@/components/ui/Preloader";
+import { CustomCursor } from "@/components/ui/CustomCursor";
+import { ProgressRail } from "@/components/ui/ProgressRail";
+import { SiteNav } from "@/components/layout/SiteNav";
 
 export default function Home() {
   return (
     <main className="min-h-screen bg-background text-foreground relative selection:bg-primary selection:text-primary-foreground overflow-hidden">
+      <SiteNav />
+      <Preloader />
+      <CustomCursor />
+      <ProgressRail />
       <SceneCanvas />
 
       {/* Global Noise Overlay */}
