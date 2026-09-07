@@ -1,5 +1,6 @@
 "use client";
 
+import { motion } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
 import { WordMask } from "@/components/ui/Animations";
 import { scrollToChapter } from "@/lib/smooth-scroll";
@@ -25,14 +26,33 @@ export function Contact() {
                     <br />
                     <WordMask text="together." delay={0.2} />
                 </h2>
-                <a
+                <motion.a
                     href="mailto:mvickymosafan@gmail.com"
                     className="cta-pill mt-11 border border-bone/15 px-[30px] py-[17px] text-[11px] font-medium uppercase tracking-[0.22em] text-bone"
+                    initial={{ opacity: 0, y: 18 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: 0.55, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
                 >
                     <i aria-hidden />
                     <span className="relative z-10">Say hello</span>
                     <ArrowUpRight className="relative size-3.5" />
-                </a>
+                </motion.a>
+            </div>
+
+            <div className="relative z-10 mt-20 overflow-hidden border-y border-bone/[0.07] py-3">
+                <div className="flex w-max animate-marquee gap-10 whitespace-nowrap">
+                    {[0, 1].map((half) => (
+                        <div key={half} className="flex items-center gap-10">
+                            {["Live Data", "Shipped", "Open Source", "No Fluff", "Built in the Open"].map((word) => (
+                                <span key={word} className="flex items-center gap-10 text-[13px] uppercase tracking-[0.3em] text-bone/25">
+                                    {word}
+                                    <span className="text-[#e0231c]">&middot;</span>
+                                </span>
+                            ))}
+                        </div>
+                    ))}
+                </div>
             </div>
 
             <footer className="relative z-10 mt-[clamp(50px,8vh,96px)] border-t border-bone/[0.07] pt-[clamp(50px,8vh,96px)]">

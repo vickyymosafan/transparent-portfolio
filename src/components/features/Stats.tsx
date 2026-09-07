@@ -2,7 +2,8 @@
 
 import { MOCK_GITHUB, MOCK_WAKATIME, Language } from "@/services/mockData";
 import { Github, Clock, Code2, Flame, ArrowUpRight, type LucideIcon } from "lucide-react";
-import { motion } from "framer-motion";
+import { animate, motion, useInView } from "framer-motion";
+import { useEffect, useRef } from "react";
 import { WordMask } from "@/components/ui/Animations";
 import { Interlude } from "@/components/ui/Interlude";
 
@@ -59,6 +60,30 @@ interface StatCardProps {
     delay: number;
 }
 
+function CountUp({ value }: { value: string }) {
+    const match = value.match(/^([\d.,]+)/);
+    const ref = useRef<HTMLSpanElement>(null);
+    const inView = useInView(ref, { once: true, margin: "-60px" });
+
+    useEffect(() => {
+        if (!inView || !match || !ref.current) return;
+        const target = parseFloat(match[1].replace(/,/g, ""));
+        const controls = animate(0, target, {
+            duration: 1.4,
+            ease: [0.16, 1, 0.3, 1],
+            onUpdate: (v) => {
+                if (ref.current) {
+                    ref.current.textContent = Math.round(v).toLocaleString("en-US") + value.slice(match[1].length);
+                }
+            },
+        });
+        return () => controls.stop();
+    }, [inView, match, value]);
+
+    if (!match) return <>{value}</>;
+    return <span ref={ref}>{match[1]}</span>;
+}
+
 function StatCard({ label, value, sub, icon: Icon, delay }: StatCardProps) {
     // Determine font size based on value length to prevent overflow
     const length = value.length;
@@ -85,7 +110,7 @@ function StatCard({ label, value, sub, icon: Icon, delay }: StatCardProps) {
                 <Icon className="size-5 opacity-50" />
             </div>
             <div className="flex min-h-20 items-end">
-                <h3 className={`${fontSizeClass} font-light tabular-nums tracking-[-0.02em] text-bone transition-colors group-hover:text-[#ff5a3c]`}>{value}</h3>
+                <h3 className={`${fontSizeClass} font-light tabular-nums tracking-[-0.02em] text-bone transition-colors group-hover:text-[#ff5a3c]`}><CountUp value={value} /></h3>
             </div>
             <div className="mt-8 flex items-center justify-between border-t border-bone/10 pt-3.5">
                 <span className="text-[10px] uppercase tracking-[0.2em] text-muted-k">{sub}</span>
