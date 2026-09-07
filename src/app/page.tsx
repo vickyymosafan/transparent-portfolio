@@ -10,6 +10,7 @@ import { ProgressRail } from "@/components/ui/ProgressRail";
 import { CustomCursor } from "@/components/ui/CustomCursor";
 import { MotionProvider } from "@/components/ui/MotionProvider";
 import { SmoothScroll } from "@/components/ui/SmoothScroll";
+import { ForegroundLayers } from "@/components/ui/ForegroundLayers";
 
 export default function Home() {
     return (
@@ -25,6 +26,7 @@ export default function Home() {
                 <CustomCursor />
 
                 <div className="relative z-10">
+                    <ForegroundLayers />
                     <Hero />
                     <About />
                     <StatsSection />

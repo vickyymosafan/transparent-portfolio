@@ -276,3 +276,20 @@ body {
     transition-duration: 0.01ms !important;
   }
 }
+
+/* ===== Foreground layers ===== */
+.fg-item {
+  opacity: 0;
+  transform: translate3d(0, 12%, 0);
+  transition: opacity 1.2s cubic-bezier(0.16, 1, 0.3, 1), transform 1.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.fg-item.on { opacity: 1; transform: translate3d(0, 0, 0); }
+.fg-delay { transition-delay: 0.12s; }
+
+.fg-sway svg { animation: fg-sway 21s ease-in-out infinite alternate; transform-origin: 40% 100%; }
+@keyframes fg-sway {
+  from { transform: rotate(-0.5deg) translate3d(0, 2px, 0); }
+  to { transform: rotate(0.5deg) translate3d(0, -6px, 0); }
+}
+
+.fg-item svg { filter: saturate(0.85) brightness(0.8); }
