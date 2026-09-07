@@ -14,7 +14,7 @@ import { FogBanks } from "./FogBanks";
 import { Ridges } from "./Ridges";
 import { EmberMoon } from "./EmberMoon";
 import { MistField } from "./MistField";
-import { Monoliths } from "./Monoliths";
+import { MonolithCity } from "./MonolithCity";
 import { cardCam, mistState, moonState, tmpColor } from "./shared-refs";
 
 function SceneRig() {
@@ -107,7 +107,7 @@ export default function SceneInner({ onReady, onContextLost }: { onReady?: () =>
       <Ridges />
       <EmberMoon />
       <MistField />
-      <Monoliths />
+      <MonolithCity />
     </Canvas>
   );
 }
