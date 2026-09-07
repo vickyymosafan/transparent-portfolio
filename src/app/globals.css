@@ -286,7 +286,7 @@ body {
 .fg-item.on { opacity: 1; transform: translate3d(0, 0, 0); }
 .fg-delay { transition-delay: 0.12s; }
 
-.fg-sway svg { animation: fg-sway 21s ease-in-out infinite alternate; transform-origin: 40% 100%; }
+.fg-sway { animation: fg-sway 21s ease-in-out infinite alternate; transform-origin: 40% 100%; }
 @keyframes fg-sway {
   from { transform: rotate(-0.5deg) translate3d(0, 2px, 0); }
   to { transform: rotate(0.5deg) translate3d(0, -6px, 0); }
