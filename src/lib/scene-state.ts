@@ -22,6 +22,8 @@ export const CHAPTER_SCENES: Record<ChapterId, ChapterScene> = {
 
 export const SCENE_DAMP = { camera: 2.2, uniforms: 1.8 } as const;
 
+export const LIVE_WINDOW_OFFSETS = [-1.6, 0.3, 1.6] as const;
+
 export function countParticles(): number {
   if (typeof navigator === "undefined") return 2500;
   const nav = navigator as Navigator & { deviceMemory?: number };

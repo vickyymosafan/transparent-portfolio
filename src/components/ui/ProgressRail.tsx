@@ -10,7 +10,11 @@ export function ProgressRail() {
                 <button
                     key={id}
                     aria-label={CHAPTER_LABELS[id]}
-                    onClick={() => document.getElementById(`chapter-${id}`)?.scrollIntoView({ behavior: "smooth" })}
+                    onClick={() =>
+                        document.getElementById(`chapter-${id}`)?.scrollIntoView({
+                            behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth",
+                        })
+                    }
                     className="grid h-2.5 w-5 place-items-center"
                 >
                     <i

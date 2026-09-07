@@ -50,6 +50,7 @@ function SceneRig() {
       const dpr = gl.getPixelRatio();
       cardCam.copy(camera as THREE.PerspectiveCamera);
       gl.setScissorTest(true);
+      // NOTE: window.innerHeight is valid here only because #scene-canvas is fixed inset-0.
       for (const v of views) {
         const r = v.el.getBoundingClientRect();
         if (r.bottom < 0 || r.top > window.innerHeight || r.width === 0) continue;
@@ -57,6 +58,8 @@ function SceneRig() {
         const y = Math.floor((window.innerHeight - r.bottom) * dpr);
         const w = Math.floor(r.width * dpr);
         const h = Math.floor(r.height * dpr);
+        cardCam.aspect = r.width / r.height;
+        cardCam.updateProjectionMatrix();
         cardCam.position.x += v.camOffsetX;
         gl.setViewport(x, y, w, h);
         gl.setScissor(x, y, w, h);
@@ -71,7 +74,7 @@ function SceneRig() {
   return <fogExp2 attach="fog" args={["#05070a", 0.055]} />;
 }
 
-export default function SceneInner({ onReady }: { onReady?: () => void }) {
+export default function SceneInner({ onReady, onContextLost }: { onReady?: () => void; onContextLost?: () => void }) {
   return (
     <Canvas
       camera={{ fov: 50, position: [0, 1, 9] }}
@@ -79,6 +82,11 @@ export default function SceneInner({ onReady }: { onReady?: () => void }) {
       gl={{ antialias: false, powerPreference: "high-performance" }}
       onCreated={({ gl }) => {
         gl.setClearColor("#05070a");
+        gl.domElement.addEventListener("webglcontextlost", (e) => {
+          e.preventDefault();
+          document.documentElement.classList.add("no-webgl");
+          onContextLost?.();
+        });
         requestAnimationFrame(() => onReady?.());
       }}
     >

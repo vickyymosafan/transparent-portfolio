@@ -4,9 +4,7 @@ import { useMemo } from "react";
 import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
 import { countParticles } from "@/lib/scene-state";
-import { mistState } from "./shared-refs";
-
-const REDUCED = typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+import { mistState, REDUCED } from "./shared-refs";
 
 export const mistUniforms = {
   uTime: { value: 0 },

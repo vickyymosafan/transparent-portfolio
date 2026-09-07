@@ -14,3 +14,6 @@ export const mistState = {
 export const cardCam = new THREE.PerspectiveCamera(50, 16 / 9, 0.1, 100);
 
 export const tmpColor = new THREE.Color();
+
+export const REDUCED =
+    typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;

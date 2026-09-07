@@ -3,7 +3,7 @@
 import { useRef } from "react";
 import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
-import { moonState } from "./shared-refs";
+import { moonState, REDUCED } from "./shared-refs";
 
 const vert = /* glsl */ `
 varying vec2 vUv;
@@ -32,17 +32,20 @@ const uniforms = {
   uIntensity: { value: 1 },
 };
 
+let moonTime = 0;
+
 export function EmberMoon() {
   const mesh = useRef<THREE.Mesh>(null);
   const mat = useRef<THREE.ShaderMaterial>(null);
 
-  useFrame((state) => {
+  useFrame((state, delta) => {
     if (mesh.current) {
       mesh.current.position.copy(moonState.pos);
       mesh.current.scale.setScalar(moonState.scale);
     }
     if (mat.current) {
-      mat.current.uniforms.uTime.value = state.clock.elapsedTime;
+      moonTime += REDUCED ? delta * 0.05 : delta;
+      mat.current.uniforms.uTime.value = moonTime;
       mat.current.uniforms.uIntensity.value = moonState.intensity;
     }
   });

@@ -57,7 +57,7 @@ export function Hero() {
                                 <b className="block text-[10px] font-medium uppercase tracking-[0.2em] text-bone-dim transition-colors duration-500 group-hover:text-bone">
                                     {CHAPTER_LABELS[id]}
                                 </b>
-                                <p className="mt-1.5 text-[11px] leading-normal text-muted-k">{CHAPTER_DESC[id]}</p>
+                                <span className="mt-1.5 block text-[11px] leading-normal text-muted-k">{CHAPTER_DESC[id]}</span>
                             </span>
                         </a>
                     ))}

@@ -2,8 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import { registerLiveView } from "./live-registry";
-
-const OFFSETS = [-1.6, 0.3, 1.6];
+import { LIVE_WINDOW_OFFSETS } from "@/lib/scene-state";
 
 export function LiveWindow({ index, className }: { index: number; className?: string }) {
     const ref = useRef<HTMLDivElement>(null);
@@ -11,7 +10,7 @@ export function LiveWindow({ index, className }: { index: number; className?: st
     useEffect(() => {
         const el = ref.current;
         if (!el || document.documentElement.classList.contains("no-webgl")) return;
-        const unregister = registerLiveView(el, OFFSETS[index % OFFSETS.length]);
+        const unregister = registerLiveView(el, LIVE_WINDOW_OFFSETS[index % LIVE_WINDOW_OFFSETS.length]);
         return () => unregister();
     }, [index]);
 

@@ -8,7 +8,10 @@ const SceneInner = dynamic(() => import("./SceneInner"), { ssr: false });
 function hasWebGL(): boolean {
   try {
     const canvas = document.createElement("canvas");
-    return !!(canvas.getContext("webgl2") ?? canvas.getContext("webgl"));
+    const gl = canvas.getContext("webgl2") ?? canvas.getContext("webgl");
+    if (!gl) return false;
+    gl.getExtension("WEBGL_lose_context")?.loseContext();
+    return true;
   } catch {
     return false;
   }
@@ -32,7 +35,7 @@ export function SceneCanvas() {
       id="scene-canvas"
       className={`fixed inset-0 z-0 transition-opacity duration-[1200ms] ease-out ${ready ? "opacity-100" : "opacity-0"}`}
     >
-      <SceneInner onReady={() => setReady(true)} />
+      <SceneInner onReady={() => setReady(true)} onContextLost={() => setSupported(false)} />
     </div>
   );
 }
