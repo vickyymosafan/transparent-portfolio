@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
+import { initPointerState } from "@/lib/pointer-state";
+import { initScrollProgress } from "@/lib/scroll-progress";
 
 const SceneInner = dynamic(() => import("./SceneInner"), { ssr: false });
 
@@ -25,7 +27,14 @@ export function SceneCanvas() {
     const ok = hasWebGL();
     if (!ok) document.documentElement.classList.add("no-webgl");
     const raf = requestAnimationFrame(() => setSupported(ok));
-    return () => cancelAnimationFrame(raf);
+    const cleanups: Array<() => void> = [];
+    if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      cleanups.push(initPointerState(), initScrollProgress());
+    }
+    return () => {
+      cancelAnimationFrame(raf);
+      cleanups.forEach((fn) => fn());
+    };
   }, []);
 
   if (supported !== true) return null;

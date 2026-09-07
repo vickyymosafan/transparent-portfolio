@@ -2,7 +2,10 @@
 
 import { useRef } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
+import { EffectComposer, Bloom } from "@react-three/postprocessing";
 import * as THREE from "three";
+import { pointerState } from "@/lib/pointer-state";
+import { scrollProgress } from "@/lib/scroll-progress";
 import { useChapterStore } from "@/lib/chapter-store";
 import { CHAPTER_SCENES, SCENE_DAMP } from "@/lib/scene-state";
 import { getLiveViews } from "./live-registry";
@@ -33,22 +36,24 @@ function SceneRig() {
       fog.density = THREE.MathUtils.damp(fog.density, s.fogDensity, SCENE_DAMP.uniforms, dt);
     }
 
-    camera.position.x = THREE.MathUtils.damp(camera.position.x, s.camera[0], SCENE_DAMP.camera, dt);
-    camera.position.y = THREE.MathUtils.damp(camera.position.y, s.camera[1], SCENE_DAMP.camera, dt);
+    const px = pointerState.x * 0.35;
+    const py = pointerState.y * 0.18;
+    const drift = scrollProgress.value;
+
+    camera.position.x = THREE.MathUtils.damp(camera.position.x, s.camera[0] + px, SCENE_DAMP.camera, dt);
+    camera.position.y = THREE.MathUtils.damp(camera.position.y, s.camera[1] + py - drift * 0.5, SCENE_DAMP.camera, dt);
     camera.position.z = THREE.MathUtils.damp(camera.position.z, s.camera[2], SCENE_DAMP.camera, dt);
-    lookAt.current.x = THREE.MathUtils.damp(lookAt.current.x, s.lookAt[0], SCENE_DAMP.camera, dt);
-    lookAt.current.y = THREE.MathUtils.damp(lookAt.current.y, s.lookAt[1], SCENE_DAMP.camera, dt);
+    lookAt.current.x = THREE.MathUtils.damp(lookAt.current.x, s.lookAt[0] + px * 0.6, SCENE_DAMP.camera, dt);
+    lookAt.current.y = THREE.MathUtils.damp(lookAt.current.y, s.lookAt[1] + py * 0.5 + drift * 0.8, SCENE_DAMP.camera, dt);
     lookAt.current.z = THREE.MathUtils.damp(lookAt.current.z, s.lookAt[2], SCENE_DAMP.camera, dt);
     camera.lookAt(lookAt.current);
-
-    gl.setScissorTest(false);
-    gl.setViewport(0, 0, gl.domElement.width, gl.domElement.height);
-    gl.render(scene, camera);
 
     const views = getLiveViews();
     if (views.length > 0) {
       const dpr = gl.getPixelRatio();
       cardCam.copy(camera as THREE.PerspectiveCamera);
+      gl.setScissorTest(false);
+      gl.setViewport(0, 0, gl.domElement.width, gl.domElement.height);
       gl.setScissorTest(true);
       // NOTE: window.innerHeight is valid here only because #scene-canvas is fixed inset-0.
       for (const v of views) {
@@ -68,7 +73,7 @@ function SceneRig() {
       }
       gl.setScissorTest(false);
     }
-  }, 1);
+  }, 2);
   /* eslint-enable react-hooks/immutability */
 
   return <fogExp2 attach="fog" args={["#05070a", 0.055]} />;
@@ -90,6 +95,9 @@ export default function SceneInner({ onReady, onContextLost }: { onReady?: () =>
         requestAnimationFrame(() => onReady?.());
       }}
     >
+      <EffectComposer multisampling={0}>
+        <Bloom mipmapBlur luminanceThreshold={1} luminanceSmoothing={0.2} intensity={1.1} />
+      </EffectComposer>
       <SceneRig />
       <EmberMoon />
       <MistField />
