@@ -1,11 +1,11 @@
 import { Hero } from "@/components/features/Hero";
-import { ProjectList } from "@/components/features/ProjectList";
+import { ProjectsSection } from "@/components/features/ProjectList";
 import { About } from "@/components/features/About";
 import { StatsGrid } from "@/components/features/Stats";
 import { Contact } from "@/components/features/Contact";
 import { Container, Section } from "@/components/layout/Wrappers";
 import { Reveal } from "@/components/ui/Animations";
-import { H2, P } from "@/components/ui/Typography";
+import { H2 } from "@/components/ui/Typography";
 import { TextReveal } from "@/components/ui/TextReveal";
 import { SceneCanvas } from "@/components/canvas/SceneCanvas";
 // TEMP furniture mounts — stay until Task 9 replaces page.tsx entirely
@@ -53,24 +53,8 @@ export default function Home() {
         </Container>
       </Section>
 
-      {/* Projects Section */}
-      <Section className="relative z-10 py-24 bg-surface/30">
-        <Container>
-          <Reveal>
-            <div className="mb-20">
-                <div className="flex items-center gap-4 mb-2">
-                    <span className="w-4 h-4 bg-accent animate-pulse" />
-                    <span className="font-mono text-accent uppercase font-bold tracking-widest">Portfolio</span>
-                </div>
-                <H2 className="text-6xl md:text-7xl font-black uppercase tracking-tighter mb-4"><TextReveal>Featured Work</TextReveal></H2>
-                <P className="text-xl max-w-2xl">Production-grade applications I&apos;ve shipped.</P>
-            </div>
-          </Reveal>
-          <Reveal delay={0.15}>
-            <ProjectList />
-          </Reveal>
-        </Container>
-      </Section>
+      {/* Projects Section — TEMP mount until Task 9 replaces page.tsx */}
+      <ProjectsSection />
 
       {/* Footer / Contact */}
       <Contact />

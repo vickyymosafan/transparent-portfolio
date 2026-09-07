@@ -1,51 +1,84 @@
-import { P } from "@/components/ui/Typography";
 import { PROJECTS } from "@/services/mockData";
 import { ArrowUpRight } from "lucide-react";
+import { LiveWindow } from "@/components/canvas/LiveWindow";
+import { WordMask } from "@/components/ui/Animations";
+
+function ProjectCard({ project, index }: { project: (typeof PROJECTS)[number]; index: number }) {
+    return (
+        <article
+            className={`group relative ${index === 1 ? "md:translate-y-[clamp(26px,5vw,74px)]" : ""} ${
+                index === 2 ? "md:translate-y-[clamp(52px,10vw,148px)]" : ""
+            }`}
+        >
+            <a href={project.link ?? "#"} className="block" data-cursor>
+                <div className="relative aspect-[4/5] outline outline-1 -outline-offset-1 outline-bone/[0.09] transition-[outline-color] duration-500 group-hover:outline-bone/30">
+                    <LiveWindow index={index} className="absolute inset-0" />
+                    <ArrowUpRight className="absolute right-3.5 top-3.5 z-20 size-6 -translate-x-1 -translate-y-1 opacity-0 transition-all duration-500 group-hover:translate-x-0 group-hover:translate-y-0 group-hover:opacity-90" />
+                    <b className="absolute bottom-3.5 left-4 right-4 z-10 text-[clamp(13px,1.15vw,17px)] uppercase tracking-wide text-bone drop-shadow-[0_2px_12px_rgba(0,0,0,0.8)]">
+                        {project.title}
+                    </b>
+                </div>
+                <div className="mt-3 flex justify-between text-[10px] uppercase tracking-[0.16em] text-muted-k">
+                    <span>{project.category ?? "Project"}</span>
+                    <span>{project.tech.slice(0, 2).join(" · ")}</span>
+                </div>
+            </a>
+        </article>
+    );
+}
 
 export function ProjectList() {
+    const cards = PROJECTS.slice(0, 3);
+    const rows = PROJECTS.slice(3);
+
     return (
-        <div className="space-y-12">
-            {PROJECTS.map((project, idx) => (
-                <div key={idx} className="group relative neo-brutal-border bg-surface p-8 transition-transform hover:-translate-y-2">
-                    <div className="absolute -top-4 -right-4 bg-primary text-black px-4 py-2 font-mono font-bold text-xl neo-brutal-border opacity-0 group-hover:opacity-100 transition-all duration-300 transform rotate-12 group-hover:rotate-0">
-                        OPEN PROJECT
-                    </div>
+        <div>
+            <div className="grid gap-[clamp(10px,1.4vw,22px)] md:grid-cols-3">
+                {cards.map((project, idx) => (
+                    <ProjectCard key={project.title} project={project} index={idx} />
+                ))}
+            </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
-                        <div>
-                             <div className="flex items-center gap-4 mb-4">
-                                <span className="text-6xl font-black text-muted/20">0{idx + 1}</span>
-                                <div className="h-1 flex-1 bg-white/10" />
-                                <span className="text-xs font-mono px-3 py-1 border border-white/20 rounded-full text-muted-foreground">
-                                    {project.category ?? "PROJECT"}
-                                </span>
-                             </div>
-                            
-                            <h3 className="text-4xl md:text-5xl font-black uppercase mb-4 group-hover:text-primary transition-colors">
-                                {project.title}
-                            </h3>
-                            
-                            <P className="text-lg text-muted-foreground mb-6 border-l-4 border-primary pl-4">
-                                {project.desc}
-                            </P>
-
-                            <div className="flex flex-wrap gap-3">
-                                {project.tech.map(t => (
-                                    <span key={t} className="text-xs font-bold font-mono px-3 py-1 bg-white text-black uppercase transform hover:scale-110 transition-transform cursor-default">
-                                        {t}
-                                    </span>
-                                ))}
-                            </div>
-                        </div>
-
-                        {/* Right side - Abstract Visual or Image Placeholder */}
-                        <div className="h-full min-h-[200px] border-2 border-dashed border-white/20 flex items-center justify-center relative overflow-hidden bg-black/50">
-                             <div className="absolute inset-0 bg-noise opacity-20" />
-                             <ArrowUpRight className="w-24 h-24 text-primary opacity-20 group-hover:opacity-100 group-hover:scale-110 transition-all duration-500" />
-                        </div>
-                    </div>
+            {rows.length > 0 && (
+                <div className="mt-16 border-t border-bone/[0.07]">
+                    {rows.map((project, i) => (
+                        <a
+                            key={project.title}
+                            href={project.link ?? "#"}
+                            className="lesson-row group grid grid-cols-[44px_1fr_auto] items-center gap-6 border-b border-bone/[0.07] py-6"
+                        >
+                            <span className="text-[11px] tabular-nums text-muted-k transition-colors duration-500 group-hover:text-[#e0231c]">
+                                {String(i + 4).padStart(2, "0")}
+                            </span>
+                            <h3 className="text-[clamp(16px,1.5vw,23px)] font-normal text-bone">{project.title}</h3>
+                            <span className="text-right text-[11px] tracking-[0.14em] text-muted-k">{project.tech[0]}</span>
+                        </a>
+                    ))}
                 </div>
-            ))}
+            )}
         </div>
+    );
+}
+
+export function ProjectsSection() {
+    return (
+        <section id="chapter-projects" data-chapter="projects" className="relative overflow-x-clip px-[clamp(20px,3.4vw,56px)] py-[clamp(88px,15vh,190px)]">
+            <div className="sec-scrim" />
+            <div className="relative z-10 mx-auto max-w-7xl">
+                <div className="mb-10 flex items-baseline gap-4">
+                    <span className="text-[10px] font-medium uppercase tracking-[0.24em] text-muted-k">
+                        <b className="font-medium text-[#e0231c]">03</b> / 04 — Projects
+                    </span>
+                    <span className="h-px flex-1 bg-bone/[0.07]" />
+                </div>
+                <h2 className="mb-3 text-[clamp(30px,4vw,60px)] font-normal uppercase leading-[1.05] tracking-[-0.012em] text-bone">
+                    <WordMask text="Selected work" />
+                </h2>
+                <p className="mb-12 max-w-xl text-[clamp(14px,1.02vw,17px)] font-light text-[#9aa5a0]">
+                    Production-grade applications I&apos;ve shipped.
+                </p>
+                <ProjectList />
+            </div>
+        </section>
     );
 }
