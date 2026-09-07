@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useChapterTracker } from "@/lib/use-chapter-observer";
+import { scrollToChapter } from "@/lib/smooth-scroll";
 
 const LINKS = [
     { label: "About", href: "#chapter-about" },
@@ -64,6 +65,11 @@ export function SiteNav() {
                         <a
                             key={l.href}
                             href={l.href}
+                            onClick={(e) => {
+                                e.preventDefault();
+                                scrollToChapter(l.href.slice(1));
+                                setOpen(false);
+                            }}
                             className="text-[11px] font-medium uppercase tracking-[0.2em] text-bone-dim transition-colors duration-300 hover:text-bone"
                         >
                             {l.label}
@@ -88,7 +94,16 @@ export function SiteNav() {
                 }`}
             >
                 {LINKS.map((l) => (
-                    <a key={l.href} href={l.href} onClick={() => setOpen(false)} className="w-full border-b border-bone/[0.07] py-4 text-[17px] font-light text-bone-dim transition-colors hover:text-bone">
+                    <a
+                        key={l.href}
+                        href={l.href}
+                        onClick={(e) => {
+                            e.preventDefault();
+                            scrollToChapter(l.href.slice(1));
+                            setOpen(false);
+                        }}
+                        className="w-full border-b border-bone/[0.07] py-4 text-[17px] font-light text-bone-dim transition-colors hover:text-bone"
+                    >
                         {l.label}
                     </a>
                 ))}

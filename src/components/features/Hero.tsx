@@ -1,8 +1,10 @@
 "use client";
 
+import Image from "next/image";
 import { motion } from "framer-motion";
 import { WordMask } from "@/components/ui/Animations";
 import { CHAPTER_LABELS } from "@/lib/chapter-store";
+import { scrollToChapter } from "@/lib/smooth-scroll";
 
 const CHIP_IDS = ["about", "stats", "projects", "finale"] as const;
 type ChipId = (typeof CHIP_IDS)[number];
@@ -17,6 +19,29 @@ export function Hero() {
     return (
         <section id="chapter-hero" data-chapter="hero" className="relative flex min-h-svh flex-col px-[clamp(20px,3.4vw,56px)]">
             <div className="pointer-events-none absolute inset-x-0 top-0 h-[46%] bg-gradient-to-b from-black/70 via-black/30 to-transparent" />
+
+            <motion.div
+                className="absolute right-[clamp(20px,3.4vw,56px)] top-[calc(84px+clamp(24px,6vh,64px))] z-10 hidden w-[clamp(240px,20vw,340px)] lg:block"
+                initial={{ opacity: 0, y: 16 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.5, duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
+            >
+                <div className="relative aspect-[4/5] overflow-hidden outline outline-1 -outline-offset-1 outline-bone/[0.09] transition-[outline-color] duration-500 hover:outline-bone/30">
+                    <Image
+                        src="/profile.png"
+                        alt="Vicky Mosafan"
+                        fill
+                        sizes="(min-width: 1024px) 20vw, 0px"
+                        className="object-cover grayscale transition-all duration-700 hover:grayscale-0"
+                        priority
+                    />
+                    <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/10 via-transparent to-black/60" />
+                </div>
+                <div className="mt-2.5 flex items-center justify-between text-[10px] uppercase tracking-[0.16em] text-muted-k">
+                    <span>Vicky Mosafan</span>
+                    <span className="text-bone-dim">Fullstack Dev</span>
+                </div>
+            </motion.div>
 
             <div className="relative z-10 max-w-[560px] pt-[calc(84px+2rem)]">
                 <div className="eyebrow mb-5 flex items-center gap-2.5">
@@ -49,7 +74,15 @@ export function Hero() {
                 </div>
                 <div className="grid grid-cols-2 gap-4 border-t border-bone/[0.07] pt-[18px] md:grid-cols-4">
                     {CHIP_IDS.map((id, i) => (
-                        <a key={id} href={`#chapter-${id}`} className="group flex gap-3.5">
+                        <a
+                            key={id}
+                            href={`#chapter-${id}`}
+                            onClick={(e) => {
+                                e.preventDefault();
+                                scrollToChapter(`chapter-${id}`);
+                            }}
+                            className="group flex gap-3.5"
+                        >
                             <span className="text-[clamp(26px,2.5vw,36px)] font-light leading-none tabular-nums text-bone-dim transition-colors duration-500 group-hover:text-[#ff5a3c]">
                                 {`0${i + 1}`}
                             </span>

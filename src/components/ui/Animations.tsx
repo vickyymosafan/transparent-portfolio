@@ -19,10 +19,10 @@ export function WordMask({
             {words.map((word, i) => (
                 <span key={i} className="inline-block overflow-hidden align-bottom" aria-hidden>
                     <motion.span
-                        className="inline-block"
-                        initial={{ y: "112%", opacity: 0 }}
-                        variants={{ visible: { y: "0%", opacity: 1 } }}
-                        transition={{ duration: 0.82, ease: [0.16, 1, 0.3, 1], delay: delay + i * stagger }}
+                        className="inline-block will-change-transform"
+                        initial={{ y: "112%", opacity: 0, filter: "blur(6px)" }}
+                        variants={{ visible: { y: "0%", opacity: 1, filter: "blur(0px)" } }}
+                        transition={{ duration: 0.95, ease: [0.16, 1, 0.3, 1], delay: delay + i * stagger }}
                     >
                         {word}
                         {i < words.length - 1 ? "\u00A0" : ""}

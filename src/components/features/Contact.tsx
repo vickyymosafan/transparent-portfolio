@@ -2,6 +2,7 @@
 
 import { ArrowUpRight } from "lucide-react";
 import { WordMask } from "@/components/ui/Animations";
+import { scrollToChapter } from "@/lib/smooth-scroll";
 
 const FOOTER_COLS: { label: string; links: [string, string][] }[] = [
     { label: "Index", links: [["About", "#chapter-about"], ["Live Data", "#chapter-stats"], ["Projects", "#chapter-projects"]] },
@@ -48,7 +49,11 @@ export function Contact() {
                             <ul className="flex flex-col gap-2.5">
                                 {col.links.map(([label, href]) => (
                                     <li key={label}>
-                                        <a href={href} className="text-[13px] font-light text-[#8f9a93] transition-colors duration-300 hover:text-bone">
+                                        <a
+                                            href={href}
+                                            onClick={href.startsWith("#") ? (e) => { e.preventDefault(); scrollToChapter(href.slice(1)); } : undefined}
+                                            className="text-[13px] font-light text-[#8f9a93] transition-colors duration-300 hover:text-bone"
+                                        >
                                             {label}
                                         </a>
                                     </li>

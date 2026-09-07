@@ -9,10 +9,12 @@ import { SiteNav } from "@/components/layout/SiteNav";
 import { ProgressRail } from "@/components/ui/ProgressRail";
 import { CustomCursor } from "@/components/ui/CustomCursor";
 import { MotionProvider } from "@/components/ui/MotionProvider";
+import { SmoothScroll } from "@/components/ui/SmoothScroll";
 
 export default function Home() {
     return (
         <main className="relative min-h-screen overflow-x-clip bg-ink text-bone selection:bg-[#e0231c] selection:text-white">
+            <SmoothScroll />
             <MotionProvider>
                 <SceneCanvas />
                 <div className="vignette" aria-hidden />

@@ -20,7 +20,7 @@ export const CHAPTER_SCENES: Record<ChapterId, ChapterScene> = {
   finale: { camera: [0, 1.2, 10], lookAt: [0, 2.2, 0], fogColor: "#080a0e", fogDensity: 0.05, moonX: 0, moonY: 3.4, moonScale: 1.7, stream: 0, drift: 0.4 },
 };
 
-export const SCENE_DAMP = { camera: 2.2, uniforms: 1.8 } as const;
+export const SCENE_DAMP = { camera: 1.5, uniforms: 1.2 } as const;
 
 export const LIVE_WINDOW_OFFSETS = [-1.6, 0.3, 1.6] as const;
 
