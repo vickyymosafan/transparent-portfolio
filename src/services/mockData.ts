@@ -152,3 +152,43 @@ export const EXPERIENCE: ExperienceEntry[] = [
         ],
     },
 ];
+
+export interface TrainingEntry {
+    institution: string;
+    program: string;
+    description: string;
+    certUrl?: string;
+}
+
+export const TRAINING: TrainingEntry[] = [
+    {
+        institution: "CodePolitan",
+        program: "Nest.js Backend Development",
+        description: "Mastering the Nest.js JavaScript framework.",
+        certUrl: "#",
+    },
+    {
+        institution: "CodePolitan",
+        program: "Next.js Fullstack with Headless CMS Case",
+        description: "Modern web development using Next.js and Headless CMS.",
+        certUrl: "#",
+    },
+    {
+        institution: "CodePolitan",
+        program: "RESTful with Express.js",
+        description: "Learning RESTful API development with Express.js.",
+        certUrl: "#",
+    },
+    {
+        institution: "CodePolitan",
+        program: "React.js with HookEffect & Data Fetching",
+        description: "Using Hook Effect to manage side effects in React components and understanding effective data fetching strategies for web applications.",
+        certUrl: "#",
+    },
+    {
+        institution: "CodePolitan",
+        program: "Learning Artificial Intelligence",
+        description: "Learning Artificial Intelligence.",
+        certUrl: "#",
+    },
+];

@@ -1,6 +1,7 @@
 import { WordMask } from "@/components/ui/Animations";
 import { Interlude } from "@/components/ui/Interlude";
-import { EXPERIENCE } from "@/services/mockData";
+import { EXPERIENCE, TRAINING } from "@/services/mockData";
+import { ArrowUpRight } from "lucide-react";
 
 export function Experience() {
     return (
@@ -40,6 +41,36 @@ export function Experience() {
                             </ul>
                         </article>
                     ))}
+                </div>
+
+                <div className="mt-24 border-t border-bone/[0.07]" />
+
+                <div className="mt-14">
+                    <div className="mb-10 flex items-baseline gap-4">
+                        <span className="text-[10px] font-medium uppercase tracking-[0.24em] text-muted-k">
+                            Training & Certifications
+                        </span>
+                        <span className="h-px flex-1 bg-bone/[0.07]" />
+                    </div>
+
+                    <div className="grid gap-4 md:grid-cols-2">
+                        {TRAINING.map((t) => (
+                            <a
+                                key={t.program}
+                                href={t.certUrl ?? "#"}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="group relative flex flex-col gap-2 bg-ink/85 p-6 outline outline-1 -outline-offset-1 outline-bone/[0.07] transition-all duration-500 hover:outline-bone/30 hover:-translate-y-0.5"
+                            >
+                                <div className="flex items-center justify-between gap-4">
+                                    <span className="text-[10px] uppercase tracking-[0.2em] text-muted-k">{t.institution}</span>
+                                    <ArrowUpRight className="size-3.5 shrink-0 text-bone-dim opacity-0 transition-all duration-500 group-hover:opacity-100 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+                                </div>
+                                <h4 className="text-sm font-normal text-bone">{t.program}</h4>
+                                <p className="text-xs font-light leading-relaxed text-muted-k">{t.description}</p>
+                            </a>
+                        ))}
+                    </div>
                 </div>
             </div>
         </section>
