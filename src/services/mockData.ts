@@ -140,4 +140,15 @@ export const EXPERIENCE: ExperienceEntry[] = [
             "Applied modern web development practices with a focus on maintainability, usability, and system performance.",
         ],
     },
+    {
+        company: "PT Bank Mandiri (Persero) Tbk",
+        location: "Remote",
+        period: "February 2025 — March 2025",
+        role: "Project-Based Virtual Intern: Mobile Apps Developer — Bank Mandiri \u00D7 Rakamin Academy",
+        bullets: [
+            "Completed a Virtual Internship Experience as a Mobile Apps Developer at Bank Mandiri through the Rakamin Academy program.",
+            "Focused on Kotlin development, unit testing, API integration, and project management using GitLab.",
+            "Developed NewsAPL, a mobile news application, available on GitHub.",
+        ],
+    },
 ];
