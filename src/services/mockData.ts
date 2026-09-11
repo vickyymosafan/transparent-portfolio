@@ -108,7 +108,7 @@ export interface ExperienceEntry {
 export const EXPERIENCE: ExperienceEntry[] = [
     {
         company: "MQL5 Algo Trading",
-        location: "Jember Regency, East Java, Indonesia",
+        location: "Remote",
         period: "August 2026 — Present",
         role: "Algorithmic Trading Developer",
         bullets: [
