@@ -1,5 +1,6 @@
 import { Hero } from "@/components/features/Hero";
 import { About } from "@/components/features/About";
+import { Experience } from "@/components/features/Experience";
 import { StatsSection } from "@/components/features/Stats";
 import { ProjectsSection } from "@/components/features/ProjectList";
 import { Contact } from "@/components/features/Contact";
@@ -29,6 +30,7 @@ export default function Home() {
                     <ForegroundLayers />
                     <Hero />
                     <About />
+                    <Experience />
                     <StatsSection />
                     <ProjectsSection />
                     <Contact />

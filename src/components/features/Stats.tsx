@@ -170,12 +170,12 @@ function LanguageBar({ languages }: { languages: Language[] }) {
 export function StatsSection() {
     return (
         <section id="chapter-stats" data-chapter="stats" className="relative overflow-x-clip px-[clamp(20px,3.4vw,56px)] py-[clamp(88px,15vh,190px)]">
-            <Interlude numeral="02" title="Live Pulse" tagline="Contributions, hours, and languages — measured while they happen, not remembered afterwards." />
+            <Interlude numeral="03" title="Live Pulse" tagline="Contributions, hours, and languages — measured while they happen, not remembered afterwards." />
             <div className="sec-scrim sec-scrim--center" />
             <div className="relative z-10 mx-auto max-w-7xl">
                 <div className="mb-10 flex items-baseline gap-4">
                     <span className="text-[10px] font-medium uppercase tracking-[0.24em] text-muted-k">
-                        <b className="font-medium text-[#e0231c]">02</b> / 04 — Live Data
+                        <b className="font-medium text-[#e0231c]">03</b> / 05 — Live Data
                     </span>
                     <span className="h-px flex-1 bg-bone/[0.07]" />
                 </div>

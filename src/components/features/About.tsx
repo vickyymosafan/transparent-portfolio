@@ -17,7 +17,7 @@ export function About() {
             <div className="relative z-10 mx-auto max-w-7xl">
                 <div className="mb-[clamp(30px,5vh,66px)] flex items-baseline gap-4">
                     <span className="text-[10px] font-medium uppercase tracking-[0.24em] text-muted-k">
-                        <b className="font-medium text-[#e0231c]">01</b> / 04 — About
+                        <b className="font-medium text-[#e0231c]">01</b> / 05 — About
                     </span>
                     <span className="h-px flex-1 bg-bone/[0.07]" />
                 </div>

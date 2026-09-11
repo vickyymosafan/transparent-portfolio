@@ -70,12 +70,12 @@ export function ProjectList() {
 export function ProjectsSection() {
     return (
         <section id="chapter-projects" data-chapter="projects" className="relative overflow-x-clip px-[clamp(20px,3.4vw,56px)] py-[clamp(88px,15vh,190px)]">
-            <Interlude numeral="03" title="The Work" tagline="Shipped systems with real users. Selected, not collected." />
+            <Interlude numeral="04" title="The Work" tagline="Shipped systems with real users. Selected, not collected." />
             <div className="sec-scrim" />
             <div className="relative z-10 mx-auto max-w-7xl">
                 <div className="mb-10 flex items-baseline gap-4">
                     <span className="text-[10px] font-medium uppercase tracking-[0.24em] text-muted-k">
-                        <b className="font-medium text-[#e0231c]">03</b> / 04 — Projects
+                        <b className="font-medium text-[#e0231c]">04</b> / 05 — Projects
                     </span>
                     <span className="h-px flex-1 bg-bone/[0.07]" />
                 </div>
