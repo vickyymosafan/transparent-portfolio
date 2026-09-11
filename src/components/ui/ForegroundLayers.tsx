@@ -15,6 +15,10 @@ const SETS: Record<ChapterId, Piece[]> = {
     { Comp: GrassTufts, left: "-6%", width: 460 },
     { Comp: BrokenTower, left: "70%", width: 300 },
   ],
+  experience: [
+    { Comp: DryTree, left: "-6%", width: 320 },
+    { Comp: GrassTufts, left: "66%", width: 400, flip: true },
+  ],
   stats: [{ Comp: GrassTufts, left: "64%", width: 420, flip: true }],
   projects: [
     { Comp: BrokenTower, left: "-8%", width: 340 },

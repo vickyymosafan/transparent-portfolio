@@ -6,6 +6,7 @@ import { scrollToChapter } from "@/lib/smooth-scroll";
 
 const LINKS = [
     { label: "About", href: "#chapter-about" },
+    { label: "Experience", href: "#chapter-experience" },
     { label: "Stats", href: "#chapter-stats" },
     { label: "Projects", href: "#chapter-projects" },
     { label: "Contact", href: "#chapter-finale" },

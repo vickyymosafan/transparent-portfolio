@@ -15,6 +15,7 @@ export interface ChapterScene {
 export const CHAPTER_SCENES: Record<ChapterId, ChapterScene> = {
   hero: { camera: [0, 1.0, 9], lookAt: [0, 1.2, 0], fogColor: "#080c11", fogDensity: 0.045, moonX: -3.2, moonY: 3.8, moonScale: 1, stream: 0, drift: 1 },
   about: { camera: [0.6, 1.0, 6.5], lookAt: [0.3, 1.4, 0], fogColor: "#0a0e12", fogDensity: 0.05, moonX: -2.8, moonY: 3.4, moonScale: 1.05, stream: 0, drift: 1.2 },
+  experience: { camera: [0.9, 1.15, 7.2], lookAt: [0.4, 1.5, 0], fogColor: "#0b0f14", fogDensity: 0.05, moonX: -3.0, moonY: 3.6, moonScale: 1, stream: 0, drift: 1 },
   stats: { camera: [0, 1.1, 6.0], lookAt: [0, 1.6, 0], fogColor: "#0a1116", fogDensity: 0.06, moonX: 2.6, moonY: 4.2, moonScale: 0.85, stream: 1, drift: 0.5 },
   projects: { camera: [1.4, 1.0, 7], lookAt: [0.6, 1.3, 0], fogColor: "#0e0b0a", fogDensity: 0.05, moonX: 0.4, moonY: 2.8, moonScale: 0.95, stream: 0, drift: 0.9 },
   finale: { camera: [0, 1.2, 10], lookAt: [0, 2.2, 0], fogColor: "#070a0e", fogDensity: 0.04, moonX: 0, moonY: 3.8, moonScale: 1.7, stream: 0, drift: 0.4 },

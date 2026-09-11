@@ -6,10 +6,11 @@ import { WordMask } from "@/components/ui/Animations";
 import { CHAPTER_LABELS } from "@/lib/chapter-store";
 import { scrollToChapter } from "@/lib/smooth-scroll";
 
-const CHIP_IDS = ["about", "stats", "projects", "finale"] as const;
+const CHIP_IDS = ["about", "experience", "stats", "projects", "finale"] as const;
 type ChipId = (typeof CHIP_IDS)[number];
 const CHAPTER_DESC: Record<ChipId, string> = {
     about: "Who I am and how I work",
+    experience: "Where I've worked",
     stats: "GitHub & WakaTime, live",
     projects: "Shipped, production-grade",
     finale: "Let's build something",
@@ -72,7 +73,7 @@ export function Hero() {
                         <i className="absolute inset-0 origin-left animate-cue bg-bone" />
                     </span>
                 </div>
-                <div className="grid grid-cols-2 gap-4 border-t border-bone/[0.07] pt-[18px] md:grid-cols-4">
+                <div className="grid grid-cols-2 gap-4 border-t border-bone/[0.07] pt-[18px] md:grid-cols-5">
                     {CHIP_IDS.map((id, i) => (
                         <a
                             key={id}

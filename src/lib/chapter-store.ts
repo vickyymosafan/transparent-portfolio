@@ -1,6 +1,6 @@
 import { create } from "zustand";
 
-export type ChapterId = "hero" | "about" | "stats" | "projects" | "finale";
+export type ChapterId = "hero" | "about" | "experience" | "stats" | "projects" | "finale";
 
 interface ChapterState {
   active: ChapterId;
@@ -12,11 +12,12 @@ export const useChapterStore = create<ChapterState>((set) => ({
   setActive: (active) => set({ active }),
 }));
 
-export const CHAPTER_ORDER: ChapterId[] = ["hero", "about", "stats", "projects", "finale"];
+export const CHAPTER_ORDER: ChapterId[] = ["hero", "about", "experience", "stats", "projects", "finale"];
 
 export const CHAPTER_LABELS: Record<ChapterId, string> = {
   hero: "Intro",
   about: "About",
+  experience: "Experience",
   stats: "Live Data",
   projects: "Projects",
   finale: "Contact",

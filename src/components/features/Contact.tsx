@@ -6,7 +6,7 @@ import { WordMask } from "@/components/ui/Animations";
 import { scrollToChapter } from "@/lib/smooth-scroll";
 
 const FOOTER_COLS: { label: string; links: [string, string][] }[] = [
-    { label: "Index", links: [["About", "#chapter-about"], ["Live Data", "#chapter-stats"], ["Projects", "#chapter-projects"]] },
+    { label: "Index", links: [["About", "#chapter-about"], ["Experience", "#chapter-experience"], ["Live Data", "#chapter-stats"], ["Projects", "#chapter-projects"]] },
     { label: "Social", links: [["Github", "https://github.com/vickyymosafan"], ["LinkedIn", "#"]] },
     { label: "Contact", links: [["Email", "mailto:mvickymosafan@gmail.com"]] },
 ];

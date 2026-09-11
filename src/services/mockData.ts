@@ -96,3 +96,48 @@ export const PROJECTS: Project[] = [
         category: "Frontend"
     }
 ];
+
+export interface ExperienceEntry {
+    company: string;
+    location: string;
+    period: string;
+    role: string;
+    bullets: string[];
+}
+
+export const EXPERIENCE: ExperienceEntry[] = [
+    {
+        company: "MQL5 Algo Trading",
+        location: "Jember Regency, East Java, Indonesia",
+        period: "August 2026 — Present",
+        role: "Algorithmic Trading Developer",
+        bullets: [
+            "Developed an automated algorithmic trading system (Expert Advisors) and custom technical indicators for the MetaTrader 5 platform using MQL5.",
+            "Published and sold the financial software on the MQL5 Market, with ongoing maintenance through bug fixes, feature additions, and version updates to keep performance optimal for traders.",
+        ],
+    },
+    {
+        company: "Universitas Muhammadiyah Jember",
+        location: "Jember Regency, East Java, Indonesia",
+        period: "July 2025 — August 2026",
+        role: "Freelance Website Developer",
+        bullets: [
+            "Developed a web-based elderly health monitoring system for Posyandu.",
+            "Features include BMI checks, blood pressure (systolic and diastolic), cholesterol, and uric acid tracking, with automatic trend analysis and health status summaries.",
+            "Built with Next.js on the frontend, Express.js + Prisma ORM on the backend, and PostgreSQL for the database.",
+            "Designed for ease of use by Posyandu staff and accurate health data management.",
+        ],
+    },
+    {
+        company: "PT. Antosa Architect",
+        location: "Jember Regency, East Java, Indonesia",
+        period: "April 2025 — July 2025",
+        role: "Project Web Architect — Information Systems",
+        bullets: [
+            "Designed and implemented a web-based information system to support architectural project management and company information needs.",
+            "Responsible for system architecture, user interface (UI), and database design based on project requirements and business workflows.",
+            "Built web features that improve management, accessibility, and operational efficiency, integrating frontend and backend into a functional, structured system.",
+            "Applied modern web development practices with a focus on maintainability, usability, and system performance.",
+        ],
+    },
+];
