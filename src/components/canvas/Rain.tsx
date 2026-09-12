@@ -1,15 +1,11 @@
 "use client";
 
-import { useMemo } from "react";
+import { useMemo, useRef } from "react";
 import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
 import { REDUCED } from "./shared-refs";
 
 const COUNT = 2000;
-
-const uniforms = {
-  uTime: { value: 0 },
-};
 
 const vertexShader = /* glsl */ `
 uniform float uTime;
@@ -41,6 +37,8 @@ void main() {
 `;
 
 export function Rain() {
+  const uniforms = useRef({ uTime: { value: 0 } }).current;
+
   const { positions, seeds, speeds } = useMemo(() => {
     /* eslint-disable react-hooks/purity -- one-time procedural buffer init */
     const positions = new Float32Array(COUNT * 3);
@@ -48,7 +46,7 @@ export function Rain() {
     const speeds = new Float32Array(COUNT);
     for (let i = 0; i < COUNT; i++) {
       positions[i * 3] = (Math.random() - 0.5) * 30;
-      positions[i * 3 + 1] = Math.random() * 12;
+      positions[i * 3 + 1] = Math.random() * 12 - 2;
       positions[i * 3 + 2] = -16 + Math.random() * 32;
       seeds[i] = Math.random();
       speeds[i] = 0.6 + Math.random() * 0.8;

@@ -6,6 +6,8 @@ import * as THREE from "three";
 import { useWalkStore } from "@/lib/walk-store";
 import { cityPath } from "@/lib/city-path";
 
+const _vecPool = [new THREE.Vector3(), new THREE.Vector3()];
+
 export function WalkCam() {
   const damped = useRef(0);
 
@@ -13,12 +15,12 @@ export function WalkCam() {
     const { progress } = useWalkStore.getState();
     damped.current = THREE.MathUtils.damp(damped.current, progress, 2.5, delta);
 
-    const pos = new THREE.Vector3();
+    const pos = _vecPool[0];
     cityPath.getPointAt(damped.current, pos);
     camera.position.copy(pos);
 
-    const lookPos = new THREE.Vector3();
-    cityPath.getPointAt(Math.min(damped.current + 0.015, 1), lookPos);
+    const lookPos = _vecPool[1];
+    cityPath.getPointAt(Math.min(damped.current + 0.015, 0.999), lookPos);
     camera.lookAt(lookPos);
   });
 

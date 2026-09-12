@@ -33,8 +33,9 @@ interface Building {
   z: number;
   w: number;
   h: number;
-  d: number;
+  depth: number;
   district: number;
+  color: THREE.Color;
 }
 
 function buildBuildings(): Building[] {
@@ -48,7 +49,7 @@ function buildBuildings(): Building[] {
       const h = 2 + Math.random() * 6;
       const dep = 0.8 + Math.random() * 0.6;
       const x = xSign * (1.5 + w / 2 + Math.random() * 1.5);
-      buildings.push({ x, z, w, h, d: dep, district: d });
+      buildings.push({ x, z, w, h, depth: dep, district: d, color: new THREE.Color(DISTRICT_COLORS[d]) });
     }
   }
   return buildings;
@@ -71,14 +72,14 @@ export function CityGenerator() {
   return (
     <group>
       {buildings.map((b, i) => {
-        const color = new THREE.Color(DISTRICT_COLORS[b.district]);
+        const color = b.color;
         return (
           <group key={i} position={[b.x, 0, b.z]}>
             <mesh position={[0, b.h / 2 - 0.8, 0]}>
-              <boxGeometry args={[b.w, b.h, b.d]} />
+              <boxGeometry args={[b.w, b.h, b.depth]} />
               <meshBasicMaterial map={tex} color={new THREE.Color(2.2, 1.8, 1.5)} toneMapped={false} fog />
             </mesh>
-            <mesh position={[0, b.h * 0.35, b.d / 2 + 0.02]} renderOrder={20}>
+            <mesh position={[0, b.h * 0.35, b.depth / 2 + 0.02]} renderOrder={20}>
               <planeGeometry args={[b.w * 0.6, b.h * 0.5]} />
               <shaderMaterial
                 ref={(m) => {
