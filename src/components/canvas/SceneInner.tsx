@@ -17,6 +17,7 @@ import { Stars } from "./Stars";
 import { Embers } from "./Embers";
 import { MonolithCity } from "./MonolithCity";
 import { CityGenerator } from "./CityGenerator";
+import { CityModel } from "./CityModel";
 import { Rain } from "./Rain";
 import { WalkCam } from "./WalkCam";
 import { cardCam, emberState, moonState, tmpColor } from "./shared-refs";
@@ -121,6 +122,7 @@ export default function SceneInner({ onReady, onContextLost, mode = "default" }:
       <Embers />
       {mode === "night" ? (
         <>
+          <CityModel />
           <CityGenerator />
           <Rain />
           <WalkCam />
