@@ -19,7 +19,7 @@ function hasWebGL(): boolean {
   }
 }
 
-export function SceneCanvas() {
+export function SceneCanvas({ mode = "default" }: { mode?: "default" | "night" }) {
   const [supported, setSupported] = useState<boolean | null>(null);
   const [ready, setReady] = useState(false);
 
@@ -28,14 +28,14 @@ export function SceneCanvas() {
     if (!ok) document.documentElement.classList.add("no-webgl");
     const raf = requestAnimationFrame(() => setSupported(ok));
     const cleanups: Array<() => void> = [];
-    if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    if (mode === "default" && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
       cleanups.push(initPointerState(), initScrollProgress());
     }
     return () => {
       cancelAnimationFrame(raf);
       cleanups.forEach((fn) => fn());
     };
-  }, []);
+  }, [mode]);
 
   if (supported !== true) return null;
 
@@ -44,7 +44,7 @@ export function SceneCanvas() {
       id="scene-canvas"
       className={`fixed inset-0 z-0 transition-opacity duration-[1200ms] ease-out ${ready ? "opacity-100" : "opacity-0"}`}
     >
-      <SceneInner onReady={() => setReady(true)} onContextLost={() => setSupported(false)} />
+      <SceneInner mode={mode} onReady={() => setReady(true)} onContextLost={() => setSupported(false)} />
     </div>
   );
 }

@@ -16,6 +16,9 @@ import { EmberMoon } from "./EmberMoon";
 import { Stars } from "./Stars";
 import { Embers } from "./Embers";
 import { MonolithCity } from "./MonolithCity";
+import { CityGenerator } from "./CityGenerator";
+import { Rain } from "./Rain";
+import { WalkCam } from "./WalkCam";
 import { cardCam, emberState, moonState, tmpColor } from "./shared-refs";
 
 const fullSize = new THREE.Vector2();
@@ -90,7 +93,7 @@ function SceneRig() {
   return <fogExp2 attach="fog" args={["#05070a", 0.055]} />;
 }
 
-export default function SceneInner({ onReady, onContextLost }: { onReady?: () => void; onContextLost?: () => void }) {
+export default function SceneInner({ onReady, onContextLost, mode = "default" }: { onReady?: () => void; onContextLost?: () => void; mode?: "default" | "night" }) {
   return (
     <Canvas
       camera={{ fov: 50, position: [0, 1, 9] }}
@@ -116,7 +119,15 @@ export default function SceneInner({ onReady, onContextLost }: { onReady?: () =>
       <EmberMoon />
       <Stars />
       <Embers />
-      <MonolithCity />
+      {mode === "night" ? (
+        <>
+          <CityGenerator />
+          <Rain />
+          <WalkCam />
+        </>
+      ) : (
+        <MonolithCity />
+      )}
     </Canvas>
   );
 }
