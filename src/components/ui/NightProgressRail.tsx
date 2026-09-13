@@ -1,19 +1,17 @@
 "use client";
 
-import { useWalkStore } from "@/lib/walk-store";
-
-const DISTRICT_LABELS = ["Hero", "About", "Experience", "Training", "Stats", "Projects"];
+import { useWalkStore, ZONE_LABELS } from "@/lib/walk-store";
 
 export function NightProgressRail() {
-  const district = useWalkStore((s) => s.district);
+  const zone = useWalkStore((s) => s.zone);
   const walkTo = useWalkStore((s) => s.walkTo);
 
   return (
     <nav
-      aria-label="Districts"
+      aria-label="Zones"
       className="fixed right-6 top-1/2 z-[45] hidden -translate-y-1/2 flex-col items-center gap-3 lg:flex"
     >
-      {DISTRICT_LABELS.map((label, i) => (
+      {ZONE_LABELS.map((label, i) => (
         <button
           key={i}
           aria-label={label}
@@ -22,7 +20,7 @@ export function NightProgressRail() {
         >
           <i
             className={`block h-px transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
-              district === i
+              zone === i
                 ? "w-[22px] bg-bone"
                 : "w-3.5 bg-bone/25 hover:w-5 hover:bg-bone/60"
             }`}

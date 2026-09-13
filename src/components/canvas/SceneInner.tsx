@@ -16,11 +16,9 @@ import { EmberMoon } from "./EmberMoon";
 import { Stars } from "./Stars";
 import { Embers } from "./Embers";
 import { MonolithCity } from "./MonolithCity";
-import { CityGenerator } from "./CityGenerator";
+import { CinematicZones } from "./CinematicZones";
 import { Rain } from "./Rain";
 import { WalkPathController } from "./WalkPathController";
-import { TransitionArch } from "./TransitionArch";
-import { RoomLights } from "./RoomLights";
 import { cardCam, emberState, moonState, tmpColor } from "./shared-refs";
 
 const fullSize = new THREE.Vector2();
@@ -96,9 +94,6 @@ function SceneRigFull() {
 }
 
 function SceneRigAtmo() {
-  const { scene } = useThree();
-
-  /* eslint-disable react-hooks/immutability -- R3F: per-frame damped mutation of the scene graph */
   useFrame((_, rawDelta) => {
     const s = CHAPTER_SCENES[useChapterStore.getState().active];
     const dt = Math.min(rawDelta, 0.05);
@@ -108,21 +103,17 @@ function SceneRigAtmo() {
     moonState.scale = THREE.MathUtils.damp(moonState.scale, s.moonScale, SCENE_DAMP.uniforms, dt);
     emberState.energy = THREE.MathUtils.damp(emberState.energy, s.stream, SCENE_DAMP.uniforms, dt);
     moonState.intensity = 1 - 0.45 * emberState.energy;
-
-    const fog = scene.fog;
-    if (fog instanceof THREE.FogExp2) {
-      fog.color.lerp(tmpColor.set(s.fogColor), 1 - Math.exp(-SCENE_DAMP.uniforms * dt));
-      fog.density = THREE.MathUtils.damp(fog.density, s.fogDensity, SCENE_DAMP.uniforms, dt);
-    }
   }, 2);
-  /* eslint-enable react-hooks/immutability */
 
-  return <fogExp2 attach="fog" args={["#05070a", 0.055]} />;
+  return <fogExp2 attach="fog" args={["#05070a", 0.018]} />;
 }
+
+
 
 export default function SceneInner({ onReady, onContextLost, mode = "default" }: { onReady?: () => void; onContextLost?: () => void; mode?: "default" | "night" }) {
   return (
     <Canvas
+      shadows
       camera={{ fov: 50, position: [0, 1, 9] }}
       dpr={[1, 1.75]}
       gl={{ antialias: false, powerPreference: "high-performance" }}
@@ -141,21 +132,19 @@ export default function SceneInner({ onReady, onContextLost, mode = "default" }:
       </EffectComposer>
       <SkyDome />
       <FogBanks />
-      <Ridges />
-      <EmberMoon />
       <Stars />
       <Embers />
       {mode === "night" ? (
         <>
           <SceneRigAtmo />
-          <RoomLights source="walk" />
-          <CityGenerator />
+          <CinematicZones />
           <Rain />
           <WalkPathController source="walk" />
-          <TransitionArch source="walk" />
         </>
       ) : (
         <>
+          <Ridges />
+          <EmberMoon />
           <SceneRigFull />
           <MonolithCity />
         </>
