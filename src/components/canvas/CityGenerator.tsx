@@ -2,7 +2,9 @@
 
 import { useEffect, useMemo } from "react";
 import * as THREE from "three";
-import { buildTowerTexture } from "@/lib/build-tower-texture";
+import { buildTowerTexture, buildTowerNormalMap } from "@/lib/build-tower-texture";
+
+const NORMAL_SCALE = new THREE.Vector2(0.9, 0.9);
 
 const DISTRICT_COLORS = [
   "#ff547b",
@@ -148,12 +150,15 @@ function buildBuildings(): Building[] {
 interface TowerProps {
   building: Building;
   texture: THREE.Texture;
+  normalMap: THREE.Texture;
 }
 
-function Tower({ building: b, texture }: TowerProps) {
+function Tower({ building: b, texture, normalMap }: TowerProps) {
   const facade = (
     <meshStandardMaterial
       map={texture}
+      normalMap={normalMap}
+      normalScale={NORMAL_SCALE}
       color="#8796ad"
       roughness={0.62}
       metalness={0.3}
@@ -339,11 +344,15 @@ function Tower({ building: b, texture }: TowerProps) {
 
 export function CityGenerator() {
   const texture = useMemo(() => buildTowerTexture(), []);
+  const normalMap = useMemo(() => buildTowerNormalMap(), []);
   const buildings = useMemo(() => buildBuildings(), []);
 
   useEffect(() => {
-    return () => texture.dispose();
-  }, [texture]);
+    return () => {
+      texture.dispose();
+      normalMap.dispose();
+    };
+  }, [texture, normalMap]);
 
   return (
     <group>
@@ -361,7 +370,7 @@ export function CityGenerator() {
       />
 
       {buildings.map((building, index) => (
-        <Tower key={index} building={building} texture={texture} />
+        <Tower key={index} building={building} texture={texture} normalMap={normalMap} />
       ))}
     </group>
   );
