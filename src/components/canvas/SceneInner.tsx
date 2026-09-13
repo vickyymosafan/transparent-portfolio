@@ -18,7 +18,6 @@ import { Embers } from "./Embers";
 import { MonolithCity } from "./MonolithCity";
 import { CityGenerator } from "./CityGenerator";
 import { Rain } from "./Rain";
-import { WalkCam } from "./WalkCam";
 import { WalkPathController } from "./WalkPathController";
 import { TransitionArch } from "./TransitionArch";
 import { RoomLights } from "./RoomLights";
@@ -148,18 +147,17 @@ export default function SceneInner({ onReady, onContextLost, mode = "default" }:
       <Embers />
       {mode === "night" ? (
         <>
-          <SceneRigFull />
+          <SceneRigAtmo />
+          <RoomLights source="walk" />
           <CityGenerator />
           <Rain />
-          <WalkCam />
+          <WalkPathController source="walk" />
+          <TransitionArch source="walk" />
         </>
       ) : (
         <>
-          <SceneRigAtmo />
-          <RoomLights />
+          <SceneRigFull />
           <MonolithCity />
-          <WalkPathController />
-          <TransitionArch />
         </>
       )}
     </Canvas>

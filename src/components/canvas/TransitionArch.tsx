@@ -4,6 +4,7 @@ import { useRef } from "react";
 import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
 import { getChapterProgress } from "@/hooks/useChapterProgress";
+import { useWalkStore } from "@/lib/walk-store";
 
 const TRANSITION_TYPES: Record<number, string> = {
   0: "doorway",
@@ -21,15 +22,31 @@ function transitionAlpha(t: number): number {
   return 0;
 }
 
-export function TransitionArch() {
+interface TransitionArchProps {
+  source?: "scroll" | "walk";
+}
+
+export function TransitionArch({ source = "scroll" }: TransitionArchProps) {
   const groupRef = useRef<THREE.Group>(null);
 
   useFrame(() => {
-    const cp = getChapterProgress();
-    const type = TRANSITION_TYPES[cp.chapterIndex];
+    let chapterIndex: number;
+    let localProgress: number;
+
+    if (source === "walk") {
+      const p = useWalkStore.getState().progress * 6;
+      chapterIndex = Math.min(Math.floor(p), 5);
+      localProgress = p - chapterIndex;
+    } else {
+      const cp = getChapterProgress();
+      chapterIndex = cp.chapterIndex;
+      localProgress = cp.localProgress;
+    }
+
+    const type = TRANSITION_TYPES[chapterIndex];
     if (!type || !groupRef.current) return;
 
-    const alpha = transitionAlpha(cp.localProgress);
+    const alpha = transitionAlpha(localProgress);
     groupRef.current.children.forEach((child) => {
       if (child instanceof THREE.Mesh) {
         const mat = child.material as THREE.MeshBasicMaterial;
@@ -41,7 +58,6 @@ export function TransitionArch() {
 
   return (
     <group ref={groupRef}>
-      {/* Doorway: two pillars + lintel — positioned at z≈3.5 (between Hero→About) */}
       <mesh position={[-1.2, 1.2, 3.5]}>
         <boxGeometry args={[0.12, 2.4, 0.12]} />
         <meshBasicMaterial color="#0a0e12" transparent opacity={0} />

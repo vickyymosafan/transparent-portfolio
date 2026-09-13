@@ -5,6 +5,7 @@ import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
 import { useChapterStore } from "@/lib/chapter-store";
 import type { ChapterId } from "@/lib/chapter-store";
+import { useWalkStore } from "@/lib/walk-store";
 
 interface RoomLightConfig {
   ambient: string;
@@ -22,17 +23,26 @@ const ROOM_LIGHTS: Record<ChapterId, RoomLightConfig> = {
   finale:     { ambient: "#1a2030", dirColor: "#d6e7ff", dirPos: [9, 18, 7],   intensity: 1.2 },
 };
 
+const DISTRICT_TO_CHAPTER: ChapterId[] = ["hero", "about", "experience", "stats", "projects", "finale"];
+
 const DAMP = 1.5;
 const _ambientColor = new THREE.Color();
 const _dirColor = new THREE.Color();
 
-export function RoomLights() {
+interface RoomLightsProps {
+  source?: "scroll" | "walk";
+}
+
+export function RoomLights({ source = "scroll" }: RoomLightsProps) {
   const ambientRef = useRef<THREE.AmbientLight>(null);
   const dirRef = useRef<THREE.DirectionalLight>(null);
 
   useFrame((_, delta) => {
     const dt = Math.min(delta, 0.05);
-    const active = useChapterStore.getState().active;
+    const active =
+      source === "walk"
+        ? DISTRICT_TO_CHAPTER[useWalkStore.getState().district]
+        : useChapterStore.getState().active;
     const cfg = ROOM_LIGHTS[active];
     if (!cfg || !ambientRef.current || !dirRef.current) return;
 
