@@ -20,6 +20,8 @@ import { CityGenerator } from "./CityGenerator";
 import { Rain } from "./Rain";
 import { WalkCam } from "./WalkCam";
 import { WalkPathController } from "./WalkPathController";
+import { TransitionArch } from "./TransitionArch";
+import { RoomLights } from "./RoomLights";
 import { cardCam, emberState, moonState, tmpColor } from "./shared-refs";
 
 const fullSize = new THREE.Vector2();
@@ -154,8 +156,10 @@ export default function SceneInner({ onReady, onContextLost, mode = "default" }:
       ) : (
         <>
           <SceneRigAtmo />
+          <RoomLights />
           <MonolithCity />
           <WalkPathController />
+          <TransitionArch />
         </>
       )}
     </Canvas>
