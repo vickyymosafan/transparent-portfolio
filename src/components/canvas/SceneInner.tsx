@@ -19,11 +19,12 @@ import { MonolithCity } from "./MonolithCity";
 import { CityGenerator } from "./CityGenerator";
 import { Rain } from "./Rain";
 import { WalkCam } from "./WalkCam";
+import { WalkPathController } from "./WalkPathController";
 import { cardCam, emberState, moonState, tmpColor } from "./shared-refs";
 
 const fullSize = new THREE.Vector2();
 
-function SceneRig() {
+function SceneRigFull() {
   const { camera, gl, scene } = useThree();
   const lookAt = useRef(new THREE.Vector3(0, 1.2, 0));
 
@@ -93,6 +94,31 @@ function SceneRig() {
   return <fogExp2 attach="fog" args={["#05070a", 0.055]} />;
 }
 
+function SceneRigAtmo() {
+  const { scene } = useThree();
+
+  /* eslint-disable react-hooks/immutability -- R3F: per-frame damped mutation of the scene graph */
+  useFrame((_, rawDelta) => {
+    const s = CHAPTER_SCENES[useChapterStore.getState().active];
+    const dt = Math.min(rawDelta, 0.05);
+
+    moonState.pos.x = THREE.MathUtils.damp(moonState.pos.x, s.moonX, SCENE_DAMP.uniforms, dt);
+    moonState.pos.y = THREE.MathUtils.damp(moonState.pos.y, s.moonY, SCENE_DAMP.uniforms, dt);
+    moonState.scale = THREE.MathUtils.damp(moonState.scale, s.moonScale, SCENE_DAMP.uniforms, dt);
+    emberState.energy = THREE.MathUtils.damp(emberState.energy, s.stream, SCENE_DAMP.uniforms, dt);
+    moonState.intensity = 1 - 0.45 * emberState.energy;
+
+    const fog = scene.fog;
+    if (fog instanceof THREE.FogExp2) {
+      fog.color.lerp(tmpColor.set(s.fogColor), 1 - Math.exp(-SCENE_DAMP.uniforms * dt));
+      fog.density = THREE.MathUtils.damp(fog.density, s.fogDensity, SCENE_DAMP.uniforms, dt);
+    }
+  }, 2);
+  /* eslint-enable react-hooks/immutability */
+
+  return <fogExp2 attach="fog" args={["#05070a", 0.055]} />;
+}
+
 export default function SceneInner({ onReady, onContextLost, mode = "default" }: { onReady?: () => void; onContextLost?: () => void; mode?: "default" | "night" }) {
   return (
     <Canvas
@@ -112,7 +138,6 @@ export default function SceneInner({ onReady, onContextLost, mode = "default" }:
       <EffectComposer multisampling={0}>
         <Bloom mipmapBlur luminanceThreshold={1} luminanceSmoothing={0.2} intensity={1.1} />
       </EffectComposer>
-      <SceneRig />
       <SkyDome />
       <FogBanks />
       <Ridges />
@@ -121,12 +146,17 @@ export default function SceneInner({ onReady, onContextLost, mode = "default" }:
       <Embers />
       {mode === "night" ? (
         <>
+          <SceneRigFull />
           <CityGenerator />
           <Rain />
           <WalkCam />
         </>
       ) : (
-        <MonolithCity />
+        <>
+          <SceneRigAtmo />
+          <MonolithCity />
+          <WalkPathController />
+        </>
       )}
     </Canvas>
   );
