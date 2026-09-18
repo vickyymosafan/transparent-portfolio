@@ -53,7 +53,7 @@ function ZoneVisibility({
     } else if (zoneIndex === 2) {
       visible = progress > 0.16 && progress < 0.62;
     } else if (zoneIndex === 3) {
-      visible = progress > 0.42 && progress < 0.76;
+      visible = progress > 0.32 && progress < 0.76;
     } else if (zoneIndex === 4) {
       visible = progress > 0.56 && progress < 0.90;
     } else {

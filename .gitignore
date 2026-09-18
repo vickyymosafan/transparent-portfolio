@@ -65,3 +65,7 @@ capture_foyer.mjs
 build_garden_corridor_master.py
 capture_corridor.mjs
 garden_corridor_master.glb
+build_gallery_master.py
+capture_gallery.mjs
+gallery_master.glb
+courtyard_master.glb

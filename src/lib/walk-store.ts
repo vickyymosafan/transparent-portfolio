@@ -21,6 +21,7 @@ interface WalkState {
   /** True when camera is crossing a zone boundary (±10% of boundary) */
   transitioning: boolean;
   advance: (delta: number) => void;
+  setProgress: (progress: number) => void;
   walkTo: (district: number) => void;
 }
 
@@ -62,6 +63,18 @@ export const useWalkStore = create<WalkState>((set) => ({
       const { zone, zoneProgress, transitioning } = computeZone(next);
       return {
         progress: next,
+        district: zone,
+        zone,
+        zoneProgress,
+        transitioning,
+      };
+    }),
+  setProgress: (next) =>
+    set(() => {
+      const p = Math.max(0, Math.min(1, next));
+      const { zone, zoneProgress, transitioning } = computeZone(p);
+      return {
+        progress: p,
         district: zone,
         zone,
         zoneProgress,

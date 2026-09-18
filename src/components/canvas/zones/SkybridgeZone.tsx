@@ -212,14 +212,7 @@ export function SkybridgeZone() {
         />
       ))}
 
-      {/* 7. North Exit Portal / Developer Studio Workspace Warm Glow */}
-      <pointLight
-        position={[1.75, 2.2, -32.5]}
-        color="#ffe2b8"
-        intensity={1.1}
-        distance={6.5}
-        decay={1.8}
-      />
+
     </group>
   );
 }
