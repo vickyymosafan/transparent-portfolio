@@ -1,5 +1,6 @@
 "use client";
 
+import { Suspense } from "react";
 import { Canvas } from "@react-three/fiber";
 import { EffectComposer, Bloom } from "@react-three/postprocessing";
 import * as THREE from "three";
@@ -38,12 +39,19 @@ export default function SceneInner({ onReady, onContextLost }: SceneInnerProps) 
       }}
     >
       <EffectComposer multisampling={0}>
-        <Bloom mipmapBlur luminanceThreshold={0.84} luminanceSmoothing={0.35} intensity={0.75} />
+        <Bloom
+          mipmapBlur
+          luminanceThreshold={0.95}
+          luminanceSmoothing={0.25}
+          intensity={0.38}
+        />
       </EffectComposer>
       <fogExp2 attach="fog" args={["#141c2b", 0.003]} />
       <SkyDome />
       <Stars />
-      <CinematicZones />
+      <Suspense fallback={null}>
+        <CinematicZones />
+      </Suspense>
       <WalkPathController />
     </Canvas>
   );

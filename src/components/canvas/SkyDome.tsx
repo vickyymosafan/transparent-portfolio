@@ -39,8 +39,8 @@ void main() {
 const uniforms = {
   uTime: { value: 0 },
   uZenith: { value: new THREE.Color("#070d1a") },  // Deep night indigo
-  uMid: { value: new THREE.Color("#132238") },     // Twilight slate blue
-  uHorizon: { value: new THREE.Color("#252830") }, // Subtle warm dusk horizon glow
+  uMid: { value: new THREE.Color("#162540") },     // Richer twilight slate blue
+  uHorizon: { value: new THREE.Color("#3a3028") }, // Warm amber post-sunset glow
 };
 
 export function SkyDome() {

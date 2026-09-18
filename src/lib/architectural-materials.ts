@@ -169,24 +169,40 @@ export const brushedBrassMat = new THREE.MeshStandardMaterial({
 export const warmCoveLedMat = new THREE.MeshStandardMaterial({
   color: "#fff8ec",
   emissive: new THREE.Color("#ffdca0"),
-  emissiveIntensity: 5.0,
-  toneMapped: false,
+  emissiveIntensity: 1.8,
+  toneMapped: true,
 });
 
 /** Subtle warm downlight source */
 export const warmDownlightMat = new THREE.MeshStandardMaterial({
   color: "#fff8eb",
   emissive: new THREE.Color("#ffcca0"),
-  emissiveIntensity: 4.2,
-  toneMapped: false,
+  emissiveIntensity: 1.4,
+  toneMapped: true,
 });
 
 /** Warm interior ambient fill for background glass windows */
 export const interiorWarmFillMat = new THREE.MeshStandardMaterial({
   color: "#ecd8b8",
   emissive: new THREE.Color("#8a6840"),
-  emissiveIntensity: 0.65,
+  emissiveIntensity: 1.0,
   roughness: 0.85,
+});
+
+/** Deeper interior furniture-depth fill (second layer behind glass) */
+export const interiorDeepFillMat = new THREE.MeshStandardMaterial({
+  color: "#c4a87a",
+  emissive: new THREE.Color("#6b4e2c"),
+  emissiveIntensity: 0.75,
+  roughness: 0.9,
+});
+
+/** Continuous soffit wash strip — lower intensity than cove LED */
+export const soffitWashMat = new THREE.MeshStandardMaterial({
+  color: "#fff4e0",
+  emissive: new THREE.Color("#ffd48a"),
+  emissiveIntensity: 1.2,
+  toneMapped: true,
 });
 
 // ─── 5. LANDSCAPE & NATURE ───
@@ -241,4 +257,30 @@ export const bambooLeafMat = new THREE.MeshStandardMaterial({
   color: "#274e20",
   roughness: 0.72,
   metalness: 0.04,
+});
+
+// ─── 6. DESERT LANDSCAPE ───
+export const desertPlantMat = new THREE.MeshStandardMaterial({
+  color: "#2a4a2e",
+  roughness: 0.88,
+  metalness: 0.02,
+});
+
+export const agaveLeafMat = new THREE.MeshStandardMaterial({
+  color: "#3a5a3a",
+  roughness: 0.75,
+  metalness: 0.06,
+});
+
+export const boulderMat = new THREE.MeshStandardMaterial({
+  color: "#5a504a",
+  roughness: 0.95,
+  metalness: 0.04,
+});
+
+export const mountainSilhouetteMat = new THREE.MeshStandardMaterial({
+  color: "#1a1e28",
+  roughness: 1.0,
+  metalness: 0.0,
+  fog: true,
 });
