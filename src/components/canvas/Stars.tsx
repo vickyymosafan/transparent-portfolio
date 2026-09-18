@@ -3,8 +3,15 @@
 import { useMemo } from "react";
 import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
-import { countStars } from "@/lib/scene-state";
-import { REDUCED } from "./shared-refs";
+const REDUCED = typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+function countStars(): number {
+  if (typeof navigator === "undefined") return 420;
+  const nav = navigator as Navigator & { deviceMemory?: number };
+  const cores = nav.hardwareConcurrency ?? 8;
+  const memory = nav.deviceMemory ?? 8;
+  return cores <= 4 || memory <= 4 ? 180 : 420;
+}
 
 const uniforms = {
   uTime: { value: 0 },

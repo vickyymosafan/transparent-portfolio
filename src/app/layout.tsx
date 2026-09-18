@@ -13,8 +13,27 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Dev Portfolio | Vicky Mosafan",
-  description: "A transparent, data-driven portfolio for a Fullstack Developer.",
+  title: "Vicky Mosafan — Creative Developer | AI × Web × 3D",
+  description:
+    "Interactive 3D architectural portfolio of Vicky Mosafan — Creative Developer specializing in Next.js, TypeScript, Three.js procedural environments, and applied AI systems.",
+  keywords: [
+    "Vicky Mosafan",
+    "Creative Developer",
+    "Fullstack Engineer",
+    "Three.js Portfolio",
+    "React Three Fiber",
+    "Next.js",
+    "TypeScript",
+    "AI Developer",
+    "Architectural 3D Web",
+  ],
+  openGraph: {
+    title: "Vicky Mosafan — Creative Developer | AI × Web × 3D",
+    description:
+      "Interactive 3D architectural portfolio exploring modern minimalist architecture, procedural Three.js environments, and production AI systems.",
+    type: "website",
+    locale: "en_US",
+  },
 };
 
 export default function RootLayout({
