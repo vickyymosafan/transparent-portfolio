@@ -4,31 +4,33 @@ import { useRef } from "react";
 import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
 import { useWalkStore } from "@/lib/walk-store";
-import { CityGenerator } from "./CityGenerator";
+import { CourtyardZone } from "./zones/CourtyardZone";
 import { LobbyZone } from "./zones/LobbyZone";
 import { SkybridgeZone } from "./zones/SkybridgeZone";
-import { ServerRoomZone } from "./zones/ServerRoomZone";
 import { GalleryZone } from "./zones/GalleryZone";
+import { StudioZone } from "./zones/StudioZone";
 import { RooftopZone } from "./zones/RooftopZone";
 
 /**
  * Per-zone fog & ambient configuration.
- * Fog densities are kept LOW so interiors stay visible.
+ * Low densities preserve interior clarity while providing soft depth separation.
  */
 const ZONE_FOG: { color: string; density: number; ambientColor: string; ambientIntensity: number }[] = [
-  { color: "#05070a", density: 0.018, ambientColor: "#1a2233", ambientIntensity: 0.6 },   // Zone 0: City
-  { color: "#0e1218", density: 0.012, ambientColor: "#2a2030", ambientIntensity: 1.2 },   // Zone 1: Lobby — warm
-  { color: "#0a1020", density: 0.010, ambientColor: "#1a2540", ambientIntensity: 0.9 },   // Zone 2: Skybridge
-  { color: "#040610", density: 0.015, ambientColor: "#0a1530", ambientIntensity: 0.5 },   // Zone 3: Server — dark mood
-  { color: "#1a1816", density: 0.008, ambientColor: "#f5f0e8", ambientIntensity: 1.8 },   // Zone 4: Gallery — bright!
-  { color: "#060a14", density: 0.006, ambientColor: "#2a3550", ambientIntensity: 1.0 },   // Zone 5: Rooftop — clear sky
+  { color: "#141c2b", density: 0.003, ambientColor: "#607a9c", ambientIntensity: 1.6 },  // Zone 0: Courtyard Entry (twilight courtyard)
+  { color: "#1c1a18", density: 0.0018, ambientColor: "#d8cca8", ambientIntensity: 2.0 }, // Zone 1: The Foyer (warm oak & travertine)
+  { color: "#161e26", density: 0.0022, ambientColor: "#7e96ac", ambientIntensity: 1.6 }, // Zone 2: Garden Corridor (bamboo & basalt)
+  { color: "#1e1d1b", density: 0.0014, ambientColor: "#e2dacb", ambientIntensity: 2.2 }, // Zone 3: Project Gallery (gallery white & terrazzo)
+  { color: "#1a1918", density: 0.0018, ambientColor: "#cab89e", ambientIntensity: 1.9 }, // Zone 4: Developer Studio (focused walnut studio)
+  { color: "#121926", density: 0.0026, ambientColor: "#687e9c", ambientIntensity: 1.8 }, // Zone 5: Rooftop Terrace (twilight sky)
 ];
 
 const _fogColor = new THREE.Color();
 const _blendColor = new THREE.Color();
+const _nextAmbColor = new THREE.Color();
 
 /**
- * Visibility controller: shows zone group only when camera is nearby.
+ * Visibility controller: keeps active zone and adjacent transition zones visible
+ * to eliminate geometry popping during camera progression.
  */
 function ZoneVisibility({
   children,
@@ -41,9 +43,24 @@ function ZoneVisibility({
 
   useFrame(() => {
     if (!groupRef.current) return;
-    const currentZone = useWalkStore.getState().zone;
-    const distance = Math.abs(currentZone - zoneIndex);
-    groupRef.current.visible = distance <= 1;
+    const progress = useWalkStore.getState().progress;
+
+    let visible = false;
+    if (zoneIndex === 0) {
+      visible = progress < 0.28;
+    } else if (zoneIndex === 1) {
+      visible = progress > 0.08 && progress < 0.46;
+    } else if (zoneIndex === 2) {
+      visible = progress > 0.24 && progress < 0.62;
+    } else if (zoneIndex === 3) {
+      visible = progress > 0.42 && progress < 0.76;
+    } else if (zoneIndex === 4) {
+      visible = progress > 0.56 && progress < 0.90;
+    } else {
+      visible = progress > 0.72;
+    }
+
+    groupRef.current.visible = visible;
   });
 
   return <group ref={groupRef}>{children}</group>;
@@ -87,7 +104,8 @@ function ZoneAtmosphere() {
     if (ambientRef.current && cfg) {
       _ambColor.current.set(cfg.ambientColor);
       if (blend > 0 && nextCfg) {
-        _ambColor.current.lerp(new THREE.Color(nextCfg.ambientColor), blend);
+        _nextAmbColor.set(nextCfg.ambientColor);
+        _ambColor.current.lerp(_nextAmbColor, blend);
       }
       ambientRef.current.color.lerp(_ambColor.current, 1 - Math.exp(-3 * dt));
 
@@ -97,55 +115,62 @@ function ZoneAtmosphere() {
         blend
       );
       ambientRef.current.intensity = THREE.MathUtils.damp(
-        ambientRef.current.intensity, targetIntensity, 3, dt
+        ambientRef.current.intensity,
+        targetIntensity,
+        3,
+        dt
       );
     }
   });
 
-  return <ambientLight ref={ambientRef} color="#1a2233" intensity={0.6} />;
+  return <ambientLight ref={ambientRef} color="#607a9c" intensity={1.6} />;
 }
 
 /**
- * CinematicZones — Master orchestrator for the 6-zone cinematic walkthrough.
+ * CinematicZones — Master orchestrator for the 6 architectural zones.
  */
 export function CinematicZones() {
   return (
     <group>
       <ZoneAtmosphere />
 
-      {/* Global directional light (moonlight / sky fill) */}
+      {/* Global directional moonlight with soft shadow map */}
       <directionalLight
-        position={[5, 15, 10]}
-        color="#3a4a6a"
-        intensity={0.4}
+        position={[14, 28, 18]}
+        color="#dae6f8"
+        intensity={1.8}
+        castShadow
+        shadow-mapSize-width={2048}
+        shadow-mapSize-height={2048}
+        shadow-bias={-0.0004}
       />
 
-      {/* Zone 0: City Approach (outdoor) */}
+      {/* Zone 0: Courtyard Entry (outdoor pavilion & reflection pool) */}
       <ZoneVisibility zoneIndex={0}>
-        <CityGenerator />
+        <CourtyardZone />
       </ZoneVisibility>
 
-      {/* Zone 1: Building Lobby (interior) */}
+      {/* Zone 1: The Foyer (interior oak & travertine with floating stairs) */}
       <ZoneVisibility zoneIndex={1}>
         <LobbyZone />
       </ZoneVisibility>
 
-      {/* Zone 2: Glass Skybridge (elevated) */}
+      {/* Zone 2: Garden Corridor (glass breezeway & bamboo courtyards) */}
       <ZoneVisibility zoneIndex={2}>
         <SkybridgeZone />
       </ZoneVisibility>
 
-      {/* Zone 3: Server / Data Room (dark) */}
+      {/* Zone 3: Project Gallery (exhibition of production projects) */}
       <ZoneVisibility zoneIndex={3}>
-        <ServerRoomZone />
-      </ZoneVisibility>
-
-      {/* Zone 4: Exhibition Gallery (bright) */}
-      <ZoneVisibility zoneIndex={4}>
         <GalleryZone />
       </ZoneVisibility>
 
-      {/* Zone 5: Rooftop Finale (outdoor) */}
+      {/* Zone 4: Developer Studio (solid walnut workstation & triple monitors) */}
+      <ZoneVisibility zoneIndex={4}>
+        <StudioZone />
+      </ZoneVisibility>
+
+      {/* Zone 5: Rooftop Terrace (open-air teak sky lounge & fire table) */}
       <ZoneVisibility zoneIndex={5}>
         <RooftopZone />
       </ZoneVisibility>

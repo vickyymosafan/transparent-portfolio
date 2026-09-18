@@ -4,7 +4,6 @@ import { useRef } from "react";
 import { useFrame, useThree } from "@react-three/fiber";
 import * as THREE from "three";
 import { getWalkPathState } from "@/lib/walk-path";
-import { getChapterProgress } from "@/hooks/useChapterProgress";
 import { useWalkStore } from "@/lib/walk-store";
 import { pointerState } from "@/lib/pointer-state";
 
@@ -30,13 +29,9 @@ const MOUSE_PARALLAX_Y = 0.15;
 const MOUSE_LOOK_X = 0.4;
 const MOUSE_LOOK_Y = 0.25;
 
-interface WalkPathControllerProps {
-  /** "scroll" reads page scroll progress (default page); "walk" reads walk-store (night route). */
-  source?: "scroll" | "walk";
-}
-
-export function WalkPathController({ source = "scroll" }: WalkPathControllerProps) {
+export function WalkPathController() {
   const { camera } = useThree();
+  const initialized = useRef(false);
   const state = useRef({
     position: new THREE.Vector3(0, 8, 25),
     lookAt: new THREE.Vector3(0, 2, 0),
@@ -48,16 +43,21 @@ export function WalkPathController({ source = "scroll" }: WalkPathControllerProp
   useFrame(({ clock }, delta) => {
     const dt = Math.min(delta, 0.05);
     const time = clock.getElapsedTime();
-
-    let t: number;
-    if (source === "walk") {
-      t = useWalkStore.getState().progress;
-    } else {
-      const cp = getChapterProgress();
-      t = cp.chapterIndex / 5 + cp.localProgress / 5;
-    }
+    const t = useWalkStore.getState().progress;
 
     const target = getWalkPathState(t);
+    const jumped = Math.abs(t - state.current.prevT) > 0.12;
+
+    if (!initialized.current || jumped) {
+      state.current.position.copy(target.position);
+      state.current.lookAt.copy(target.lookAt);
+      state.current.fov = target.fov;
+      camera.position.copy(target.position);
+      camera.lookAt(target.lookAt);
+      (camera as THREE.PerspectiveCamera).fov = target.fov;
+      camera.updateProjectionMatrix();
+      initialized.current = true;
+    }
 
     // Compute movement speed for head-bob intensity
     const speed = Math.abs(t - state.current.prevT) / Math.max(dt, 0.001);

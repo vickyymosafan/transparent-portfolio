@@ -1,10 +1,24 @@
 "use client";
 
+import { useEffect } from "react";
 import { useWalkStore, ZONE_LABELS } from "@/lib/walk-store";
 
 export function NightProgressRail() {
   const zone = useWalkStore((s) => s.zone);
   const walkTo = useWalkStore((s) => s.walkTo);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const params = new URLSearchParams(window.location.search);
+      const z = params.get("zone") ?? params.get("section");
+      if (z !== null) {
+        const val = parseInt(z, 10);
+        if (!isNaN(val) && val >= 0 && val <= 5) {
+          walkTo(val);
+        }
+      }
+    }
+  }, [walkTo]);
 
   return (
     <nav

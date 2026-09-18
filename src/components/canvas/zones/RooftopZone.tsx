@@ -1,169 +1,304 @@
 "use client";
 
-import { useMemo } from "react";
+import { useRef, useMemo } from "react";
+import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
-import { buildRooftopTexture } from "@/lib/build-tower-texture";
+import {
+  getTeakDeckMat,
+  getPebblesMat,
+  getBoardFormedConcreteMat,
+  architecturalGlassMat,
+  matteBlackMetalMat,
+  warmCoveLedMat,
+  pineTrunkMat,
+  cloudPineFoliageMat,
+  interiorWarmFillMat,
+} from "@/lib/architectural-materials";
 
-// ─── Shared materials ───
-const railMat = new THREE.MeshStandardMaterial({ color: "#3a4555", metalness: 0.85, roughness: 0.25 });
-const helipadMat = new THREE.MeshStandardMaterial({ color: "#1c2028", roughness: 0.7, metalness: 0.3 });
-const hvacMat = new THREE.MeshStandardMaterial({ color: "#253040", metalness: 0.6, roughness: 0.4 });
-const doorHousingMat = new THREE.MeshStandardMaterial({ color: "#1a2030", metalness: 0.4, roughness: 0.6 });
-const doorOpeningMat = new THREE.MeshStandardMaterial({ color: "#0a1018", roughness: 0.9 });
-const antennaMat = new THREE.MeshStandardMaterial({ color: "#4a5565", metalness: 0.9, roughness: 0.2 });
-const hvacFanMat = new THREE.MeshStandardMaterial({ color: "#151e28", metalness: 0.9, roughness: 0.15 });
-const hMarkMat = new THREE.MeshStandardMaterial({ color: "#e8e4df", roughness: 0.6 });
-const heliRingMat = new THREE.MeshStandardMaterial({
-  color: "#ffb65c", emissive: new THREE.Color("#ffb65c"),
-  emissiveIntensity: 3, toneMapped: false,
-});
-const neonTealMat = new THREE.MeshStandardMaterial({
-  color: "#49eadb", emissive: new THREE.Color("#49eadb"),
-  emissiveIntensity: 4, toneMapped: false,
-});
-const beaconMat = new THREE.MeshStandardMaterial({
-  color: "#ff2233", emissive: new THREE.Color("#ff2233"),
-  emissiveIntensity: 5, toneMapped: false,
+const sofaFabricMat = new THREE.MeshStandardMaterial({
+  color: "#cfc6b6",
+  roughness: 0.85,
+  metalness: 0.02,
 });
 
-const railPostGeo = new THREE.BoxGeometry(0.08, 1.1, 0.08);
-const beaconGeo = new THREE.SphereGeometry(0.08, 8, 8);
+const pillowFabricMat = new THREE.MeshStandardMaterial({
+  color: "#8a7d6e",
+  roughness: 0.88,
+  metalness: 0.02,
+});
 
-/**
- * Zone 5: Rooftop Finale
- * Camera path: z ≈ -41→-47, y ≈ 6→11
- */
+const fireTableMat = new THREE.MeshStandardMaterial({
+  color: "#16171a",
+  roughness: 0.22,
+  metalness: 0.82,
+});
+
+const flameGlowMat = new THREE.MeshStandardMaterial({
+  color: "#ff9025",
+  emissive: new THREE.Color("#ffb844"),
+  emissiveIntensity: 6.2,
+  toneMapped: false,
+});
+
 export function RooftopZone() {
-  const roofTex = useMemo(() => {
-    const t = buildRooftopTexture();
-    t.repeat.set(3, 3);
-    return t;
-  }, []);
-  const roofFloorMat = useMemo(() => new THREE.MeshStandardMaterial({
-    map: roofTex, roughness: 0.85, metalness: 0.15, color: "#222830",
-  }), [roofTex]);
+  const fireLightRef = useRef<THREE.PointLight>(null);
+  const flameMeshRef = useRef<THREE.Mesh>(null);
 
-  const roofW = 18, roofD = 18;
-  // Camera starts at y≈6, rises to y≈11. Roof surface at y=5
-  const roofY = 5;
-  // Camera z range: -41 to -47, center ≈ -44
-  const zCenter = -44;
+  const deckW = 20.0;
+  const deckD = 16.0;
+  const floorY = 0.0;
+  const zCenter = -57.5; // Spans from z = -51.0 to z = -64.0
+
+  const teakDeckMat = useMemo(() => getTeakDeckMat(), []);
+  const lavaBedMat = useMemo(() => getPebblesMat(), []);
+  const concreteMat = useMemo(() => getBoardFormedConcreteMat(), []);
+
+  // Distant twinkling city skyline lights (Reference 1 evening backdrop)
+  const cityLightPositions = useMemo(() => {
+    const pts = new Float32Array(90 * 3);
+    for (let i = 0; i < 90; i++) {
+      const pseudoX = Math.sin(i * 12.9898 + 78.233) * 43758.5453;
+      const fracX = pseudoX - Math.floor(pseudoX);
+      const pseudoY = Math.sin(i * 39.346 + 11.135) * 23421.631;
+      const fracY = pseudoY - Math.floor(pseudoY);
+      const pseudoZ = Math.sin(i * 71.182 + 93.411) * 31254.819;
+      const fracZ = pseudoZ - Math.floor(pseudoZ);
+
+      pts[i * 3] = -18 + fracX * 36;
+      pts[i * 3 + 1] = 0.4 + fracY * 2.8;
+      pts[i * 3 + 2] = -deckD / 2 - 4.5 - fracZ * 8.0;
+    }
+    return pts;
+  }, [deckD]);
+
+  // Subtle natural flame flicker
+  useFrame(({ clock }) => {
+    const t = clock.getElapsedTime();
+    if (fireLightRef.current) {
+      const flicker =
+        Math.sin(t * 12) * 0.25 +
+        Math.sin(t * 24.3) * 0.18 +
+        Math.sin(t * 7.5) * 0.3;
+      fireLightRef.current.intensity = 4.2 + flicker;
+    }
+    if (flameMeshRef.current) {
+      flameMeshRef.current.scale.y = 1 + Math.sin(t * 15) * 0.12;
+      flameMeshRef.current.scale.x = 1 + Math.cos(t * 11) * 0.08;
+    }
+  });
 
   return (
-    <group position={[0, roofY, zCenter]}>
-      {/* Roof surface */}
-      <mesh receiveShadow rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.01, 0]} material={roofFloorMat}>
-        <planeGeometry args={[roofW, roofD]} />
+    <group position={[0, floorY, zCenter]}>
+      {/* ═══ 1. NATURAL WARM TEAK PLANK ROOFTOP DECKING (Reference 1) ═══ */}
+      <mesh receiveShadow position={[0, -0.01, 0]} rotation={[-Math.PI / 2, 0, 0]} material={teakDeckMat}>
+        <planeGeometry args={[deckW, deckD]} />
       </mesh>
 
-      {/* Helipad */}
-      <group position={[0, 0.03, -1]}>
-        <mesh rotation={[-Math.PI / 2, 0, 0]} material={helipadMat}>
-          <circleGeometry args={[3.5, 32]} />
+      {/* ═══ 2. SUNKEN ARCHITECTURAL LOUNGE PIT (Reference 1) ═══ */}
+      <group position={[0.6, 0, 0.4]}>
+        {/* Sunken Pit Base Floor */}
+        <mesh receiveShadow position={[0, -0.42, 0]} rotation={[-Math.PI / 2, 0, 0]} material={teakDeckMat}>
+          <planeGeometry args={[6.6, 5.4]} />
         </mesh>
-        <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.005, 0]} material={heliRingMat}>
-          <ringGeometry args={[3.1, 3.5, 32]} />
+
+        {/* Stepped Wood Perimeter Rim Edging */}
+        <mesh position={[0, -0.21, 2.75]} material={teakDeckMat}>
+          <boxGeometry args={[7.0, 0.42, 0.24]} />
         </mesh>
-        {/* Helipad lights around ring */}
-        {Array.from({ length: 8 }, (_, i) => {
-          const angle = (i / 8) * Math.PI * 2;
-          return (
-            <pointLight key={`hp-${i}`}
-              position={[Math.cos(angle) * 3.3, 0.2, -1 + Math.sin(angle) * 3.3]}
-              color="#ffb65c" intensity={0.4} distance={2} decay={2} />
-          );
-        })}
-        {/* H marking */}
-        <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.01, 0]} material={hMarkMat}>
-          <planeGeometry args={[0.5, 2.5]} />
+        <mesh position={[0, -0.21, -2.75]} material={teakDeckMat}>
+          <boxGeometry args={[7.0, 0.42, 0.24]} />
         </mesh>
-        <mesh rotation={[-Math.PI / 2, 0, 0]} position={[-0.7, 0.01, 0]} material={hMarkMat}>
-          <planeGeometry args={[0.5, 1]} />
+        <mesh position={[-3.4, -0.21, 0]} material={teakDeckMat}>
+          <boxGeometry args={[0.24, 0.42, 5.4]} />
         </mesh>
-        <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0.7, 0.01, 0]} material={hMarkMat}>
-          <planeGeometry args={[0.5, 1]} />
+        <mesh position={[3.4, -0.21, 0]} material={teakDeckMat}>
+          <boxGeometry args={[0.24, 0.42, 5.4]} />
         </mesh>
+
+        {/* ── Modular Sectional Sofa (U-Shaped Oatmeal Linen) ── */}
+        {/* North Bench Cushion (Back) */}
+        <group position={[0, -0.26, -1.85]}>
+          <mesh castShadow receiveShadow material={sofaFabricMat}>
+            <boxGeometry args={[5.4, 0.3, 0.9]} />
+          </mesh>
+          <mesh position={[0, 0.3, -0.34]} castShadow material={sofaFabricMat}>
+            <boxGeometry args={[5.4, 0.38, 0.25]} />
+          </mesh>
+          {[-1.6, 0, 1.6].map((px, idx) => (
+            <mesh key={`npillow-${idx}`} position={[px, 0.22, -0.24]} rotation={[0.15, 0, 0]} material={pillowFabricMat}>
+              <boxGeometry args={[0.48, 0.32, 0.12]} />
+            </mesh>
+          ))}
+        </group>
+
+        {/* South Bench Cushion (Front) */}
+        <group position={[0, -0.26, 1.85]}>
+          <mesh castShadow receiveShadow material={sofaFabricMat}>
+            <boxGeometry args={[5.4, 0.3, 0.9]} />
+          </mesh>
+          <mesh position={[0, 0.3, 0.34]} castShadow material={sofaFabricMat}>
+            <boxGeometry args={[5.4, 0.38, 0.25]} />
+          </mesh>
+          {[-1.6, 1.6].map((px, idx) => (
+            <mesh key={`spillow-${idx}`} position={[px, 0.22, 0.24]} rotation={[-0.15, 0, 0]} material={pillowFabricMat}>
+              <boxGeometry args={[0.48, 0.32, 0.12]} />
+            </mesh>
+          ))}
+        </group>
+
+        {/* West Bench Cushion (Left connecting piece) */}
+        <group position={[-2.2, -0.26, 0]}>
+          <mesh castShadow receiveShadow material={sofaFabricMat}>
+            <boxGeometry args={[0.9, 0.3, 2.8]} />
+          </mesh>
+          <mesh position={[-0.34, 0.3, 0]} castShadow material={sofaFabricMat}>
+            <boxGeometry args={[0.25, 0.38, 2.8]} />
+          </mesh>
+          <mesh position={[-0.24, 0.22, 0]} rotation={[0, 0, 0.15]} material={pillowFabricMat}>
+            <boxGeometry args={[0.12, 0.32, 0.48]} />
+          </mesh>
+        </group>
+
+        {/* ── Monolithic Black Basalt Linear Fire Table ── */}
+        <group position={[0, -0.21, 0]}>
+          <mesh castShadow receiveShadow material={fireTableMat}>
+            <boxGeometry args={[2.5, 0.42, 0.88]} />
+          </mesh>
+          {/* Recessed lava rock bed */}
+          <mesh position={[0, 0.19, 0]} material={lavaBedMat}>
+            <boxGeometry args={[2.2, 0.05, 0.58]} />
+          </mesh>
+          {/* Glowing flame ribbon */}
+          <mesh ref={flameMeshRef} position={[0, 0.32, 0]} material={flameGlowMat}>
+            <boxGeometry args={[1.9, 0.22, 0.12]} />
+          </mesh>
+          {/* Flickering warm firelight */}
+          <pointLight
+            ref={fireLightRef}
+            position={[0, 0.5, 0]}
+            color="#ff9b36"
+            intensity={4.5}
+            distance={7.5}
+            decay={2}
+          />
+        </group>
+
+        {/* Warm linear LED runner under perimeter rim */}
+        {[-2.65, 2.65].map((rz, idx) => (
+          <group key={`rim-glow-${idx}`} position={[0, -0.04, rz]}>
+            <mesh material={warmCoveLedMat}>
+              <boxGeometry args={[6.6, 0.03, 0.03]} />
+            </mesh>
+            <pointLight position={[0, -0.15, 0]} color="#ffe0a3" intensity={2.0} distance={4.5} decay={2} />
+          </group>
+        ))}
       </group>
 
-      {/* Safety railing posts */}
-      {Array.from({ length: 10 }, (_, i) => {
-        const pos = -roofW / 2 + 1 + i * (roofW - 2) / 9;
-        return (
-          <group key={`rp-${i}`}>
-            <mesh position={[pos, 0.55, roofD / 2 - 0.15]} castShadow geometry={railPostGeo} material={railMat} />
-            <mesh position={[pos, 0.55, -roofD / 2 + 0.15]} castShadow geometry={railPostGeo} material={railMat} />
-          </group>
-        );
-      })}
-      {Array.from({ length: 10 }, (_, i) => {
-        const pos = -roofD / 2 + 1 + i * (roofD - 2) / 9;
-        return (
-          <group key={`rs-${i}`}>
-            <mesh position={[-roofW / 2 + 0.15, 0.55, pos]} castShadow geometry={railPostGeo} material={railMat} />
-            <mesh position={[roofW / 2 - 0.15, 0.55, pos]} castShadow geometry={railPostGeo} material={railMat} />
-          </group>
-        );
-      })}
-      {/* Horizontal rails */}
-      {[0.55, 1.1].map((h) => (
-        <group key={`hr-${h}`}>
-          <mesh position={[0, h, roofD / 2 - 0.15]} material={railMat}>
-            <boxGeometry args={[roofW - 1, 0.05, 0.05]} />
+      {/* ═══ 3. ARCHITECTURAL JAPANESE CLOUD PINE PLANTERS (Reference 1) ═══ */}
+      {[
+        { x: -5.8, z: -4.8, ry: 0.3 },
+        { x: 6.8, z: 4.2, ry: -0.6 },
+      ].map((p, pidx) => (
+        <group key={`roof-planter-${pidx}`} position={[p.x, 0, p.z]} rotation={[0, p.ry, 0]}>
+          {/* Dark Charcoal Concrete Planter Box */}
+          <mesh position={[0, 0.5, 0]} castShadow receiveShadow material={concreteMat}>
+            <boxGeometry args={[2.2, 1.0, 2.2]} />
           </mesh>
-          <mesh position={[0, h, -roofD / 2 + 0.15]} material={railMat}>
-            <boxGeometry args={[roofW - 1, 0.05, 0.05]} />
+          {/* Soil / River Pebble surface */}
+          <mesh position={[0, 1.01, 0]} rotation={[-Math.PI / 2, 0, 0]} material={lavaBedMat}>
+            <planeGeometry args={[2.1, 2.1]} />
           </mesh>
-          <mesh position={[-roofW / 2 + 0.15, h, 0]} material={railMat}>
-            <boxGeometry args={[0.05, 0.05, roofD - 1]} />
+          {/* Sculpted Niwaki Trunk */}
+          <mesh position={[0, 1.8, 0]} rotation={[0, 0, 0.2]} castShadow material={pineTrunkMat}>
+            <cylinderGeometry args={[0.07, 0.16, 1.6, 8]} />
           </mesh>
-          <mesh position={[roofW / 2 - 0.15, h, 0]} material={railMat}>
-            <boxGeometry args={[0.05, 0.05, roofD - 1]} />
+          <mesh position={[0.3, 2.5, 0.2]} rotation={[0.4, 0, -0.35]} castShadow material={pineTrunkMat}>
+            <cylinderGeometry args={[0.05, 0.09, 1.1, 8]} />
           </mesh>
+          <mesh position={[-0.3, 2.3, -0.2]} rotation={[-0.3, 0, 0.4]} castShadow material={pineTrunkMat}>
+            <cylinderGeometry args={[0.04, 0.07, 1.0, 8]} />
+          </mesh>
+          {/* Cloud Foliage Pads */}
+          <mesh position={[0.65, 2.9, 0.25]} scale={[1.4, 0.38, 1.1]} castShadow material={cloudPineFoliageMat}>
+            <sphereGeometry args={[0.5, 12, 8]} />
+          </mesh>
+          <mesh position={[-0.5, 2.7, -0.15]} scale={[1.2, 0.35, 1.0]} castShadow material={cloudPineFoliageMat}>
+            <sphereGeometry args={[0.45, 12, 8]} />
+          </mesh>
+          <mesh position={[0.05, 3.3, 0.1]} scale={[1.1, 0.32, 0.9]} castShadow material={cloudPineFoliageMat}>
+            <sphereGeometry args={[0.4, 12, 8]} />
+          </mesh>
+          {/* Warm ground uplight */}
+          <pointLight position={[0.4, 1.1, 0.4]} color="#ffe0a3" intensity={2.2} distance={4.5} decay={2} />
         </group>
       ))}
 
-      {/* Rooftop access door */}
-      <group position={[0, 0, roofD / 2 - 0.8]}>
-        <mesh position={[0, 1.6, 0]} castShadow material={doorHousingMat}>
-          <boxGeometry args={[3, 3.2, 2.5]} />
+      {/* ═══ 4. FRAMELESS GLASS BALUSTRADE & WARM PERIMETER COVE RUNNER (Reference 1) ═══ */}
+      {/* North Edge Balustrade */}
+      <group position={[0, 0.65, -deckD / 2 + 0.1]}>
+        <mesh material={architecturalGlassMat}>
+          <boxGeometry args={[deckW - 0.4, 1.3, 0.03]} />
         </mesh>
-        <mesh position={[0, 1.3, 1.28]} material={doorOpeningMat}>
-          <boxGeometry args={[1.4, 2.6, 0.12]} />
+        <mesh position={[0, 0.66, 0]} material={matteBlackMetalMat}>
+          <boxGeometry args={[deckW - 0.4, 0.04, 0.06]} />
         </mesh>
-        <mesh position={[0, 2.7, 1.32]} material={neonTealMat}>
-          <boxGeometry args={[1.6, 0.06, 0.03]} />
+        {/* Warm linear perimeter baseboard light */}
+        <mesh position={[0, -0.62, 0.06]} material={warmCoveLedMat}>
+          <boxGeometry args={[deckW - 0.6, 0.03, 0.03]} />
+        </mesh>
+        {[-6, 0, 6].map((bx, idx) => (
+          <pointLight key={`b-glow-${idx}`} position={[bx, -0.5, 0.3]} color="#ffb866" intensity={2.4} distance={4.0} decay={2} />
+        ))}
+      </group>
+
+      {/* South Edge Balustrade */}
+      <group position={[0, 0.65, deckD / 2 - 0.1]}>
+        <mesh material={architecturalGlassMat}>
+          <boxGeometry args={[deckW - 0.4, 1.3, 0.03]} />
+        </mesh>
+        <mesh position={[0, 0.66, 0]} material={matteBlackMetalMat}>
+          <boxGeometry args={[deckW - 0.4, 0.04, 0.06]} />
         </mesh>
       </group>
 
-      {/* HVAC equipment */}
-      <mesh position={[5, 0.7, -4]} castShadow material={hvacMat}>
-        <boxGeometry args={[2, 1.4, 1.8]} />
-      </mesh>
-      <mesh position={[5, 1.45, -4]} material={hvacFanMat}>
-        <cylinderGeometry args={[0.5, 0.5, 0.12, 12]} />
-      </mesh>
-      <mesh position={[-6, 0.55, -5]} castShadow material={hvacMat}>
-        <boxGeometry args={[1.6, 1.1, 1.4]} />
-      </mesh>
-      <mesh position={[-4, 0.45, 3]} castShadow material={hvacMat}>
-        <boxGeometry args={[1.2, 0.9, 1]} />
-      </mesh>
+      {/* East Edge Balustrade */}
+      <group position={[deckW / 2 - 0.1, 0.65, 0]}>
+        <mesh material={architecturalGlassMat}>
+          <boxGeometry args={[0.03, 1.3, deckD - 0.4]} />
+        </mesh>
+        <mesh position={[0, 0.66, 0]} material={matteBlackMetalMat}>
+          <boxGeometry args={[0.06, 0.04, deckD - 0.4]} />
+        </mesh>
+      </group>
 
-      {/* Antenna masts */}
-      {[[6, -6], [-7, -7], [7, 5]].map(([x, z], i) => (
-        <group key={`ant-${i}`} position={[x, 0, z]}>
-          <mesh position={[0, 2.5, 0]} castShadow material={antennaMat}>
-            <cylinderGeometry args={[0.04, 0.07, 5, 8]} />
+      {/* ═══ 5. INDOOR PAVILION VOLUME & FLOOR-TO-CEILING GLASS (WEST SIDE) ═══ */}
+      <group position={[-deckW / 2 + 2.4, 0, 0]}>
+        <mesh position={[-0.8, 2.5, 0]} material={concreteMat}>
+          <boxGeometry args={[1.6, 5.0, deckD]} />
+        </mesh>
+        <mesh position={[0.2, 2.5, 0]} material={interiorWarmFillMat}>
+          <boxGeometry args={[0.2, 4.8, deckD - 0.8]} />
+        </mesh>
+        <mesh position={[0.3, 2.5, 0]} material={architecturalGlassMat}>
+          <boxGeometry args={[0.04, 4.8, deckD - 0.8]} />
+        </mesh>
+        {/* Mullions */}
+        {[-5, -2.5, 0, 2.5, 5].map((mz, idx) => (
+          <mesh key={`pav-mul-${idx}`} position={[0.32, 2.5, mz]} material={matteBlackMetalMat}>
+            <boxGeometry args={[0.06, 4.8, 0.08]} />
           </mesh>
-          <mesh position={[0, 5.1, 0]} geometry={beaconGeo} material={beaconMat} />
-          <pointLight position={[0, 5.2, 0]} color="#ff2233" intensity={0.5} distance={3} decay={2} />
-        </group>
-      ))}
+        ))}
+        {/* Warm interior light spill */}
+        <pointLight position={[1.2, 2.8, 0]} color="#ffe0a3" intensity={3.5} distance={9.0} decay={2} />
+      </group>
 
-      {/* Rooftop ambient lighting — moonlight / sky */}
-      <pointLight position={[0, 2, 0]} color="#8090b0" intensity={1.5} distance={15} decay={2} />
-      <pointLight position={[-5, 1, -3]} color="#ffb65c" intensity={0.8} distance={8} decay={2} />
-      <pointLight position={[5, 1, 3]} color="#ffb65c" intensity={0.8} distance={8} decay={2} />
+      {/* ═══ 6. DISTANT PANORAMIC TWINKLING CITY SKYLINE (Reference 1) ═══ */}
+      <points>
+        <bufferGeometry>
+          <bufferAttribute attach="attributes-position" args={[cityLightPositions, 3]} />
+        </bufferGeometry>
+        <pointsMaterial size={0.16} color="#ffdca0" transparent opacity={0.85} depthWrite={false} />
+      </points>
     </group>
   );
 }

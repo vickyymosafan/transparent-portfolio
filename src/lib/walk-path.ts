@@ -1,5 +1,5 @@
 import * as THREE from "three";
-import type { ChapterId } from "@/lib/chapter-store";
+export type ChapterId = "hero" | "about" | "experience" | "stats" | "projects" | "finale";
 
 export interface PathNode {
   position: [number, number, number];
@@ -9,115 +9,112 @@ export interface PathNode {
 }
 
 /*
- * CINEMATIC CAMERA PATH — 6 Zones
- *
- * The camera follows a dramatic 3D spline that moves through:
- *   Zone 0: City Approach — aerial descent to street level   (z: 25→8)
- *   Zone 1: Building Lobby — enter through door, atrium      (z: 8→-2)
- *   Zone 2: Glass Skybridge — elevated corridor, rise up     (z: -2→-12)
- *   Zone 3: Server/Data Room — descend into dark room        (z: -12→-22)
- *   Zone 4: Exhibition Gallery — walk through bright gallery  (z: -22→-32)
- *   Zone 5: Rooftop Finale — ascend to rooftop panorama      (z: -32→-42)
- *
- * Each zone spans ~10 units in Z, with camera Y and X varying dramatically.
+ * CINEMATIC ARCHITECTURAL CAMERA PATH — 6 Photorealistic Spaces
+ * Calibrated for exact 1-point and 2-point perspective matching the reference images:
+ *   Zone 0: Exterior Courtyard Entrance   z: 21.0 → 0.2    (Eye level descending over reflection pool)
+ *   Zone 1: The Entrance Foyer            z: 0.0 → -14.5   (Eye level y = 1.55 framing floating stairs & fluted wall)
+ *   Zone 2: Zen Garden Corridor           z: -14.5 → -27.0 (Symmetrical 1-point breezeway perspective at y = 1.6)
+ *   Zone 3: Project Exhibition Gallery    z: -27.0 → -39.0 (Framed 2-point view of backlit slabs & bench, y = 1.55)
+ *   Zone 4: Developer Studio              z: -39.0 → -51.0 (Desk & triple monitors with city window, y = 1.48)
+ *   Zone 5: Rooftop Sky Lounge            z: -51.0 → -63.0 (Elevated terrace angle framing sunken pit & fire table)
  */
 
 export const PATH_NODES: PathNode[] = [
   // ═══════════════════════════════════════════════════════════
-  // ZONE 0: CITY APPROACH — Aerial descent through rain
+  // ZONE 0: EXTERIOR COURTYARD (Reference Image 5)
   // ═══════════════════════════════════════════════════════════
-  // Start: high up, far away — dramatic aerial view of the city
-  { position: [0, 8, 25],    lookAt: [0, 2, 0],    fov: 38, chapter: "hero" },
-  // Descend, slight pan right — see neon signs along buildings
-  { position: [1.5, 5, 20],  lookAt: [0, 2.5, 5],  fov: 42, chapter: "hero" },
-  // Sweep left, approaching street level
-  { position: [-1, 3, 15],   lookAt: [0, 2, 2],    fov: 48, chapter: "hero" },
-  // Touch down to walking height, looking at building entrance
-  { position: [0, 1.6, 11],  lookAt: [0, 1.8, 0],  fov: 52, chapter: "hero" },
-  // Approach the entrance — looking straight at the doorway
-  { position: [0, 1.6, 9],   lookAt: [0, 1.6, -2],  fov: 55, chapter: "hero" },
-  // Enter through the doorframe
-  { position: [0, 1.6, 7.5], lookAt: [0, 1.6, -3],  fov: 56, chapter: "hero" },
+  // 0. High approach overview
+  { position: [0, 3.8, 20.0],    lookAt: [0, 2.0, 0],     fov: 46, chapter: "hero" },
+  // 1. Gliding down along basalt walkway
+  { position: [0.2, 2.8, 15.0],  lookAt: [-0.1, 1.9, 0],  fov: 48, chapter: "hero" },
+  // 2. Mid courtyard hero view: reflection pool & cloud pine on left, canopy ahead
+  { position: [0, 1.8, 8.5],     lookAt: [0, 1.7, 0],     fov: 50, chapter: "hero" },
+  // 3. Eye-level alignment approaching the entrance steps
+  { position: [0, 1.68, 5.0],    lookAt: [0, 1.72, -1],   fov: 52, chapter: "hero" },
+  // 4. In front of cantilevered canopy & glowing basalt steps
+  { position: [0, 1.62, 2.6],    lookAt: [0, 1.65, -3],   fov: 53, chapter: "hero" },
+  // 5. Approaching the grand dark walnut pivot door
+  { position: [0, 1.6, 0.8],     lookAt: [0, 1.65, -5],   fov: 54, chapter: "hero" },
 
   // ═══════════════════════════════════════════════════════════
-  // ZONE 1: BUILDING LOBBY — Cyberpunk atrium interior
+  // ZONE 1: THE FOYER (Reference Image 3)
   // ═══════════════════════════════════════════════════════════
-  // Just inside the door — see the atrium open up
-  { position: [0, 1.6, 5],    lookAt: [0, 2.5, -5],   fov: 58, chapter: "about" },
-  // Pan right to see reception desk, holographic display
-  { position: [1.2, 1.6, 3],  lookAt: [0, 2, -6],     fov: 55, chapter: "about" },
-  // Walk deeper into the lobby, look up at the soaring atrium
-  { position: [0.5, 1.6, 0],  lookAt: [-0.5, 4, -8],  fov: 60, chapter: "about" },
-  // Approach the elevator / skybridge entrance
-  { position: [0, 1.6, -2],   lookAt: [0, 2.5, -10],  fov: 55, chapter: "about" },
-  // Turn toward corridor that leads to the skybridge
-  { position: [-0.5, 1.6, -3.5], lookAt: [0, 3, -12], fov: 52, chapter: "about" },
-  // Pass through doorway into skybridge zone
-  { position: [0, 1.8, -5],   lookAt: [0, 3, -14],    fov: 50, chapter: "about" },
+  // 6. Passing through pivot portal into oak foyer
+  { position: [0.1, 1.58, -2.0],  lookAt: [-0.1, 1.6, -9],   fov: 52, chapter: "about" },
+  // 7. Symmetrical 1-point hero view: floating stairs on left, console on right, garden ahead
+  { position: [0.35, 1.58, -4.5], lookAt: [-0.2, 1.62, -11], fov: 50, chapter: "about" },
+  // 8. Mid-foyer sweet spot: framing floating open treads, glass balustrade, fluted oak wall
+  { position: [0.2, 1.58, -7.25], lookAt: [0, 1.6, -14], fov: 50, chapter: "about" },
+  // 9. Glancing past the Nero Marquina console & wabi-sabi vase
+  { position: [-0.15, 1.58, -9.8], lookAt: [0.6, 1.6, -14], fov: 51, chapter: "about" },
+  // 10. Approaching the garden corridor opening
+  { position: [0, 1.6, -12.2],  lookAt: [0, 1.6, -17],   fov: 52, chapter: "about" },
+  // 11. Crossing portal into the Zen breezeway
+  { position: [0, 1.6, -14.2],  lookAt: [0, 1.6, -20],   fov: 52, chapter: "about" },
 
   // ═══════════════════════════════════════════════════════════
-  // ZONE 2: GLASS SKYBRIDGE — Elevated glass corridor
+  // ZONE 2: ZEN GARDEN CORRIDOR (Reference Image 4)
   // ═══════════════════════════════════════════════════════════
-  // Enter skybridge — camera rises, glass walls become visible
-  { position: [0, 4, -7],     lookAt: [0, 3.5, -16],  fov: 52, chapter: "experience" },
-  // Midpoint — peak height, look down through glass floor
-  { position: [0.3, 5.5, -10], lookAt: [-0.3, 3, -18], fov: 55, chapter: "experience" },
-  // Side glance — city visible through glass walls
-  { position: [-0.5, 5, -12], lookAt: [1, 4, -20],    fov: 58, chapter: "experience" },
-  // Begin descent at far end of skybridge
-  { position: [0, 4.5, -14],  lookAt: [0, 2, -22],    fov: 55, chapter: "experience" },
-  // Drop toward server room entrance
-  { position: [0.3, 3, -16],  lookAt: [0, 1.5, -24],  fov: 50, chapter: "experience" },
-  // Pass through security door into darkness
-  { position: [0, 2, -17.5],  lookAt: [0, 1.6, -25],  fov: 48, chapter: "experience" },
+  // 12. Entering glass breezeway: linear baseboard lights glowing
+  { position: [0, 1.6, -16.2],  lookAt: [0, 1.6, -23],   fov: 50, chapter: "experience" },
+  // 13. Symmetrical 1-point perspective down the honed basalt floor & bamboo gardens
+  { position: [0, 1.6, -18.5],  lookAt: [0, 1.6, -25],   fov: 48, chapter: "experience" },
+  // 14. Mid-corridor: looking out through glass at bamboo groves & granite rocks
+  { position: [0.1, 1.6, -20.8], lookAt: [-0.3, 1.6, -27], fov: 48, chapter: "experience" },
+  // 15. Passing minimalist walnut bench
+  { position: [-0.1, 1.6, -23.0], lookAt: [0.3, 1.6, -29], fov: 49, chapter: "experience" },
+  // 16. Approaching gallery entrance portal
+  { position: [0, 1.6, -25.2],  lookAt: [0, 1.6, -31],   fov: 50, chapter: "experience" },
+  // 17. Crossing threshold into bright Exhibition Gallery
+  { position: [0, 1.6, -27.0],  lookAt: [0, 1.65, -33],  fov: 52, chapter: "experience" },
 
   // ═══════════════════════════════════════════════════════════
-  // ZONE 3: SERVER / DATA ROOM — Dark with glowing racks
+  // ZONE 3: PROJECT GALLERY (Reference Image 1)
   // ═══════════════════════════════════════════════════════════
-  // Enter dark room — eyes adjust, LED strips glow
-  { position: [0, 1.6, -19],  lookAt: [0, 1.5, -28],  fov: 45, chapter: "stats" },
-  // Walk between server rack rows
-  { position: [0, 1.6, -21],  lookAt: [0.8, 1.8, -30], fov: 42, chapter: "stats" },
-  // Pause at holographic data display
-  { position: [0.5, 1.7, -23], lookAt: [-0.5, 2, -30], fov: 40, chapter: "stats" },
-  // Look up at data visualizations
-  { position: [0, 1.8, -25],  lookAt: [0, 3, -32],    fov: 44, chapter: "stats" },
-  // Move toward exit
-  { position: [-0.3, 1.6, -27], lookAt: [0, 1.6, -34], fov: 48, chapter: "stats" },
-  // Exit through glass doors into gallery light
-  { position: [0, 1.6, -28.5], lookAt: [0, 1.8, -36], fov: 50, chapter: "stats" },
+  // 18. Entering pristine gallery: polished terrazzo floor reflections
+  { position: [0.7, 1.55, -29.0], lookAt: [-1.2, 1.8, -34], fov: 48, chapter: "projects" },
+  // 19. Framed architectural view of 4 backlit display slabs, travertine bench, elevator
+  { position: [0.8, 1.55, -30.0], lookAt: [-1.4, 1.75, -35.0], fov: 48, chapter: "projects" },
+  // 20. Center gallery promenade: inspecting featured project details
+  { position: [0.5, 1.55, -32.5], lookAt: [-1.6, 1.8, -36], fov: 46, chapter: "projects" },
+  // 21. Viewing works with glass elevator vestibule in the background
+  { position: [0.2, 1.55, -35.0], lookAt: [-0.6, 1.7, -39], fov: 48, chapter: "projects" },
+  // 22. Moving toward the Developer Studio portal
+  { position: [0, 1.58, -37.0], lookAt: [0, 1.6, -42],   fov: 49, chapter: "projects" },
+  // 23. Entering Developer Studio
+  { position: [0, 1.58, -38.8], lookAt: [0, 1.55, -44],  fov: 50, chapter: "projects" },
 
   // ═══════════════════════════════════════════════════════════
-  // ZONE 4: EXHIBITION GALLERY — Bright project showcase
+  // ZONE 4: DEVELOPER STUDIO ("WHERE I BUILD")
   // ═══════════════════════════════════════════════════════════
-  // Enter gallery — dramatic light change from dark server room
-  { position: [0, 1.6, -30],  lookAt: [0, 2, -38],    fov: 52, chapter: "projects" },
-  // Pan to see left wall displays
-  { position: [-1.5, 1.6, -32], lookAt: [2, 1.8, -38], fov: 48, chapter: "projects" },
-  // Walk center aisle, see displays on both sides
-  { position: [0, 1.6, -34],  lookAt: [0, 1.8, -40],  fov: 45, chapter: "projects" },
-  // Pause near featured project display
-  { position: [1, 1.7, -36],  lookAt: [-1, 2, -42],   fov: 42, chapter: "projects" },
-  // Approach exit toward stairwell
-  { position: [0.5, 1.6, -38], lookAt: [0, 2.5, -44], fov: 50, chapter: "projects" },
-  // Enter stairwell / exit door to rooftop
-  { position: [0, 1.8, -39.5], lookAt: [0, 4, -46],   fov: 55, chapter: "projects" },
+  // 24. Entering warm walnut studio sanctuary
+  { position: [0.4, 1.55, -40.5], lookAt: [-0.6, 1.45, -45], fov: 48, chapter: "stats" },
+  // 25. 2-Point perspective: walnut desk, triple monitors, bookcase, city window
+  { position: [0.6, 1.5, -42.5], lookAt: [-0.7, 1.35, -45.5], fov: 45, chapter: "stats" },
+  // 26. Workstation focus: code on center monitor, AI graph on left, brass lamp glow
+  { position: [0.2, 1.48, -44.5], lookAt: [-0.8, 1.3, -45.5], fov: 42, chapter: "stats" },
+  // 27. Looking past workstation toward the large floor-to-ceiling city window
+  { position: [0.5, 1.52, -46.5], lookAt: [1.8, 1.6, -48], fov: 48, chapter: "stats" },
+  // 28. Approaching bronze elevator vestibule
+  { position: [0, 1.58, -48.5], lookAt: [0, 2.0, -51],   fov: 50, chapter: "stats" },
+  // 29. Ascending into elevator to the rooftop
+  { position: [0, 1.8, -50.5],  lookAt: [0, 2.8, -53],   fov: 52, chapter: "stats" },
 
   // ═══════════════════════════════════════════════════════════
-  // ZONE 5: ROOFTOP — Open sky panorama finale
+  // ZONE 5: ROOFTOP SKY LOUNGE (Reference Image 2)
   // ═══════════════════════════════════════════════════════════
-  // Emerge through rooftop door — sky opens up
-  { position: [0, 6, -41],    lookAt: [0, 5, -48],    fov: 58, chapter: "finale" },
-  // Rise to rooftop level — helipad visible
-  { position: [0.5, 8, -43],  lookAt: [-1, 6, -50],   fov: 62, chapter: "finale" },
-  // Pan around — full city panorama below
-  { position: [-1, 9, -45],   lookAt: [2, 4, -48],    fov: 65, chapter: "finale" },
-  // Final position — looking at skyline, wide shot
-  { position: [0, 10, -46],   lookAt: [0, 6, -40],    fov: 60, chapter: "finale" },
-  // Hold — dramatic finale view
-  { position: [0, 10.5, -47], lookAt: [0, 5, -38],    fov: 58, chapter: "finale" },
-  // Fade to credits position
-  { position: [0, 11, -47],   lookAt: [0, 8, -35],    fov: 55, chapter: "finale" },
+  // 30. Emerging onto open-air teak roof terrace under evening sky
+  { position: [-3.8, 1.65, -52.2], lookAt: [0.6, 0.1, -57.2], fov: 50, chapter: "finale" },
+  // 31. Elevated 3/4 diagonal perspective: sunken pit, dancing flame, beige sectional, pines, skyline
+  { position: [-3.4, 1.50, -53.6], lookAt: [0.6, -0.12, -57.2], fov: 48, chapter: "finale" },
+  // 32. Lower intimate lounge perspective near the fire table
+  { position: [-2.6, 1.40, -55.2], lookAt: [0.6, -0.15, -57.5], fov: 48, chapter: "finale" },
+  // 33. Front view of fire table and glowing river rocks
+  { position: [-1.0, 1.25, -56.8], lookAt: [0.6, -0.10, -58.0], fov: 50, chapter: "finale" },
+  // 34. Skyline view over the glass balustrade with warm perimeter wash
+  { position: [0.0, 1.45, -59.2], lookAt: [0, 1.2, -66.0],  fov: 52, chapter: "finale" },
+  // 35. Final serene hover view: "LET'S BUILD SOMETHING IMPRESSIVE"
+  { position: [0.0, 1.60, -61.5], lookAt: [0, 1.4, -68.0],  fov: 50, chapter: "finale" },
 ];
 
 export const walkCurve = new THREE.CatmullRomCurve3(
@@ -125,9 +122,7 @@ export const walkCurve = new THREE.CatmullRomCurve3(
 );
 
 export const walkLookAts = PATH_NODES.map((n) => new THREE.Vector3(...n.lookAt));
-
 export const walkFovs = PATH_NODES.map((n) => n.fov);
-
 export const walkChapters = PATH_NODES.map((n) => n.chapter);
 
 const _pos = new THREE.Vector3();
@@ -143,18 +138,29 @@ export interface WalkPathState {
 /** Map normalised path progress (0–1) to interpolated camera state. */
 export function getWalkPathState(t: number): WalkPathState {
   const clamped = Math.max(0, Math.min(1, t));
-  const idx = clamped * (PATH_NODES.length - 1);
-  const i = Math.min(Math.floor(idx), PATH_NODES.length - 2);
-  const frac = idx - i;
-
   walkCurve.getPointAt(clamped, _pos);
 
-  _look.lerpVectors(walkLookAts[i], walkLookAts[i + 1], frac);
+  // Synchronize lookAt and fov precisely with camera's physical Z coordinate
+  let i = 0;
+  for (let n = 0; n < PATH_NODES.length - 1; n++) {
+    const zCurr = PATH_NODES[n].position[2];
+    const zNext = PATH_NODES[n + 1].position[2];
+    if (_pos.z <= zCurr && _pos.z >= zNext) {
+      i = n;
+      break;
+    }
+  }
+  const zA = PATH_NODES[i].position[2];
+  const zB = PATH_NODES[i + 1].position[2];
+  const frac = Math.abs(zA - zB) > 0.001 ? (_pos.z - zA) / (zB - zA) : 0;
+  const clampedFrac = Math.max(0, Math.min(1, frac));
+
+  _look.lerpVectors(walkLookAts[i], walkLookAts[i + 1], clampedFrac);
 
   return {
     position: _pos.clone(),
     lookAt: _look.clone(),
-    fov: THREE.MathUtils.lerp(walkFovs[i], walkFovs[i + 1], frac),
+    fov: THREE.MathUtils.lerp(walkFovs[i], walkFovs[i + 1], clampedFrac),
     chapter: walkChapters[i],
   };
 }

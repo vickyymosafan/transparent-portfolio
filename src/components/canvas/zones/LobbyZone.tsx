@@ -2,205 +2,225 @@
 
 import { useMemo } from "react";
 import * as THREE from "three";
-import { buildTileFloorTexture } from "@/lib/build-tower-texture";
+import {
+  getTravertineMat,
+  getEuropeanOakMat,
+  getDarkWalnutMat,
+  getNeroMarquinaMat,
+  matteBlackMetalMat,
+  architecturalGlassMat,
+  warmCoveLedMat,
+  brushedBrassMat,
+} from "@/lib/architectural-materials";
 
-// ─── Shared materials ───
-const wallMat = new THREE.MeshStandardMaterial({ color: "#1a2030", metalness: 0.3, roughness: 0.6 });
-const wallInnerMat = new THREE.MeshStandardMaterial({ color: "#1e2535", metalness: 0.25, roughness: 0.65 });
-const ceilingMat = new THREE.MeshStandardMaterial({ color: "#151a22", metalness: 0.5, roughness: 0.5 });
-const columnMat = new THREE.MeshStandardMaterial({ color: "#2a3545", metalness: 0.85, roughness: 0.2 });
-const columnCapMat = new THREE.MeshStandardMaterial({ color: "#253040", metalness: 0.8, roughness: 0.3 });
-const cableMat = new THREE.MeshStandardMaterial({ color: "#253040", metalness: 0.7, roughness: 0.4 });
-const pillarMat = new THREE.MeshStandardMaterial({ color: "#1a2230", metalness: 0.6, roughness: 0.4 });
-const deskMat = new THREE.MeshStandardMaterial({ color: "#1a2030", metalness: 0.7, roughness: 0.3 });
-const elevDoorMat = new THREE.MeshStandardMaterial({ color: "#141c28", metalness: 0.9, roughness: 0.15 });
-const elevSlitMat = new THREE.MeshStandardMaterial({ color: "#0a1018", roughness: 0.9 });
-
-const neonPinkMat = new THREE.MeshStandardMaterial({
-  color: "#ff547b", emissive: new THREE.Color("#ff547b"),
-  emissiveIntensity: 4, toneMapped: false,
-});
-const neonPinkBrightMat = new THREE.MeshStandardMaterial({
-  color: "#ff547b", emissive: new THREE.Color("#ff547b"),
-  emissiveIntensity: 5, toneMapped: false,
-});
-const neonBlueMat = new THREE.MeshStandardMaterial({
-  color: "#51baff", emissive: new THREE.Color("#51baff"),
-  emissiveIntensity: 4, toneMapped: false,
-});
-const ceilLightMat = new THREE.MeshStandardMaterial({
-  color: "#ffe8c0", emissive: new THREE.Color("#ffe8c0"),
-  emissiveIntensity: 3, toneMapped: false,
-});
-const elevIndicatorMat = new THREE.MeshStandardMaterial({
-  color: "#00ff88", emissive: new THREE.Color("#00ff88"),
-  emissiveIntensity: 3, toneMapped: false,
-});
-const holoMat = new THREE.MeshStandardMaterial({
-  color: "#51baff", emissive: new THREE.Color("#51baff"),
-  emissiveIntensity: 2.5, transparent: true, opacity: 0.5, toneMapped: false,
+// Dedicated accessories materials
+const ceramicVaseMat = new THREE.MeshStandardMaterial({
+  color: "#22201d",
+  roughness: 0.65,
+  metalness: 0.12,
 });
 
-// ─── Shared geometries ───
-const columnGeo = new THREE.CylinderGeometry(0.3, 0.3, 5.5, 6);
-const neonRingGeo = new THREE.CylinderGeometry(0.38, 0.38, 0.06, 6);
-const columnCapGeo = new THREE.CylinderGeometry(0.36, 0.3, 0.25, 6);
-const neonStripGeo = new THREE.BoxGeometry(0.04, 4.5, 0.06);
+const planterPotMat = new THREE.MeshStandardMaterial({
+  color: "#24272c",
+  roughness: 0.75,
+  metalness: 0.1,
+});
 
-/**
- * Zone 1: Cyberpunk Building Lobby
- * Camera path: z ≈ 7.5→-5, y ≈ 1.6, x ≈ -0.5→1.2
- * Room positioned so camera walks through center of lobby.
- */
+const leafMat = new THREE.MeshStandardMaterial({
+  color: "#1e3a20",
+  roughness: 0.55,
+  metalness: 0.04,
+});
+
+const branchMat = new THREE.MeshStandardMaterial({
+  color: "#3a2d22",
+  roughness: 0.85,
+  metalness: 0.04,
+});
+
+const ceilingMat = new THREE.MeshStandardMaterial({
+  color: "#f5f0e6",
+  roughness: 0.88,
+  metalness: 0.02,
+});
+
 export function LobbyZone() {
-  const floorTex = useMemo(() => {
-    const t = buildTileFloorTexture();
-    t.repeat.set(4, 6);
-    return t;
+  const roomW = 9.2;
+  const roomH = 4.8;
+  const roomD = 14.5;
+  const floorY = 0.0;
+  const zCenter = -7.25;
+
+  const oakFloorMat = useMemo(() => getEuropeanOakMat(), []);
+  const travertineWallMat = useMemo(() => getTravertineMat(), []);
+  const walnutSlatMat = useMemo(() => getDarkWalnutMat(), []);
+  const marbleConsoleMat = useMemo(() => getNeroMarquinaMat(), []);
+
+  // Floating staircase open treads (cantilevered from travertine wall on left)
+  const stairTreads = useMemo(() => {
+    const list: { y: number; z: number }[] = [];
+    const count = 13;
+    for (let i = 0; i < count; i++) {
+      list.push({
+        y: 0.22 + i * 0.25,
+        z: 5.5 - i * 0.82,
+      });
+    }
+    return list;
   }, []);
 
-  const floorMat = useMemo(() => new THREE.MeshStandardMaterial({
-    map: floorTex, roughness: 0.08, metalness: 0.5, color: "#1a1e24",
-  }), [floorTex]);
+  const slatGeo = useMemo(() => new THREE.BoxGeometry(0.06, roomH, 0.08), [roomH]);
+  const treadGeo = useMemo(() => new THREE.BoxGeometry(1.6, 0.07, 0.42), []);
 
-  const roomW = 10;    // Wider lobby
-  const roomH = 5.5;   // Ceiling height
-  const roomD = 16;    // Longer depth to cover full camera path
-  const floorY = -0.5; // Slightly below camera y=1.6 walking height
-
-  // Center so camera path (z: 7.5 → -5) passes through middle
-  const zCenter = 1;
+  // Vertical fluted oak slats for right accent wall (Reference 2)
+  const wallSlats = useMemo(() => {
+    const list: number[] = [];
+    for (let z = -6.8; z <= 6.8; z += 0.22) {
+      list.push(z);
+    }
+    return list;
+  }, []);
 
   return (
     <group position={[0, floorY, zCenter]}>
-      {/* ═══ FLOOR ═══ */}
-      <mesh receiveShadow rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.01, 0]} material={floorMat}>
+      {/* ═══ 1. WIDE-PLANK EUROPEAN OAK HARDWOOD FLOOR (Reference 2) ═══ */}
+      <mesh receiveShadow position={[0, 0.01, 0]} rotation={[-Math.PI / 2, 0, 0]} material={oakFloorMat}>
         <planeGeometry args={[roomW, roomD]} />
       </mesh>
 
-      {/* ═══ CEILING ═══ */}
+      {/* ═══ 2. CEILING WITH RECESSED 2700K COVE TROFFER WASH (Reference 2) ═══ */}
       <mesh position={[0, roomH, 0]} material={ceilingMat}>
-        <boxGeometry args={[roomW, 0.3, roomD]} />
+        <boxGeometry args={[roomW, 0.2, roomD]} />
       </mesh>
-
-      {/* ═══ CEILING LIGHTS (more, brighter) ═══ */}
-      {[-5, -2.5, 0, 2.5, 5].map((z) => (
-        <group key={`cl-${z}`}>
-          <mesh position={[0, roomH - 0.08, z]} material={ceilLightMat}>
-            <boxGeometry args={[2.5, 0.06, 0.8]} />
+      {/* Center recessed cove ceiling troffer tray */}
+      <mesh position={[0, roomH - 0.06, 0]} material={ceilingMat}>
+        <boxGeometry args={[2.4, 0.06, roomD - 1.2]} />
+      </mesh>
+      {/* Hidden Linear Warm LED Strips inside cove casting 2700K ambient wash */}
+      {[-1.2, 1.2].map((cx, idx) => (
+        <group key={`cove-edge-${idx}`} position={[cx, roomH - 0.05, 0]}>
+          <mesh material={warmCoveLedMat}>
+            <boxGeometry args={[0.06, 0.025, roomD - 1.6]} />
           </mesh>
-          <pointLight position={[0, roomH - 0.5, z]} color="#ffe2b0" intensity={2.5} distance={8} decay={2} />
-          {/* Side fill lights */}
-          <pointLight position={[-3, roomH - 0.5, z]} color="#ffe2b0" intensity={1.2} distance={5} decay={2} />
-          <pointLight position={[3, roomH - 0.5, z]} color="#ffe2b0" intensity={1.2} distance={5} decay={2} />
+          <pointLight position={[0, -0.2, 0]} color="#ffe0a3" intensity={2.6} distance={7.5} decay={2} />
         </group>
       ))}
 
-      {/* ═══ WALLS (thick, opaque, no city bleed-through) ═══ */}
-      {/* Left wall */}
-      <mesh position={[-roomW / 2, roomH / 2, 0]} castShadow material={wallMat}>
-        <boxGeometry args={[0.5, roomH, roomD]} />
-      </mesh>
-      {/* Left wall inner panel */}
-      <mesh position={[-roomW / 2 + 0.3, roomH / 2, 0]} material={wallInnerMat}>
-        <boxGeometry args={[0.08, roomH - 0.5, roomD - 0.2]} />
-      </mesh>
-      {/* Right wall */}
-      <mesh position={[roomW / 2, roomH / 2, 0]} castShadow material={wallMat}>
-        <boxGeometry args={[0.5, roomH, roomD]} />
-      </mesh>
-      {/* Right wall inner panel */}
-      <mesh position={[roomW / 2 - 0.3, roomH / 2, 0]} material={wallInnerMat}>
-        <boxGeometry args={[0.08, roomH - 0.5, roomD - 0.2]} />
-      </mesh>
-      {/* Back wall */}
-      <mesh position={[0, roomH / 2, -roomD / 2]} material={wallMat}>
-        <boxGeometry args={[roomW, roomH, 0.5]} />
-      </mesh>
-
-      {/* ═══ NEON LED STRIPS on walls ═══ */}
-      {[-1, 1].map((side) =>
-        [-5, -2, 1, 4].map((z) => (
-          <group key={`n-${side}-${z}`}>
-            <mesh position={[side * (roomW / 2 - 0.55), roomH * 0.45, z]}
-              geometry={neonStripGeo} material={neonPinkMat} />
-            {/* Neon glow light */}
-            <pointLight
-              position={[side * (roomW / 2 - 1), roomH * 0.45, z]}
-              color="#ff547b" intensity={0.8} distance={3} decay={2}
-            />
-          </group>
-        ))
-      )}
-
-      {/* ═══ HEXAGONAL COLUMNS ═══ */}
-      {[
-        [-3, -4], [-3, 0], [-3, 4],
-        [3, -4], [3, 0], [3, 4],
-      ].map(([x, z], i) => (
-        <group key={`col-${i}`} position={[x, 0, z]}>
-          <mesh position={[0, roomH / 2, 0]} castShadow geometry={columnGeo} material={columnMat} />
-          <mesh position={[0, 0.15, 0]} geometry={neonRingGeo} material={neonBlueMat} />
-          <mesh position={[0, roomH - 0.15, 0]} geometry={columnCapGeo} material={columnCapMat} />
-          {/* Column base glow */}
-          <pointLight position={[0, 0.3, 0]} color="#51baff" intensity={0.6} distance={2.5} decay={2} />
+      {/* Recessed black linear downlight slits along ceiling */}
+      {[-4.5, -1.5, 1.5, 4.5].map((lz, idx) => (
+        <group key={`foyer-dl-${idx}`} position={[0, roomH - 0.03, lz]}>
+          <mesh material={matteBlackMetalMat}>
+            <boxGeometry args={[0.12, 0.02, 0.4]} />
+          </mesh>
+          <pointLight position={[0, -0.25, 0]} color="#fff2db" intensity={2.2} distance={7.0} decay={2} />
         </group>
       ))}
 
-      {/* ═══ ELEVATOR DOORS ═══ */}
-      {[-1.5, 1.5].map((x) => (
-        <group key={`el-${x}`} position={[x, 0, -roomD / 2 + 0.3]}>
-          <mesh position={[0, 1.5, 0]} material={elevDoorMat}>
-            <boxGeometry args={[1.6, 3, 0.08]} />
-          </mesh>
-          <mesh position={[0, 1.5, 0.05]} material={elevSlitMat}>
-            <boxGeometry args={[0.03, 2.8, 0.03]} />
-          </mesh>
-          <mesh position={[0, 3.3, 0.05]} material={elevIndicatorMat}>
-            <boxGeometry args={[0.5, 0.18, 0.04]} />
+      {/* ═══ 3. LEFT WALL: VEIN-CUT TRAVERTINE & FLOATING OAK STAIRCASE ═══ */}
+      <mesh position={[-roomW / 2, roomH / 2, 0]} castShadow receiveShadow material={travertineWallMat}>
+        <boxGeometry args={[0.4, roomH, roomD]} />
+      </mesh>
+
+      {/* Cantilevered Floating Staircase Treads */}
+      {stairTreads.map((t, idx) => (
+        <group key={`stair-${idx}`} position={[-roomW / 2 + 1.05, t.y, t.z]}>
+          <mesh castShadow receiveShadow material={oakFloorMat} geometry={treadGeo} />
+          <pointLight position={[0, -0.05, 0]} color="#ffe0a3" intensity={0.4} distance={2.2} decay={2} />
+          <mesh position={[0.85, 0, 0]} material={brushedBrassMat}>
+            <boxGeometry args={[0.05, 0.07, 0.12]} />
           </mesh>
         </group>
       ))}
 
-      {/* ═══ RECEPTION DESK & HOLOGRAM ═══ */}
-      <group position={[0, 0, -1]}>
-        <mesh position={[0, 0.5, 0]} castShadow material={deskMat}>
-          <boxGeometry args={[3, 1, 0.9]} />
+      {/* Tempered Glass Balustrade on stairs */}
+      <mesh position={[-roomW / 2 + 1.92, 1.85, 0.6]} rotation={[0.29, 0, 0]} material={architecturalGlassMat}>
+        <boxGeometry args={[0.03, 1.1, 10.8]} />
+      </mesh>
+      {/* Slender Bronze Handrail along the glass balustrade */}
+      <mesh position={[-roomW / 2 + 1.92, 2.45, 0.6]} rotation={[0.29, 0, 0]} material={brushedBrassMat}>
+        <boxGeometry args={[0.05, 0.05, 10.8]} />
+      </mesh>
+
+      {/* Exterior Lightwell Glass Window */}
+      <group position={[-roomW / 2 + 0.15, roomH / 2, 5.8]}>
+        <mesh material={architecturalGlassMat}>
+          <boxGeometry args={[0.04, roomH - 0.2, 2.8]} />
         </mesh>
-        <mesh position={[0, 1.6, 0]} material={holoMat}>
-          <boxGeometry args={[2.2, 1, 0.03]} />
+        <mesh position={[-0.8, 0, 0]} material={travertineWallMat}>
+          <boxGeometry args={[0.2, roomH, 3.2]} />
         </mesh>
-        {/* Hologram glow */}
-        <pointLight position={[0, 1.6, 0.5]} color="#51baff" intensity={1.5} distance={4} decay={2} />
+        <pointLight position={[-0.4, 2.0, 0]} color="#d6e8ff" intensity={1.8} distance={5.0} decay={2} />
       </group>
 
-      {/* ═══ CABLE TRAYS ═══ */}
-      {[-2.5, 0, 2.5].map((x) => (
-        <mesh key={`cab-${x}`} position={[x, roomH - 0.5, 0]} material={cableMat}>
-          <boxGeometry args={[0.35, 0.1, roomD * 0.85]} />
+      {/* Tall Architectural Fiddle Leaf Fig Tree */}
+      <group position={[-roomW / 2 + 1.1, 0, 5.8]}>
+        <mesh position={[0, 0.52, 0]} castShadow material={planterPotMat}>
+          <cylinderGeometry args={[0.42, 0.34, 1.04, 18]} />
         </mesh>
-      ))}
-
-      {/* ═══ ENTRANCE ARCH (front) ═══ */}
-      <group position={[0, 0, roomD / 2]}>
-        <mesh position={[-1.5, roomH * 0.4, 0]} castShadow material={pillarMat}>
-          <boxGeometry args={[0.3, roomH * 0.8, 0.5]} />
+        <mesh position={[0, 1.65, 0]} castShadow material={branchMat}>
+          <cylinderGeometry args={[0.04, 0.065, 1.35, 8]} />
         </mesh>
-        <mesh position={[1.5, roomH * 0.4, 0]} castShadow material={pillarMat}>
-          <boxGeometry args={[0.3, roomH * 0.8, 0.5]} />
-        </mesh>
-        <mesh position={[0, roomH * 0.82, 0]} material={pillarMat}>
-          <boxGeometry args={[3.3, 0.15, 0.5]} />
-        </mesh>
-        <mesh position={[0, roomH * 0.88, 0.28]} material={neonPinkBrightMat}>
-          <boxGeometry args={[1.8, 0.1, 0.03]} />
-        </mesh>
+        {[
+          [0, 2.35, 0, 0.58],
+          [0.26, 2.05, 0.16, 0.46],
+          [-0.24, 1.85, -0.15, 0.44],
+          [0.16, 2.68, -0.1, 0.52],
+        ].map(([lx, ly, lz, lr], lidx) => (
+          <mesh key={`leaf-${lidx}`} position={[lx, ly, lz]} castShadow material={leafMat}>
+            <sphereGeometry args={[lr, 12, 10]} />
+          </mesh>
+        ))}
       </group>
 
-      {/* ═══ FLOOR HIGHLIGHT LIGHTS (walking path) ═══ */}
-      {[-5, -2, 1, 4].map((z) => (
-        <pointLight key={`floor-${z}`} position={[0, 0.2, z]} color="#ffe8c0" intensity={0.4} distance={3} decay={2} />
+      {/* ═══ 4. RIGHT WALL: FLUTED VERTICAL SLATS & MARBLE CONSOLE ═══ */}
+      <mesh position={[roomW / 2, roomH / 2, 0]} castShadow receiveShadow material={travertineWallMat}>
+        <boxGeometry args={[0.4, roomH, roomD]} />
+      </mesh>
+      {wallSlats.map((sz, idx) => (
+        <mesh key={`wslat-${idx}`} position={[roomW / 2 - 0.18, roomH / 2, sz]} castShadow material={walnutSlatMat} geometry={slatGeo} />
       ))}
+
+      {/* Floating Nero Marquina Black Marble Console Table */}
+      <group position={[roomW / 2 - 0.48, 0.85, 0]}>
+        <mesh castShadow receiveShadow material={marbleConsoleMat}>
+          <boxGeometry args={[0.56, 0.08, 4.2]} />
+        </mesh>
+        <mesh position={[0, -0.42, 2.05]} castShadow material={marbleConsoleMat}>
+          <boxGeometry args={[0.56, 0.8, 0.08]} />
+        </mesh>
+
+        {/* Minimalist Ceramic Wabi-Sabi Vase with Branch */}
+        <group position={[0, 0.28, 0.8]}>
+          <mesh castShadow material={ceramicVaseMat}>
+            <cylinderGeometry args={[0.13, 0.19, 0.48, 18]} />
+          </mesh>
+          <mesh position={[0, 0.48, 0]} rotation={[0, 0, 0.22]} material={branchMat}>
+            <cylinderGeometry args={[0.015, 0.025, 0.65, 6]} />
+          </mesh>
+          <mesh position={[0.14, 0.68, 0]} rotation={[0, 0, -0.32]} material={branchMat}>
+            <cylinderGeometry args={[0.01, 0.015, 0.4, 6]} />
+          </mesh>
+          <pointLight position={[0, 1.8, 0]} color="#ffe4c0" intensity={2.2} distance={5.0} decay={2} />
+        </group>
+      </group>
+
+      {/* ═══ 5. NORTH TRANSITION PORTAL (Toward Garden Corridor) ═══ */}
+      <group position={[0, 0, -roomD / 2 + 0.1]}>
+        <mesh position={[-roomW / 2 + 1.2, roomH / 2, 0]} material={travertineWallMat}>
+          <boxGeometry args={[2.4, roomH, 0.3]} />
+        </mesh>
+        <mesh position={[roomW / 2 - 1.2, roomH / 2, 0]} material={travertineWallMat}>
+          <boxGeometry args={[2.4, roomH, 0.3]} />
+        </mesh>
+        <mesh position={[0, roomH - 0.4, 0]} material={matteBlackMetalMat}>
+          <boxGeometry args={[roomW - 4.8, 0.8, 0.2]} />
+        </mesh>
+        {[-2.2, 2.2].map((jx, idx) => (
+          <mesh key={`jamb-${idx}`} position={[jx, roomH / 2, 0]} material={matteBlackMetalMat}>
+            <boxGeometry args={[0.08, roomH, 0.22]} />
+          </mesh>
+        ))}
+      </group>
     </group>
   );
 }
