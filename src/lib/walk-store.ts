@@ -76,3 +76,8 @@ export const useWalkStore = create<WalkState>((set) => ({
       return { progress, district: d, zone, zoneProgress, transitioning };
     }),
 }));
+
+if (typeof window !== "undefined") {
+  (window as unknown as { __walkStore: typeof useWalkStore }).__walkStore = useWalkStore;
+}
+

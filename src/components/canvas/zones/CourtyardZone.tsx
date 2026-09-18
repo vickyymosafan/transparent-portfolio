@@ -1,9 +1,10 @@
 "use client";
 
 import { useMemo, useRef, useEffect } from "react";
-import { useLoader } from "@react-three/fiber";
+import { useLoader, useFrame } from "@react-three/fiber";
 import * as THREE from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
+import { useWalkStore } from "@/lib/walk-store";
 import {
   getBoardFormedConcreteMat,
   getDarkConcreteMat,
@@ -67,6 +68,9 @@ function CourtyardModel() {
     });
   }, []);
 
+  const doorObjRef = useRef<THREE.Object3D | null>(null);
+  const handleObjRef = useRef<THREE.Object3D | null>(null);
+
   const scene = useMemo(() => {
     const clone = gltf.scene.clone(true);
 
@@ -78,6 +82,8 @@ function CourtyardModel() {
         toRemove.push(child);
         return;
       }
+
+        // Door and handle references will be bound in useEffect to the mounted scene
 
       if ((child as THREE.Mesh).isMesh) {
         const mesh = child as THREE.Mesh;
@@ -172,7 +178,40 @@ function CourtyardModel() {
     if (s1DnLight.current && s1DnTarget.current) s1DnLight.current.target = s1DnTarget.current;
     if (s2UpLight.current && s2UpTarget.current) s2UpLight.current.target = s2UpTarget.current;
     if (s2DnLight.current && s2DnTarget.current) s2DnLight.current.target = s2DnTarget.current;
-  }, []);
+
+    scene.traverse((child) => {
+      if (child.name === "Entrance_Pivot_Door") doorObjRef.current = child;
+      if (child.name === "Door_Pull_Handle") handleObjRef.current = child;
+    });
+  }, [scene]);
+
+  // Smooth architectural pivot door opening as camera approaches entrance
+  useFrame(() => {
+    if (!doorObjRef.current) {
+      scene.traverse((child) => {
+        if (child.name === "Entrance_Pivot_Door") doorObjRef.current = child;
+        if (child.name === "Door_Pull_Handle") handleObjRef.current = child;
+      });
+      if (!doorObjRef.current) return;
+    }
+    const p = useWalkStore.getState().progress;
+    // Pivot opens smoothly as visitor approaches entrance (progress 0.06 to 0.16)
+    // By progress 0.18, the door is completely open and tucked against the wall
+    const factor = THREE.MathUtils.clamp((p - 0.06) / 0.10, 0, 1);
+    const ease = factor * factor * (3 - 2 * factor);
+    const theta = 1.52 * ease; // 87 degrees, tucked neatly against the left wall
+
+    // Rotate around vertical hinge at (1.15, -3.56) inward into the foyer (-Z)
+    doorObjRef.current.rotation.y = theta;
+    doorObjRef.current.position.x = 1.15 + 0.60 * Math.cos(theta);
+    doorObjRef.current.position.z = -3.56 - 0.60 * Math.sin(theta);
+
+    if (handleObjRef.current) {
+      handleObjRef.current.rotation.y = theta;
+      handleObjRef.current.position.x = 1.15 + 1.33 * Math.cos(theta) + 0.10 * Math.sin(theta);
+      handleObjRef.current.position.z = -3.56 - 1.33 * Math.sin(theta) + 0.10 * Math.cos(theta);
+    }
+  });
 
   return (
     <group position={[-1.75, 0, 3.56]}>

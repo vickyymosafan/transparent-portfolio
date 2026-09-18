@@ -30,7 +30,7 @@ const MOUSE_LOOK_X = 0.4;
 const MOUSE_LOOK_Y = 0.25;
 
 export function WalkPathController() {
-  const { camera } = useThree();
+  const { camera, scene } = useThree();
   const initialized = useRef(false);
   const state = useRef({
     position: new THREE.Vector3(0, 8, 25),
@@ -57,6 +57,13 @@ export function WalkPathController() {
       (camera as THREE.PerspectiveCamera).fov = target.fov;
       camera.updateProjectionMatrix();
       initialized.current = true;
+    }
+
+    if (typeof window !== "undefined") {
+      (window as unknown as { THREE: typeof THREE }).THREE = THREE;
+      (window as unknown as { __camera: THREE.Camera; __camTarget: typeof target }).__camera = camera;
+      (window as unknown as { __camTarget: typeof target }).__camTarget = target;
+      (window as unknown as { __threeScene: THREE.Scene }).__threeScene = scene;
     }
 
     // Compute movement speed for head-bob intensity

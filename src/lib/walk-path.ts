@@ -34,13 +34,13 @@ export const PATH_NODES: PathNode[] = [
   // 4. In front of cantilevered canopy & glowing basalt steps
   { position: [0, 1.62, 2.6],    lookAt: [0, 1.65, -3],   fov: 53, chapter: "hero" },
   // 5. Approaching the grand dark walnut pivot door
-  { position: [0, 1.6, 0.8],     lookAt: [0, 1.65, -5],   fov: 54, chapter: "hero" },
+  { position: [0.18, 1.6, 0.8],     lookAt: [0, 1.65, -5],   fov: 54, chapter: "hero" },
 
   // ═══════════════════════════════════════════════════════════
   // ZONE 1: THE FOYER (Reference Image 3)
   // ═══════════════════════════════════════════════════════════
   // 6. Passing through pivot portal into oak foyer
-  { position: [0.1, 1.58, -2.0],  lookAt: [-0.1, 1.6, -9],   fov: 52, chapter: "about" },
+  { position: [0.25, 1.58, -2.0],  lookAt: [-0.1, 1.6, -9],   fov: 52, chapter: "about" },
   // 7. Symmetrical 1-point hero view: floating stairs on left, console on right, garden ahead
   { position: [0.35, 1.58, -4.5], lookAt: [-0.2, 1.62, -11], fov: 50, chapter: "about" },
   // 8. Mid-foyer sweet spot: framing floating open treads, glass balustrade, fluted oak wall

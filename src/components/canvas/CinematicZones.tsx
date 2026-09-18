@@ -49,7 +49,7 @@ function ZoneVisibility({
     if (zoneIndex === 0) {
       visible = progress < 0.28;
     } else if (zoneIndex === 1) {
-      visible = progress > 0.08 && progress < 0.46;
+      visible = progress < 0.46; // Visible from entrance approach to allow seamless interior look-through
     } else if (zoneIndex === 2) {
       visible = progress > 0.24 && progress < 0.62;
     } else if (zoneIndex === 3) {
