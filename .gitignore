@@ -69,3 +69,6 @@ build_gallery_master.py
 capture_gallery.mjs
 gallery_master.glb
 courtyard_master.glb
+build_studio_master.py
+capture_studio.mjs
+studio_master.glb

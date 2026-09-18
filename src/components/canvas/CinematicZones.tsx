@@ -53,9 +53,9 @@ function ZoneVisibility({
     } else if (zoneIndex === 2) {
       visible = progress > 0.16 && progress < 0.62;
     } else if (zoneIndex === 3) {
-      visible = progress > 0.32 && progress < 0.76;
+      visible = progress > 0.32 && progress < 0.82;
     } else if (zoneIndex === 4) {
-      visible = progress > 0.56 && progress < 0.90;
+      visible = progress > 0.46 && progress < 0.92;
     } else {
       visible = progress > 0.72;
     }
@@ -142,7 +142,8 @@ export function CinematicZones() {
         castShadow
         shadow-mapSize-width={2048}
         shadow-mapSize-height={2048}
-        shadow-bias={-0.0004}
+        shadow-bias={-0.0001}
+        shadow-normalBias={0.03}
       />
 
       {/* Zone 0: Courtyard Entry (outdoor pavilion & reflection pool) */}

@@ -88,11 +88,11 @@ export const PATH_NODES: PathNode[] = [
   // ZONE 4: DEVELOPER STUDIO ("WHERE I BUILD")
   // ═══════════════════════════════════════════════════════════
   // 24. Entering warm walnut studio sanctuary
-  { position: [0.4, 1.55, -40.5], lookAt: [-0.6, 1.45, -45], fov: 48, chapter: "stats" },
+  { position: [0.15, 1.55, -40.5], lookAt: [0.05, 1.45, -45.5], fov: 48, chapter: "stats" },
   // 25. 2-Point perspective: walnut desk, triple monitors, bookcase, city window
-  { position: [0.6, 1.5, -42.5], lookAt: [-0.7, 1.35, -45.5], fov: 45, chapter: "stats" },
+  { position: [0.05, 1.50, -42.5], lookAt: [0.15, 1.35, -46.0], fov: 46, chapter: "stats" },
   // 26. Workstation focus: code on center monitor, AI graph on left, brass lamp glow
-  { position: [0.2, 1.48, -44.5], lookAt: [-0.8, 1.3, -45.5], fov: 42, chapter: "stats" },
+  { position: [-0.05, 1.46, -44.2], lookAt: [0.20, 1.30, -46.5], fov: 44, chapter: "stats" },
   // 27. Looking past workstation toward the large floor-to-ceiling city window
   { position: [0.5, 1.52, -46.5], lookAt: [1.8, 1.6, -48], fov: 48, chapter: "stats" },
   // 28. Approaching bronze elevator vestibule
