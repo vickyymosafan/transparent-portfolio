@@ -72,3 +72,6 @@ courtyard_master.glb
 build_studio_master.py
 capture_studio.mjs
 studio_master.glb
+capture_rooftop.mjs
+rooftop_master.glb
+build_rooftop_master.py

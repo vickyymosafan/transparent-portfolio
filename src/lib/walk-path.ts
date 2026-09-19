@@ -103,18 +103,18 @@ export const PATH_NODES: PathNode[] = [
   // ═══════════════════════════════════════════════════════════
   // ZONE 5: ROOFTOP SKY LOUNGE (Reference Image 2)
   // ═══════════════════════════════════════════════════════════
-  // 30. Emerging onto open-air teak roof terrace under evening sky
-  { position: [-3.8, 1.65, -52.2], lookAt: [0.6, 0.1, -57.2], fov: 50, chapter: "finale" },
-  // 31. Elevated 3/4 diagonal perspective: sunken pit, dancing flame, beige sectional, pines, skyline
-  { position: [-3.4, 1.50, -53.6], lookAt: [0.6, -0.12, -57.2], fov: 48, chapter: "finale" },
-  // 32. Lower intimate lounge perspective near the fire table
-  { position: [-2.6, 1.40, -55.2], lookAt: [0.6, -0.15, -57.5], fov: 48, chapter: "finale" },
-  // 33. Front view of fire table and glowing river rocks
-  { position: [-1.0, 1.25, -56.8], lookAt: [0.6, -0.10, -58.0], fov: 50, chapter: "finale" },
-  // 34. Skyline view over the glass balustrade with warm perimeter wash
-  { position: [0.0, 1.45, -59.2], lookAt: [0, 1.2, -66.0],  fov: 52, chapter: "finale" },
-  // 35. Final serene hover view: "LET'S BUILD SOMETHING IMPRESSIVE"
-  { position: [0.0, 1.60, -61.5], lookAt: [0, 1.4, -68.0],  fov: 50, chapter: "finale" },
+  // 30. Emerging from penthouse elevator vestibule onto teak terrace
+  { position: [-2.6, 1.68, -52.0], lookAt: [0.8, 0.10, -57.5], fov: 52, chapter: "finale" },
+  // 31. Elevated 3/4 perspective matching reference photo: pavilion framing on left, sunken pit, dancing fire, niwaki pine, skyline
+  { position: [-2.8, 1.58, -53.8], lookAt: [1.2, -0.05, -57.8], fov: 50, chapter: "finale" },
+  // 32. Approaching conversation pit and fire table
+  { position: [-1.8, 1.45, -55.4], lookAt: [0.9, -0.10, -57.8], fov: 48, chapter: "finale" },
+  // 33. Front view of fire table, dancing flame, and oatmeal cushions
+  { position: [-0.6, 1.30, -56.8], lookAt: [0.6, -0.10, -58.0], fov: 48, chapter: "finale" },
+  // 34. Skyline view over the glass balustrade with glowing golden perimeter runner
+  { position: [0.0, 1.45, -59.2], lookAt: [0, 1.1, -66.0],  fov: 52, chapter: "finale" },
+  // 35. Final serene twilight hover view: "LET'S BUILD SOMETHING IMPRESSIVE"
+  { position: [0.0, 1.60, -61.5], lookAt: [0, 1.3, -68.0],  fov: 50, chapter: "finale" },
 ];
 
 export const walkCurve = new THREE.CatmullRomCurve3(
