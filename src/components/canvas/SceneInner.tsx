@@ -6,8 +6,12 @@ import { EffectComposer, Bloom } from "@react-three/postprocessing";
 import * as THREE from "three";
 import { SkyDome } from "./SkyDome";
 import { Stars } from "./Stars";
-import { CinematicZones } from "./CinematicZones";
-import { WalkPathController } from "./WalkPathController";
+import { HouseShell } from "../world/HouseShell";
+import { Player } from "../player/Player";
+import { PlayerController } from "../player/PlayerController";
+import { ThirdPersonCamera } from "../player/ThirdPersonCamera";
+import { InteractionSystem } from "../player/InteractionSystem";
+import { useWalkStore } from "@/lib/walk-store";
 
 interface SceneInnerProps {
   onReady?: () => void;
@@ -15,11 +19,13 @@ interface SceneInnerProps {
 }
 
 export default function SceneInner({ onReady, onContextLost }: SceneInnerProps) {
+  const quality = useWalkStore((s) => s.quality);
+
   return (
     <Canvas
-      shadows
-      camera={{ fov: 46, position: [0, 1.6, 9] }}
-      dpr={[1, 1.75]}
+      shadows={quality.shadows}
+      camera={{ fov: 50, position: [0, 2.2, 16.5] }}
+      dpr={quality.dpr}
       gl={{
         antialias: true,
         powerPreference: "high-performance",
@@ -28,8 +34,10 @@ export default function SceneInner({ onReady, onContextLost }: SceneInnerProps) 
       }}
       onCreated={({ gl }) => {
         gl.setClearColor("#0c1017");
-        gl.shadowMap.enabled = true;
-        gl.shadowMap.type = THREE.PCFSoftShadowMap;
+        if (quality.shadows) {
+          gl.shadowMap.enabled = true;
+          gl.shadowMap.type = THREE.PCFSoftShadowMap;
+        }
         gl.domElement.addEventListener("webglcontextlost", (e) => {
           e.preventDefault();
           document.documentElement.classList.add("no-webgl");
@@ -38,22 +46,30 @@ export default function SceneInner({ onReady, onContextLost }: SceneInnerProps) 
         requestAnimationFrame(() => onReady?.());
       }}
     >
-      <EffectComposer multisampling={0}>
-        <Bloom
-          mipmapBlur
-          luminanceThreshold={0.95}
-          luminanceSmoothing={0.25}
-          intensity={0.38}
-        />
-      </EffectComposer>
+      {quality.bloom && (
+        <EffectComposer multisampling={0}>
+          <Bloom
+            mipmapBlur
+            luminanceThreshold={0.95}
+            luminanceSmoothing={0.25}
+            intensity={0.35}
+          />
+        </EffectComposer>
+      )}
+
       <fogExp2 attach="fog" args={["#141c2b", 0.003]} />
       <SkyDome />
       <Stars />
+
       <Suspense fallback={null}>
-        <CinematicZones />
+        <HouseShell />
       </Suspense>
-      <WalkPathController />
+
+      {/* Playable Character, Controls & Interaction System */}
+      <Player />
+      <PlayerController />
+      <ThirdPersonCamera />
+      <InteractionSystem />
     </Canvas>
   );
 }
-

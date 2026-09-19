@@ -2,121 +2,89 @@
 
 import { useEffect, useState, useCallback } from "react";
 import { useWalkStore } from "@/lib/walk-store";
+import { ArrowRight } from "lucide-react";
 
 interface IntroScreenProps {
   onEnter?: () => void;
 }
 
 export function IntroScreen({ onEnter }: IntroScreenProps) {
-  const [entered, setEntered] = useState(() => {
-    if (typeof window !== "undefined") {
-      const params = new URLSearchParams(window.location.search);
-      return (
-        params.get("no-intro") === "1" ||
-        params.get("entered") === "1" ||
-        params.get("zone") !== null ||
-        params.get("section") !== null
-      );
-    }
-    return false;
-  });
-  const [fadedOut, setFadedOut] = useState(() => entered);
-  const advance = useWalkStore((s) => s.advance);
+  const { mode, setMode } = useWalkStore();
+  const [fadedOut, setFadedOut] = useState(mode !== "intro");
 
   const handleEnter = useCallback(() => {
-    setEntered(true);
+    setMode("walk");
     onEnter?.();
-    // Gentle initial impulse forward into the courtyard
-    setTimeout(() => {
-      advance(0.04);
-    }, 400);
     setTimeout(() => {
       setFadedOut(true);
-    }, 900);
-  }, [onEnter, advance]);
-
-  // If user scrolled/advanced externally, auto-enter
-  useEffect(() => {
-    const unsub = useWalkStore.subscribe((state) => {
-      if (state.progress > 0.01) {
-        setEntered(true);
-        setFadedOut(true);
-      }
-    });
-    return unsub;
-  }, []);
+    }, 600);
+  }, [onEnter, setMode]);
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      if (!entered && (e.key === "Enter" || e.key === " " || e.key === "ArrowDown")) {
+      if (mode === "intro" && (e.key === "Enter" || e.key === " ")) {
         e.preventDefault();
         handleEnter();
       }
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [entered, handleEnter]);
+  }, [mode, handleEnter]);
 
-  if (fadedOut) return null;
+  if (fadedOut && mode !== "intro") return null;
+
+  const isLeaving = mode !== "intro";
 
   return (
     <div
-      aria-hidden={entered}
-      className={`fixed inset-0 z-[80] flex flex-col items-center justify-between px-6 py-12 transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] select-none ${
-        entered
-          ? "pointer-events-none opacity-0 backdrop-blur-0 scale-[1.03]"
-          : "opacity-100 bg-ink/90 backdrop-blur-md"
+      role="dialog"
+      aria-label="Welcome screen"
+      className={`fixed inset-0 z-50 flex flex-col items-center justify-between p-6 sm:p-12 select-none transition-all duration-700 ${
+        isLeaving
+          ? "pointer-events-none opacity-0 backdrop-blur-0 scale-105"
+          : "opacity-100 bg-[#0c1017]/80 backdrop-blur-sm"
       }`}
     >
-      {/* Top Bar Label */}
-      <div className="flex w-full max-w-5xl items-center justify-between text-[11px] uppercase tracking-[0.3em] text-bone/40">
-        <span>ARCHITECTURAL PORTFOLIO</span>
-        <span>JAKARTA / TOKYO EST. 2024</span>
+      {/* Top Header */}
+      <div className="flex w-full max-w-5xl items-center justify-between text-xs tracking-widest text-white/50 uppercase">
+        <span>Architectural Portfolio</span>
+        <span>Interactive 3D Residence</span>
       </div>
 
-      {/* Main Center Editorial Lockup */}
-      <div className="flex flex-col items-center text-center">
-        <span className="mb-4 text-[12px] uppercase tracking-[0.45em] text-[#cca872] font-mono">
-          Interactive 3D Studio Walkthrough
+      {/* Main Lockup */}
+      <div className="flex flex-col items-center text-center max-w-xl">
+        <span className="text-xs font-semibold tracking-widest text-[#cca872] uppercase mb-3">
+          Playable Developer Residence
         </span>
 
-        <h1 className="text-5xl md:text-8xl font-light tracking-[-0.03em] text-bone mb-6 uppercase">
-          Vicky Mosafan
+        <h1 className="text-4xl sm:text-6xl md:text-7xl font-light tracking-tight text-white uppercase leading-none mb-4">
+          M. Vicky Mosafan
         </h1>
 
-        <div className="h-px w-20 bg-[#cca872]/60 mb-6" />
+        <div className="h-px w-16 bg-[#cca872]/60 mb-4" />
 
-        <h2 className="text-sm md:text-base font-medium tracking-[0.35em] text-bone/80 uppercase mb-2">
-          Creative Developer
+        <h2 className="text-sm sm:text-base font-medium tracking-widest text-white/85 uppercase mb-1">
+          Creative Frontend Developer
         </h2>
 
-        <p className="text-xs md:text-sm tracking-[0.25em] text-bone/50 uppercase font-mono">
-          AI × WEB × 3D
+        <p className="text-xs sm:text-sm tracking-widest text-white/50 uppercase font-mono mb-8">
+          AI x Web x 3D
         </p>
 
-        {/* Enter Experience Button */}
+        {/* Enter Residence CTA */}
         <button
           onClick={handleEnter}
-          className="group relative mt-12 inline-flex items-center gap-4 overflow-hidden border border-bone/20 bg-bone/[0.04] px-10 py-4 text-xs font-medium uppercase tracking-[0.3em] text-bone transition-all duration-500 hover:border-[#cca872] hover:bg-[#cca872]/10 hover:text-white focus:outline-none focus:ring-1 focus:ring-[#cca872]"
+          className="group flex items-center gap-3 border border-[#cca872] bg-[#cca872] px-8 py-3.5 text-xs font-semibold tracking-widest text-[#0e1117] uppercase transition-all duration-300 hover:bg-[#d8b580] hover:shadow-[0_0_25px_rgba(204,168,114,0.3)] active:scale-95"
         >
-          <span className="relative z-10">Enter Experience</span>
-          <svg
-            className="relative z-10 h-3.5 w-3.5 transition-transform duration-500 group-hover:translate-x-1"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1.5"
-          >
-            <path d="M5 12h14M12 5l7 7-7 7" strokeLinecap="round" strokeLinejoin="round" />
-          </svg>
-          <span className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/5 to-transparent transition-transform duration-1000 group-hover:translate-x-full" />
+          <span>Enter Residence</span>
+          <ArrowRight className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-1" />
         </button>
       </div>
 
-      {/* Footer Navigation Tip */}
-      <div className="flex flex-col items-center gap-2 text-center text-[10px] uppercase tracking-[0.25em] text-bone/30">
-        <span>Press <kbd className="border border-bone/20 px-1 py-0.5 rounded text-bone/60">Enter</kbd> or Scroll to Navigate</span>
-        <span>Procedural Three.js · Natural Lighting · Zero Neon</span>
+      {/* Footer Instructions */}
+      <div className="flex flex-col items-center gap-1.5 text-center text-[11px] tracking-wider text-white/40 uppercase">
+        <span>Explore with <kbd className="border border-white/20 px-1 py-0.5 text-white/70">W A S D</kbd> &bull; Mouse to look &bull; <kbd className="border border-white/20 px-1 py-0.5 text-white/70">E</kbd> to interact</span>
+        <span>Real Scale &bull; Natural Archviz Lighting &bull; Smooth 60 FPS</span>
       </div>
     </div>
   );

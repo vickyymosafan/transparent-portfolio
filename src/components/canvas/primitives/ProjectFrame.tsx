@@ -99,7 +99,7 @@ function createProjectTexture(project: Project): THREE.CanvasTexture {
   // Footer Year & Role
   ctx.fillStyle = "#667085";
   ctx.font = "500 24px sans-serif";
-  ctx.fillText(`${project.year}  —  ${project.role}`, 80, 920);
+  ctx.fillText(`${project.year}  |  ${project.role}`, 80, 920);
 
   const texture = new THREE.CanvasTexture(canvas);
   texture.anisotropy = 8;

@@ -1,96 +1,133 @@
 import { create } from "zustand";
+import { ZONES, PLAYER_CONFIG } from "./constants";
+import { detectQualityTier, QualitySettings } from "./quality";
 
-export const ZONE_COUNT = 6;
+export type AppMode = "intro" | "walk" | "paused";
 
-export const ZONE_LABELS = [
-  "Courtyard Entry",
-  "The Foyer",
-  "Garden Corridor",
-  "Project Gallery",
-  "Developer Studio",
-  "Rooftop Terrace",
-] as const;
+export interface ActiveInteraction {
+  id: string;
+  title: string;
+  prompt: string;
+  type: "door" | "project" | "cv-identity" | "cv-experience" | "skills" | "contact";
+  payload?: unknown;
+}
 
 interface WalkState {
-  progress: number;
-  district: number;
-  /** Current cinematic zone index (0-5) */
-  zone: number;
-  /** Progress within current zone (0-1) */
-  zoneProgress: number;
-  /** True when camera is crossing a zone boundary (±10% of boundary) */
-  transitioning: boolean;
-  advance: (delta: number) => void;
-  setProgress: (progress: number) => void;
-  walkTo: (district: number) => void;
+  mode: AppMode;
+  currentZone: number;
+  playerPosition: [number, number, number];
+  playerRotation: number;
+  isSprinting: boolean;
+  hasMoved: boolean;
+  activeInteraction: ActiveInteraction | null;
+  activeModal: string | null;
+  modalPayload: unknown | null;
+  quality: QualitySettings;
+  mobileMove: [number, number]; // [x, z] normalized (-1 to 1)
+  mobileLookDelta: [number, number]; // [yaw, pitch] deltas
+  doorOpen: boolean;
+
+  // Actions
+  setMode: (mode: AppMode) => void;
+  setPlayerPosition: (pos: [number, number, number], rot?: number) => void;
+  setCurrentZone: (zone: number) => void;
+  setIsSprinting: (sprinting: boolean) => void;
+  setHasMoved: (moved: boolean) => void;
+  setActiveInteraction: (interaction: ActiveInteraction | null) => void;
+  openModal: (modalId: string, payload?: unknown) => void;
+  closeModal: () => void;
+  setMobileMove: (x: number, z: number) => void;
+  consumeMobileLook: () => [number, number];
+  addMobileLook: (yawDelta: number, pitchDelta: number) => void;
+  toggleDoor: () => void;
+  teleportToZone: (zoneIndex: number) => void;
 }
 
-const ZONE_THRESHOLDS = [0.0, 0.22, 0.40, 0.56, 0.70, 0.84, 1.0];
+export const useWalkStore = create<WalkState>((set, get) => ({
+  mode: "intro",
+  currentZone: 0,
+  playerPosition: [...PLAYER_CONFIG.initialPosition],
+  playerRotation: PLAYER_CONFIG.initialYaw,
+  isSprinting: false,
+  hasMoved: false,
+  activeInteraction: null,
+  activeModal: null,
+  modalPayload: null,
+  quality: detectQualityTier(),
+  mobileMove: [0, 0],
+  mobileLookDelta: [0, 0],
+  doorOpen: false,
 
-function computeZone(progress: number) {
-  let zone = 0;
-  for (let i = 0; i < ZONE_COUNT; i++) {
-    if (progress >= ZONE_THRESHOLDS[i] && progress < ZONE_THRESHOLDS[i + 1]) {
-      zone = i;
-      break;
+  setMode: (mode) => set({ mode }),
+
+  setPlayerPosition: (pos, rot) =>
+    set((state) => {
+      // Determine active zone from z coordinate
+      const z = pos[2];
+      let foundZone = 0;
+      for (let i = 0; i < ZONES.length; i++) {
+        if (z <= ZONES[i].zStart && z >= ZONES[i].zEnd) {
+          foundZone = i;
+          break;
+        } else if (z > ZONES[0].zStart) {
+          foundZone = 0;
+        } else if (z < ZONES[ZONES.length - 1].zEnd) {
+          foundZone = ZONES.length - 1;
+        }
+      }
+
+      return {
+        playerPosition: pos,
+        playerRotation: rot !== undefined ? rot : state.playerRotation,
+        currentZone: foundZone,
+      };
+    }),
+
+  setCurrentZone: (zone) => set({ currentZone: zone }),
+
+  setIsSprinting: (isSprinting) => set({ isSprinting }),
+
+  setHasMoved: (hasMoved) => set({ hasMoved }),
+
+  setActiveInteraction: (activeInteraction) => set({ activeInteraction }),
+
+  openModal: (activeModal, modalPayload = null) =>
+    set({ activeModal, modalPayload, mode: "paused" }),
+
+  closeModal: () => set({ activeModal: null, modalPayload: null, mode: "walk" }),
+
+  setMobileMove: (x, z) => set({ mobileMove: [x, z] }),
+
+  addMobileLook: (yawDelta, pitchDelta) =>
+    set((state) => ({
+      mobileLookDelta: [
+        state.mobileLookDelta[0] + yawDelta,
+        state.mobileLookDelta[1] + pitchDelta,
+      ],
+    })),
+
+  consumeMobileLook: () => {
+    const delta = get().mobileLookDelta;
+    if (delta[0] !== 0 || delta[1] !== 0) {
+      set({ mobileLookDelta: [0, 0] });
     }
-  }
-  if (progress >= ZONE_THRESHOLDS[ZONE_COUNT]) {
-    zone = ZONE_COUNT - 1;
-  }
+    return delta;
+  },
 
-  const start = ZONE_THRESHOLDS[zone];
-  const end = ZONE_THRESHOLDS[zone + 1] ?? 1.0;
-  const zoneProgress = Math.max(0, Math.min(1, (progress - start) / Math.max(0.001, end - start)));
+  toggleDoor: () => set((state) => ({ doorOpen: !state.doorOpen })),
 
-  const transitioning =
-    zone < ZONE_COUNT - 1 && (zoneProgress > 0.85 || zoneProgress < 0.15);
-
-  return { zone, zoneProgress, transitioning };
-}
-
-export const ZONE_TARGET_PROGRESS = [0.14, 0.31, 0.49, 0.63, 0.77, 0.90];
-
-export const useWalkStore = create<WalkState>((set) => ({
-  progress: 0,
-  district: 0,
-  zone: 0,
-  zoneProgress: 0,
-  transitioning: false,
-  advance: (delta) =>
-    set((s) => {
-      const next = Math.max(0, Math.min(1, s.progress + delta));
-      const { zone, zoneProgress, transitioning } = computeZone(next);
-      return {
-        progress: next,
-        district: zone,
-        zone,
-        zoneProgress,
-        transitioning,
-      };
-    }),
-  setProgress: (next) =>
-    set(() => {
-      const p = Math.max(0, Math.min(1, next));
-      const { zone, zoneProgress, transitioning } = computeZone(p);
-      return {
-        progress: p,
-        district: zone,
-        zone,
-        zoneProgress,
-        transitioning,
-      };
-    }),
-  walkTo: (district) =>
-    set(() => {
-      const d = Math.max(0, Math.min(5, district));
-      const progress = ZONE_TARGET_PROGRESS[d] ?? (d / 5);
-      const { zone, zoneProgress, transitioning } = computeZone(progress);
-      return { progress, district: d, zone, zoneProgress, transitioning };
-    }),
+  teleportToZone: (zoneIndex: number) => {
+    const target = ZONES[zoneIndex];
+    if (target) {
+      set({
+        playerPosition: [...target.spawnPoint],
+        currentZone: zoneIndex,
+        mode: "walk",
+      });
+    }
+  },
 }));
 
 if (typeof window !== "undefined") {
   (window as unknown as { __walkStore: typeof useWalkStore }).__walkStore = useWalkStore;
 }
-

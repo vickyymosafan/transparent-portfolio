@@ -185,8 +185,10 @@ function CourtyardModel() {
     });
   }, [scene]);
 
-  // Smooth architectural pivot door opening as camera approaches entrance
-  useFrame(() => {
+  // Smooth architectural pivot door opening as player approaches or toggles door
+  const doorFactor = useRef(0);
+
+  useFrame((_, delta) => {
     if (!doorObjRef.current) {
       scene.traverse((child) => {
         if (child.name === "Entrance_Pivot_Door") doorObjRef.current = child;
@@ -194,11 +196,14 @@ function CourtyardModel() {
       });
       if (!doorObjRef.current) return;
     }
-    const p = useWalkStore.getState().progress;
-    // Pivot opens smoothly as visitor approaches entrance (progress 0.06 to 0.16)
-    // By progress 0.18, the door is completely open and tucked against the wall
-    const factor = THREE.MathUtils.clamp((p - 0.06) / 0.10, 0, 1);
-    const ease = factor * factor * (3 - 2 * factor);
+
+    const { doorOpen, playerPosition } = useWalkStore.getState();
+    const isNear =
+      Math.abs(playerPosition[2] - 3.56) < 2.2 && Math.abs(playerPosition[0]) < 1.8;
+    const targetFactor = (doorOpen || isNear) ? 1.0 : 0.0;
+
+    doorFactor.current = THREE.MathUtils.damp(doorFactor.current, targetFactor, 6.0, delta);
+    const ease = doorFactor.current * doorFactor.current * (3 - 2 * doorFactor.current);
     const theta = 1.52 * ease; // 87 degrees, tucked neatly against the left wall
 
     // Rotate around vertical hinge at (1.15, -3.56) inward into the foyer (-Z)

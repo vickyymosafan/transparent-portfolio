@@ -13,9 +13,9 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Vicky Mosafan — Creative Developer | AI × Web × 3D",
+  title: "Vicky Mosafan | Creative Developer | AI x Web x 3D",
   description:
-    "Interactive 3D architectural portfolio of Vicky Mosafan — Creative Developer specializing in Next.js, TypeScript, Three.js procedural environments, and applied AI systems.",
+    "Interactive 3D architectural portfolio of Vicky Mosafan, Creative Developer specializing in Next.js, TypeScript, Three.js procedural environments, and applied AI systems.",
   keywords: [
     "Vicky Mosafan",
     "Creative Developer",
@@ -28,7 +28,7 @@ export const metadata: Metadata = {
     "Architectural 3D Web",
   ],
   openGraph: {
-    title: "Vicky Mosafan — Creative Developer | AI × Web × 3D",
+    title: "Vicky Mosafan | Creative Developer | AI x Web x 3D",
     description:
       "Interactive 3D architectural portfolio exploring modern minimalist architecture, procedural Three.js environments, and production AI systems.",
     type: "website",
